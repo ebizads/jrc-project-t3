@@ -51,13 +51,13 @@ export default function Home() {
                 >
                     <div className="flex h-full w-full flex-row ">
                         {/* Generator Card 1 */}
-                        <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold uppercase tracking-widest">
+                        <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
                             <div className=" sticky top-0 z-50 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal tracking-widest">
                                 CDORFFWC
                             </div>
                             {/* Generator Control Status */}
                             <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
-                                <h1 className="text-sm font-semibold tracking-[0.2em]">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                                     Generator Control Status
                                 </h1>
                                 <GeneratorControlStatus
@@ -121,6 +121,17 @@ export default function Home() {
                                             value: "HIGH",
                                         },
                                     ]}
+                                />
+                            </div>
+
+                            {/* Status Logs */}
+                            <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                                    Status Logs
+                                </h1>
+                                <StatusCard
+                                    content="Diesel Generator remote operation is STARTED."
+                                    color="green-500"
                                 />
                             </div>
                         </div>

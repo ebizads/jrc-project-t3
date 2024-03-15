@@ -4,6 +4,7 @@ import Link from "next/link";
 import GeneratorControlStatus from "~/components/GeneratorControlStatus";
 import PowerSupplyStatus from "~/components/PowerSupplyStatus";
 import StatusCard from "~/components/StatusCard";
+import StatusDayLog from "~/components/StatusDayLog";
 
 import { api } from "~/utils/api";
 
@@ -125,13 +126,55 @@ export default function Home() {
                             </div>
 
                             {/* Status Logs */}
-                            <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
+                            <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
                                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                                     Status Logs
                                 </h1>
-                                <StatusCard
-                                    content="Diesel Generator remote operation is STARTED."
-                                    color="green-500"
+                                <StatusDayLog
+                                    day="MARCH 15, 2024"
+                                    statusLogSet={[
+                                        {
+                                            key: "stat1",
+                                            time: "08:36",
+                                            statusType: "success",
+                                            content:
+                                                "Diesel Generator remote operation is ",
+                                            statusName: "STARTED",
+                                        },
+                                        {
+                                            key: "stat2",
+                                            time: "04:23",
+                                            statusType: "warning",
+                                            content: "Diesel Generator is on ",
+                                            statusName: "MANUAL",
+                                        },
+                                    ]}
+                                />
+                                <StatusDayLog
+                                    day="MARCH 05, 2024"
+                                    statusLogSet={[
+                                        {
+                                            key: "stat1",
+                                            time: "08:36",
+                                            statusType: "info",
+                                            content:
+                                                "Diesel Generator remote operation is ",
+                                            statusName: "STARTED",
+                                        },
+                                    ]}
+                                />
+                                <StatusDayLog
+                                    day="FEB 17, 2024"
+                                    statusLogSet={[
+                                        {
+                                            key: "stat1",
+                                            time: "08:36",
+                                            statusType: "error",
+                                            content:
+                                                "Diesel Generator remote operation is ",
+                                            statusName: "STARTED",
+                                        },
+                                    ]}
                                 />
                             </div>
                         </div>
@@ -205,6 +248,33 @@ export default function Home() {
                                             key: "statusSet3",
                                             name: "BATTERY TEMPERATURE",
                                             value: "HIGH",
+                                        },
+                                    ]}
+                                />
+                            </div>
+
+                            {/* Status Logs */}
+                            <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                                    Status Logs
+                                </h1>
+                                <StatusDayLog
+                                    day="MARCH 15, 2024"
+                                    statusLogSet={[
+                                        {
+                                            key: "stat1",
+                                            time: "08:36",
+                                            statusType: "success",
+                                            content:
+                                                "Diesel Generator remote operation is ",
+                                            statusName: "STARTED",
+                                        },
+                                        {
+                                            key: "stat2",
+                                            time: "04:23",
+                                            statusType: "warning",
+                                            content: "Diesel Generator is on ",
+                                            statusName: "MANUAL",
                                         },
                                     ]}
                                 />
@@ -286,11 +356,50 @@ export default function Home() {
                             </div>
 
                             {/* Status Logs */}
-                            <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
-                                <h1 className="text-sm font-semibold tracking-[0.2em]">
+                            <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                                     Status Logs
                                 </h1>
-                                <StatusCard />
+                                <StatusDayLog
+                                    day="MARCH 15, 2024"
+                                    statusLogSet={[
+                                        {
+                                            key: "stat1",
+                                            time: "08:36",
+                                            statusType: "success",
+                                            content:
+                                                "Diesel Generator remote operation is ",
+                                            statusName: "STARTED",
+                                        },
+                                        {
+                                            key: "stat2",
+                                            time: "04:23",
+                                            statusType: "warning",
+                                            content: "Diesel Generator is on ",
+                                            statusName: "MANUAL",
+                                        },
+                                    ]}
+                                />
+                                <StatusDayLog
+                                    day="MARCH 15, 2024"
+                                    statusLogSet={[
+                                        {
+                                            key: "stat1",
+                                            time: "08:36",
+                                            statusType: "error",
+                                            content:
+                                                "Diesel Generator remote operation is ",
+                                            statusName: "STARTED",
+                                        },
+                                        {
+                                            key: "stat2",
+                                            time: "04:23",
+                                            statusType: "warning",
+                                            content: "Diesel Generator is on ",
+                                            statusName: "MANUAL",
+                                        },
+                                    ]}
+                                />
                             </div>
                         </div>
                     </div>

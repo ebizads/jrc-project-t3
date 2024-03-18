@@ -1,3 +1,4 @@
+import type { Status } from "~/utils/types";
 import StatusGroup from "./StatusGroup";
 
 //STATUS COLORS
@@ -7,14 +8,14 @@ const greenGlow =
     " flex h-full w-full flex-col rounded-full border-2 border-[#9CFDA6] bg-gradient-to-b from-[#3A463B] to-[#468C4D] p-3 text-center tracking-widest text-[#B4FFBC] shadow-[0_0_8px_rgba(70,140,77,1)] ";
 const redGlow =
     " flex h-full w-full flex-col rounded-full border-2 border-[#FF9CA2] bg-gradient-to-b from-[#583D3E] to-[#E8545C] p-3 text-center tracking-widest text-[#FFCFD1] shadow-[0_0_8px_rgba(232,84,92,1)] ";
-const optionUnselected =
-    "flex h-full w-full flex-col rounded-full p-3 text-center font-normal tracking-widest text-[#7E7E7E]";
+// const optionUnselected =
+//     "flex h-full w-full flex-col rounded-full p-3 text-center font-normal tracking-widest text-[#7E7E7E]";
 
-const GeneratorControlStatus = ({ id, statusSet }: any) => {
+const GeneratorControlStatus = (props: { id: string; statusSet: Status[] }) => {
     return (
         <>
-            <div key={id} className="space-y-5">
-                {statusSet.map((status: any) => (
+            <div key={props?.id} className="space-y-5">
+                {props?.statusSet.map((status: Status) => (
                     <StatusGroup
                         key={status.key}
                         groupName={status.name}
@@ -29,7 +30,7 @@ const GeneratorControlStatus = ({ id, statusSet }: any) => {
 };
 
 // Function to define statusList dynamically based on status name
-const getStatusList = (statusName: any) => {
+const getStatusList = (statusName: string) => {
     // Define statusList based on status name
     switch (statusName) {
         case "COMMERCIAL POWER":

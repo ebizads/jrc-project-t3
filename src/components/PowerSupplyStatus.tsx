@@ -1,3 +1,4 @@
+import type { Status } from "~/utils/types";
 import StatusGroup from "./StatusGroup";
 
 //STATUS COLORS
@@ -6,13 +7,13 @@ const greenGlow =
 const redGlow =
     " flex h-full w-full flex-col rounded-full border-2 border-[#FF9CA2] bg-gradient-to-b from-[#583D3E] to-[#E8545C] p-3 text-center tracking-widest text-[#FFCFD1] shadow-[0_0_8px_rgba(232,84,92,1)] ";
 
-const PowerSupplyStatus = ({ id, statusSet }: any) => {
+const PowerSupplyStatus = (props: { id: string; statusSet: Status[] }) => {
     return (
         <>
-            <div key={id} className="space-y-5">
-                {statusSet.map((status: any) => (
+            <div key={props?.id} className="space-y-5">
+                {props?.statusSet.map((status, idx) => (
                     <StatusGroup
-                        key={status.key}
+                        key={idx}
                         groupName={status.name}
                         // Define statusList dynamically based on status name
                         statusList={getStatusList(status.name)}
@@ -25,7 +26,7 @@ const PowerSupplyStatus = ({ id, statusSet }: any) => {
 };
 
 // Function to define statusList dynamically based on status name
-const getStatusList = (statusName: any) => {
+const getStatusList = (statusName: string) => {
     // Define statusList based on status name
     switch (statusName) {
         case "DC POWER SUPPLY STATUS":

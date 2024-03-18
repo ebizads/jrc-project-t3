@@ -1,9 +1,9 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type GetServerSidePropsContext } from "next";
 import {
-  getServerSession,
-  type DefaultSession,
-  type NextAuthOptions,
+    getServerSession,
+    type DefaultSession,
+    type NextAuthOptions,
 } from "next-auth";
 import bcrypt from "bcrypt";
 import { type Adapter } from "next-auth/adapters";
@@ -21,23 +21,23 @@ import { Account } from "next-auth";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: DefaultSession["user"] & {
-      id: number;
-      // ...other properties
-      // role: UserRole;
-    };
-  }
+    interface Session extends DefaultSession {
+        user: DefaultSession["user"] & {
+            id: number;
+            // ...other properties
+            // role: UserRole;
+        };
+    }
 
-  interface Account {
-    id: number
-  }
+    interface Account {
+        id: number;
+    }
 
-  interface User {
-    id: number
-    // ...other properties
-    // role: UserRole;
-  }
+    interface User {
+        id: number;
+        // ...other properties
+        // role: UserRole;
+    }
 }
 
 /**
@@ -46,67 +46,69 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  callbacks: {
-    jwt: async ({ token, user }) => {
-      if (user) {
-        token.id = user.id
-        token.email = user.email
-      }
+    callbacks: {
+        jwt: async ({ token, user }) => {
+            if (user) {
+                token.id = user.id;
+                token.email = user.email;
+            }
 
-      return token
+            return token;
+        },
+        session({ session, token }) {
+            if (session.user) {
+                session.user.id = Number(token.sub);
+            }
+            return session;
+        },
     },
-    session({ session, token }) {
-      if (session.user) {
-        session.user.id = Number(token.sub) as number
-      }
-      return session
+    pages: {
+        signIn: "/user/login",
     },
-  },
-  pages: {
-    signIn: "/user/login",
-  },
-  session: { strategy: "jwt" },
-  adapter: PrismaAdapter(db) as Adapter,
-  providers: [
-    CredentialsProvider({
-      id: "credentials",
-      name: "credentials",
-      credentials: {
-        username: { type: "text" },
-        password: { type: "password" },
-      },
-      async authorize(credentials) {
-        const encryptedPassword = await bcrypt.hash(credentials?.password ?? "", 12)
-        const account = await db.account.findUnique({
-          where: {
-            username: credentials?.username,
+    session: { strategy: "jwt" },
+    adapter: PrismaAdapter(db) as Adapter,
+    providers: [
+        CredentialsProvider({
+            id: "credentials",
+            name: "credentials",
+            credentials: {
+                username: { type: "text" },
+                password: { type: "password" },
+            },
+            async authorize(credentials) {
+                const encryptedPassword = await bcrypt.hash(
+                    credentials?.password ?? "",
+                    12
+                );
+                const account = await db.account.findUnique({
+                    where: {
+                        username: credentials?.username,
+                    },
+                });
 
-          },
-        })
+                if (account != null) {
+                    const isValid = bcrypt.compareSync(
+                        credentials?.password ?? "",
+                        account.password
+                    );
 
-        if (account != null) {
-          const isValid = bcrypt.compareSync(
-            credentials?.password ?? "",
-            account.password
-          )
+                    if (isValid) {
+                        const user = await db.user.findUnique({
+                            where: {
+                                uid: account.userId,
+                            },
+                        });
+                        console.log(encryptedPassword);
 
-          if (isValid) {
-            const user = await db.user.findUnique({
-              where: {
-                uid: account.userId
-              }
-            })
-            console.log(encryptedPassword)
-
-            console.log('User found:', user);
-            return user;
-          }
-          throw new Error("account not found")
-        }
-        throw new Error("Failed to Login.")
-      }
-    }),
-  ],
+                        console.log("User found:", user);
+                        return user;
+                    }
+                    throw new Error("account not found");
+                }
+                throw new Error("Failed to Login.");
+            },
+        }),
+    ],
 };
 
 /**
@@ -115,8 +117,8 @@ export const authOptions: NextAuthOptions = {
  * @see https://next-auth.js.org/configuration/nextjs
  */
 export const getServerAuthSession = (ctx: {
-  req: GetServerSidePropsContext["req"];
-  res: GetServerSidePropsContext["res"];
+    req: GetServerSidePropsContext["req"];
+    res: GetServerSidePropsContext["res"];
 }) => {
-  return getServerSession(ctx.req, ctx.res, authOptions);
+    return getServerSession(ctx.req, ctx.res, authOptions);
 };

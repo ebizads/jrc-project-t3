@@ -7,9 +7,10 @@ import StatusCard from "~/components/StatusCard";
 import StatusDayLog from "~/components/StatusDayLog";
 
 import { api } from "~/utils/api";
+import { Status } from "~/utils/types";
 
 export default function Home() {
-    const hello = api.post.hello.useQuery({ text: "from tRPC" });
+    // const hello = api.post.hello.useQuery({ text: "from tRPC" });
 
     return (
         <>
@@ -62,33 +63,33 @@ export default function Home() {
                                     Generator Control Status
                                 </h1>
                                 <GeneratorControlStatus
-                                    key="CDORFFWC"
+                                    id="CDORFFWC"
                                     statusSet={[
                                         {
                                             key: "statusSet1",
                                             name: "COMMERCIAL POWER",
                                             value: "OFF",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet2",
                                             name: "DEG MODE",
                                             value: "MANUAL",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet3",
                                             name: "DEG STATUS",
                                             value: "FAILED",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet4",
                                             name: "REMOTE OPERATION",
                                             value: "ON",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet5",
                                             name: "LOAD ON",
                                             value: "COMMERCIAL POWER",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet6",
                                             name: "FUEL LEVEL",
@@ -104,7 +105,7 @@ export default function Home() {
                                     DC 48V POWER SUPPLY STATUS
                                 </h1>
                                 <PowerSupplyStatus
-                                    key="CDORFFWC"
+                                    id="CDORFFWC"
                                     statusSet={[
                                         {
                                             key: "statusSet1",
@@ -131,10 +132,11 @@ export default function Home() {
                                     Status Logs
                                 </h1>
                                 <StatusDayLog
+                                    id="start1"
                                     day="MARCH 15, 2024"
                                     statusLogSet={[
                                         {
-                                            key: "stat1",
+                                            id: "stat1",
                                             time: "08:36",
                                             statusType: "success",
                                             content:
@@ -142,7 +144,7 @@ export default function Home() {
                                             statusName: "STARTED",
                                         },
                                         {
-                                            key: "stat2",
+                                            id: "stat2",
                                             time: "04:23",
                                             statusType: "warning",
                                             content: "Diesel Generator is on ",
@@ -151,10 +153,11 @@ export default function Home() {
                                     ]}
                                 />
                                 <StatusDayLog
+                                    id="start2"
                                     day="MARCH 05, 2024"
                                     statusLogSet={[
                                         {
-                                            key: "stat1",
+                                            id: "stat1",
                                             time: "08:36",
                                             statusType: "info",
                                             content:
@@ -164,10 +167,11 @@ export default function Home() {
                                     ]}
                                 />
                                 <StatusDayLog
+                                    id="start3"
                                     day="FEB 17, 2024"
                                     statusLogSet={[
                                         {
-                                            key: "stat1",
+                                            id: "stat1",
                                             time: "08:36",
                                             statusType: "error",
                                             content:
@@ -179,34 +183,34 @@ export default function Home() {
                             </div>
                         </div>
                         {/* Generator Card 2 */}
-                        <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold uppercase tracking-widest">
+                        <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
                             <div className="sticky top-0 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal tracking-widest">
                                 XR1- LIBONA
                             </div>
 
                             {/* Generator Control Status */}
                             <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
-                                <h1 className="text-sm font-semibold tracking-[0.2em]">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                                     Generator Control Status
                                 </h1>
                                 <GeneratorControlStatus
-                                    key="XR1_LIBONA"
+                                    id="XR1_LIBONA"
                                     statusSet={[
                                         {
                                             key: "statusSet1",
                                             name: "COMMERCIAL POWER",
                                             value: "ON",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet2",
                                             name: "DEG MODE",
                                             value: "AUTO",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet3",
                                             name: "DEG STATUS",
                                             value: "GENERATING",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet4",
                                             name: "REMOTE OPERATION",
@@ -216,12 +220,12 @@ export default function Home() {
                                             key: "statusSet5",
                                             name: "LOAD ON",
                                             value: "COMMERCIAL POWER",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet6",
                                             name: "FUEL LEVEL",
                                             value: "HIGH",
-                                        },
+                                        } as Status,
                                     ]}
                                 />
                             </div>
@@ -232,7 +236,7 @@ export default function Home() {
                                     DC 48V POWER SUPPLY STATUS
                                 </h1>
                                 <PowerSupplyStatus
-                                    key="XR1_LIBONA"
+                                    id="XR1_LIBONA"
                                     statusSet={[
                                         {
                                             key: "statusSet1",
@@ -259,10 +263,11 @@ export default function Home() {
                                     Status Logs
                                 </h1>
                                 <StatusDayLog
+                                    id="start1"
                                     day="MARCH 15, 2024"
                                     statusLogSet={[
                                         {
-                                            key: "stat1",
+                                            id: "stat1",
                                             time: "08:36",
                                             statusType: "success",
                                             content:
@@ -270,7 +275,7 @@ export default function Home() {
                                             statusName: "STARTED",
                                         },
                                         {
-                                            key: "stat2",
+                                            id: "stat2",
                                             time: "04:23",
                                             statusType: "warning",
                                             content: "Diesel Generator is on ",
@@ -278,52 +283,80 @@ export default function Home() {
                                         },
                                     ]}
                                 />
+                                <StatusDayLog
+                                    id="start2"
+                                    day="MARCH 05, 2024"
+                                    statusLogSet={[
+                                        {
+                                            id: "stat1",
+                                            time: "08:36",
+                                            statusType: "info",
+                                            content:
+                                                "Diesel Generator remote operation is ",
+                                            statusName: "STARTED",
+                                        },
+                                    ]}
+                                />
+                                <StatusDayLog
+                                    id="start3"
+                                    day="FEB 17, 2024"
+                                    statusLogSet={[
+                                        {
+                                            id: "stat1",
+                                            time: "08:36",
+                                            statusType: "error",
+                                            content:
+                                                "Diesel Generator remote operation is ",
+                                            statusName: "STARTED",
+                                        },
+                                    ]}
+                                />
                             </div>
                         </div>
                         {/* Generator Card 3 */}
-                        <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold uppercase tracking-widest">
+                        <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
                             <div className=" sticky top-0 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal tracking-widest">
                                 XR2 - DAGUMBAAN
                             </div>
 
                             {/* Generator Control Status */}
                             <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
-                                <h1 className="text-sm font-semibold tracking-[0.2em]">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                                     Generator Control Status
                                 </h1>
                                 <GeneratorControlStatus
-                                    key="XR2_DAGUMBAAN"
+                                    id="XR2_DAGUMBAAN"
                                     statusSet={[
                                         {
                                             key: "statusSet1",
                                             name: "COMMERCIAL POWER",
                                             value: "OFF",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet2",
                                             name: "DEG MODE",
                                             value: "MANUAL",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet3",
                                             name: "DEG STATUS",
                                             value: "FAILED",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet4",
                                             name: "REMOTE OPERATION",
                                             value: "ON",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet5",
                                             name: "LOAD ON",
                                             value: "COMMERCIAL POWER",
-                                        },
+                                        } as Status,
                                         {
                                             key: "statusSet6",
                                             name: "FUEL LEVEL",
                                             value: "LOW",
-                                        },
+                                        } as Status,
                                     ]}
                                 />
                             </div>
@@ -334,7 +367,7 @@ export default function Home() {
                                     DC 48V POWER SUPPLY STATUS
                                 </h1>
                                 <PowerSupplyStatus
-                                    key="XR2_DAGUMBAAN"
+                                    id="XR2_DAGUMBAAN"
                                     statusSet={[
                                         {
                                             key: "statusSet1",
@@ -361,10 +394,11 @@ export default function Home() {
                                     Status Logs
                                 </h1>
                                 <StatusDayLog
+                                    id="start1"
                                     day="MARCH 15, 2024"
                                     statusLogSet={[
                                         {
-                                            key: "stat1",
+                                            id: "stat1",
                                             time: "08:36",
                                             statusType: "success",
                                             content:
@@ -372,7 +406,7 @@ export default function Home() {
                                             statusName: "STARTED",
                                         },
                                         {
-                                            key: "stat2",
+                                            id: "stat2",
                                             time: "04:23",
                                             statusType: "warning",
                                             content: "Diesel Generator is on ",
@@ -381,22 +415,30 @@ export default function Home() {
                                     ]}
                                 />
                                 <StatusDayLog
-                                    day="MARCH 15, 2024"
+                                    id="start2"
+                                    day="MARCH 05, 2024"
                                     statusLogSet={[
                                         {
-                                            key: "stat1",
+                                            id: "stat1",
                                             time: "08:36",
-                                            statusType: "error",
+                                            statusType: "success",
                                             content:
                                                 "Diesel Generator remote operation is ",
                                             statusName: "STARTED",
                                         },
+                                    ]}
+                                />
+                                <StatusDayLog
+                                    id="start3"
+                                    day="FEB 17, 2024"
+                                    statusLogSet={[
                                         {
-                                            key: "stat2",
-                                            time: "04:23",
+                                            id: "stat1",
+                                            time: "08:36",
                                             statusType: "warning",
-                                            content: "Diesel Generator is on ",
-                                            statusName: "MANUAL",
+                                            content:
+                                                "Diesel Generator remote operation is ",
+                                            statusName: "STARTED",
                                         },
                                     ]}
                                 />
@@ -412,10 +454,7 @@ export default function Home() {
 function AuthShowcase() {
     const { data: sessionData } = useSession();
 
-    const { data: secretMessage } = api.post.getSecretMessage.useQuery(
-        undefined, // no input
-        { enabled: sessionData?.user !== undefined }
-    );
+    const secretMessage = "secret message";
 
     return (
         <div className="flex flex-col items-center justify-center gap-4">

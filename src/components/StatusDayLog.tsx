@@ -1,15 +1,17 @@
 import StatusCard from "./StatusCard";
+import type { StatusDayLogType } from "~/utils/types";
 
-const StatusDayLog = ({ id, day, statusLogSet }: any) => {
+const StatusDayLog = (statusDayLog: StatusDayLogType) => {
     return (
         <div
-            key={id}
+            key={statusDayLog.id}
             className="space-y-4 text-sm font-normal tracking-widest text-[#CCCCCC]"
         >
-            <h2>{day}</h2>
-            {statusLogSet.map((stat: any) => (
+            <h2>{statusDayLog.day}</h2>
+            {statusDayLog.statusLogSet.map((stat, idx) => (
                 <StatusCard
-                    key={stat.key}
+                    key={idx}
+                    id={stat.id}
                     time={stat.time}
                     statusType={stat.statusType}
                     content={stat.content}

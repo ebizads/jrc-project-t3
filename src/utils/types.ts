@@ -30,3 +30,7 @@ export type statusList = {
     option: string;
     color: string;
 };
+
+export type RemoteOperationProps = {
+    disabled: boolean;
+};

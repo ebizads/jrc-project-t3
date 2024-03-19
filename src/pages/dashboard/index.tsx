@@ -3,6 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import GeneratorControlStatus from "~/components/GeneratorControlStatus";
 import PowerSupplyStatus from "~/components/PowerSupplyStatus";
+import RemoteOperation from "~/components/RemoteOperation";
 import StatusCard from "~/components/StatusCard";
 import StatusDayLog from "~/components/StatusDayLog";
 
@@ -97,6 +98,14 @@ export default function Home() {
                                         },
                                     ]}
                                 />
+                            </div>
+
+                            {/* Remote Operation */}
+                            <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                                    Remote Operation
+                                </h1>
+                                <RemoteOperation disabled={true} />
                             </div>
 
                             {/* Power Supply Status */}
@@ -230,6 +239,14 @@ export default function Home() {
                                 />
                             </div>
 
+                            {/* Remote Operation */}
+                            <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                                    Remote Operation
+                                </h1>
+                                <RemoteOperation disabled={false} />
+                            </div>
+
                             {/* Power Supply Status */}
                             <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
                                 <h1 className="text-sm font-semibold tracking-[0.2em]">
@@ -359,6 +376,14 @@ export default function Home() {
                                         } as Status,
                                     ]}
                                 />
+                            </div>
+
+                            {/* Remote Operation */}
+                            <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                                    Remote Operation
+                                </h1>
+                                <RemoteOperation disabled={false} />
                             </div>
 
                             {/* Power Supply Status */}

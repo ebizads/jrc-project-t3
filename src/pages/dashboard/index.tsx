@@ -6,6 +6,7 @@ import PowerSupplyStatus from "~/components/PowerSupplyStatus";
 import RemoteOperation from "~/components/RemoteOperation";
 import StatusCard from "~/components/StatusCard";
 import StatusDayLog from "~/components/StatusDayLog";
+import StatusDiagram from "~/components/StatusDiagram";
 
 import { api } from "~/utils/api";
 import { Status } from "~/utils/types";
@@ -98,6 +99,14 @@ export default function Home() {
                                         },
                                     ]}
                                 />
+                            </div>
+
+                            {/* Generator Power Diagram */}
+                            <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                                    Generator Power Diagram
+                                </h1>
+                                <StatusDiagram />
                             </div>
 
                             {/* Remote Operation */}

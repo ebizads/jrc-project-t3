@@ -7,6 +7,7 @@ import RemoteOperation from "~/components/RemoteOperation";
 import StatusCard from "~/components/StatusCard";
 import StatusDayLog from "~/components/StatusDayLog";
 import StatusDiagram from "~/components/StatusDiagram";
+import TestSwitch from "~/components/TestSwitch";
 
 import { api } from "~/utils/api";
 import { Status } from "~/utils/types";
@@ -59,6 +60,39 @@ export default function Home() {
                             <div className=" sticky top-0 z-50 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal tracking-widest">
                                 CDORFFWC
                             </div>
+                            {/* Test */}
+                            <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
+                                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                                    Test Connection
+                                </h1>
+                                <TestSwitch
+                                    id="CDORFFWC"
+                                    //============= DITO MO LAGAY SA BABA YUNG NEED I-FETCH =================
+                                    statusSet={[
+                                        {
+                                            key: "statusSet1",
+                                            name: "EMERGENCY",
+                                            value: true,
+                                        },
+                                        {
+                                            key: "statusSet2",
+                                            name: "FREEZER_DOOR",
+                                            value: false,
+                                        },
+                                        {
+                                            key: "statusSet3",
+                                            name: "PHOTO_SENSOR",
+                                            value: false,
+                                        },
+                                        {
+                                            key: "statusSet4",
+                                            name: "POS",
+                                            value: true,
+                                        },
+                                    ]}
+                                />
+                            </div>
+
                             {/* Generator Control Status */}
                             <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
                                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">

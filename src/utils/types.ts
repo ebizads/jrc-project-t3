@@ -34,3 +34,22 @@ export type statusList = {
 export type RemoteOperationProps = {
     disabled: boolean;
 };
+
+//=========================== test types beloww ===========================
+export type TestStatus = {
+    key: string;
+    name: string;
+    value: boolean;
+};
+
+export type testStatusList = {
+    key: string;
+    option: boolean;
+    color: string;
+};
+
+export type TestStatusGroupType = {
+    groupName: string;
+    testStatusList: testStatusList[];
+    selectedStatus: boolean;
+};

@@ -10,7 +10,7 @@ export default function Document() {
                     href="https://kit-pro.fontawesome.com/releases/v6.1.1/css/pro.css"
                 />
             </Head>
-            <body >
+            <body>
                 <HeaderNav />
                 <Main />
                 <NextScript />

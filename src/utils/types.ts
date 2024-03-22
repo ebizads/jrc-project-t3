@@ -35,6 +35,11 @@ export type RemoteOperationProps = {
     disabled: boolean;
 };
 
+export type StatusDiagramProps = {
+    loadStatus: string;
+    genStatus: string;
+};
+
 //=========================== test types beloww ===========================
 export type TestStatus = {
     key: string;

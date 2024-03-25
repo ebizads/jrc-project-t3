@@ -61,7 +61,7 @@ export default function Home() {
                                 CDORFFWC
                             </div>
                             {/* Test */}
-                            <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
+                            {/* <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
                                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                                     Test Connection
                                 </h1>
@@ -91,7 +91,7 @@ export default function Home() {
                                         },
                                     ]}
                                 />
-                            </div>
+                            </div> */}
 
                             {/* Generator Control Status */}
                             <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
@@ -140,7 +140,10 @@ export default function Home() {
                                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                                     Generator Power Diagram
                                 </h1>
-                                <StatusDiagram />
+                                <StatusDiagram
+                                    loadStatus="GENERATOR"
+                                    genStatus="GENERATING"
+                                />
                             </div>
 
                             {/* Remote Operation */}

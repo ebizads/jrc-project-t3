@@ -1,3 +1,7 @@
+export type Generator = {
+    generatorName: string;
+};
+
 export type Status = {
     key: string;
     name: string;

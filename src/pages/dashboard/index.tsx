@@ -4,16 +4,8 @@ import Link from "next/link";
 import Generator1 from "~/components/Generator1";
 import Generator2 from "~/components/Generator2";
 import Generator3 from "~/components/Generator3";
-import GeneratorControlStatus from "~/components/GeneratorControlStatus";
-import PowerSupplyStatus from "~/components/PowerSupplyStatus";
-import RemoteOperation from "~/components/RemoteOperation";
-import StatusCard from "~/components/StatusCard";
-import StatusDayLog from "~/components/StatusDayLog";
-import StatusDiagram from "~/components/StatusDiagram";
-import TestSwitch from "~/components/TestSwitch";
 
 import { api } from "~/utils/api";
-import { Status } from "~/utils/types";
 
 export default function Home() {
     // const hello = api.post.hello.useQuery({ text: "from tRPC" });

@@ -11,7 +11,6 @@ export default function Document() {
                 />
             </Head>
             <body>
-                <HeaderNav />
                 <Main />
                 <NextScript />
             </body>

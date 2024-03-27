@@ -4,7 +4,7 @@ import Image from "next/image";
 const HeaderNav = () => {
     return (
         <>
-            <div className="navbar  px-10">
+            <div className="navbar bg-neutral px-10">
                 <div className="flex-1">
                     <div className="relative">
                         <Image

@@ -25,14 +25,13 @@ export default function Home() {
                     />
                     <link rel="icon" href="/jrc-icon.svg" />
                 </Head>
-                <div
-                    className="hero min-h-[40vh]"
-                    style={{
-                        backgroundImage:
-                            "url(https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg)",
-                    }}
-                >
-                    <div className="hero-overlay bg-opacity-60"></div>
+
+                <div className=" absolute -z-50 min-h-[130vh] w-full bg-[url('https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg')] bg-cover bg-no-repeat opacity-25 blur-sm ">
+                    <div className="absolute h-full w-full bg-gradient-to-b from-transparent to-base-100"></div>
+                </div>
+
+                <div className=" hero min-h-[40vh]">
+                    {/* <div className="hero-overlay bg-opacity-60"></div> */}
                     <div className="hero-content text-center text-neutral-content">
                         <div className="max-w-3xl">
                             <h1 className="mb-2 text-3xl font-bold">
@@ -45,9 +44,10 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
+
                 {/* main */}
                 <main
-                    className={`flex min-h-screen w-full flex-col items-center justify-between p-12 text-primary `}
+                    className={`flex min-h-screen w-full flex-col items-center justify-between px-12 pb-12 text-primary `}
                 >
                     <div className="flex h-full w-full flex-row ">
                         {/* Generator Card 1 */}

@@ -9,7 +9,7 @@ import TestSwitch from "./TestSwitch";
 const Generator2 = (generatorProps: Generator) => {
     return (
         <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
-            <div className="sticky top-0 z-50 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
+            <div className="sticky top-0 z-40 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
                 {generatorProps.generatorName}
             </div>
 

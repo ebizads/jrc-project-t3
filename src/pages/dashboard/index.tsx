@@ -4,6 +4,7 @@ import Link from "next/link";
 import Generator1 from "~/components/Generator1";
 import Generator2 from "~/components/Generator2";
 import Generator3 from "~/components/Generator3";
+import ModalVerification from "~/components/ModalVerification";
 
 import { api } from "~/utils/api";
 
@@ -49,6 +50,7 @@ export default function Home() {
                 <main
                     className={`flex min-h-screen w-full flex-col items-center justify-between px-12 pb-12 text-primary `}
                 >
+                    <ModalVerification />
                     <div className="flex h-full w-full flex-row ">
                         {/* Generator Card 1 */}
                         <Generator1 generatorName="CDORFFWC" />

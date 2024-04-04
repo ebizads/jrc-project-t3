@@ -90,7 +90,7 @@ const LoginForm = () => {
                             className=" flex w-full flex-col gap-5"
                         >
                             {/* USERNAME */}
-                            <label className="input flex items-center gap-4 rounded-none bg-secondary ">
+                            <label className="input flex items-center gap-4 rounded-none bg-secondary pr-0">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 16 16"
@@ -103,18 +103,18 @@ const LoginForm = () => {
                                     id="username"
                                     type="text"
                                     {...register("username")}
-                                    className="grow text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
+                                    className=" grow bg-secondary p-3 text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
                                     placeholder="USERNAME"
                                 />
                             </label>
 
                             {/* PASSWORD */}
-                            <label className="input flex items-center gap-4 rounded-none bg-secondary ">
+                            <label className="input flex items-center gap-4 rounded-none bg-secondary pr-0 ">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 16 16"
                                     fill="currentColor"
-                                    className="h-4 w-4 opacity-70"
+                                    className=" h-4 w-4 bg-secondary opacity-70"
                                 >
                                     <path
                                         fillRule="evenodd"
@@ -126,7 +126,7 @@ const LoginForm = () => {
                                     id="password"
                                     type="password"
                                     {...register("password")}
-                                    className="grow text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
+                                    className=" grow rounded-none bg-secondary p-3 text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
                                     placeholder="PASSWORD"
                                 />
                             </label>

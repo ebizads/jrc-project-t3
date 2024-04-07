@@ -1,10 +1,10 @@
 import { Generator } from "~/utils/types";
 import GeneratorControlStatus from "./GeneratorControlStatus";
 import PowerSupplyStatus from "./PowerSupplyStatus";
-import RemoteOperation from "./RemoteOperation";
 import StatusDayLog from "./StatusDayLog";
 import StatusDiagram from "./StatusDiagram";
 import TestSwitch from "./TestSwitch";
+import RemoteOperation from "./RemoteOperation";
 
 const Generator1 = (generatorProps: Generator) => {
     return (
@@ -100,7 +100,7 @@ const Generator1 = (generatorProps: Generator) => {
                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                     Remote Operation
                 </h1>
-                <RemoteOperation disabled={true} />
+                <RemoteOperation disabled={false} />
             </div>
 
             {/* Power Supply Status */}

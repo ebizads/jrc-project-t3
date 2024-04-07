@@ -1,24 +1,24 @@
 import { useState } from "react";
+import { ModalVerificationProps } from "~/utils/types";
 
-const ModalVerification = () => {
-    const [modalOpen, setModalOpen] = useState(false);
+const ModalVerification = (props: ModalVerificationProps) => {
+    const statusColor = getStatusColor(props.modalStatus);
 
-    const openModal = () => {
-        setModalOpen(true);
-        document.body.style.overflow = "hidden";
-    };
+    // const [modalOpen, setModalOpen] = useState(false);
 
-    const closeModal = () => {
-        setModalOpen(false);
-        document.body.style.overflow = "auto";
-    };
+    // const openModal = () => {
+    //     setModalOpen(true);
+    //     document.body.style.overflow = "hidden";
+    // };
+
+    // const closeModal = () => {
+    //     setModalOpen(false);
+    //     document.body.style.overflow = "auto";
+    // };
 
     return (
         <>
-            <button className="btn" onClick={openModal}>
-                Open Modal
-            </button>
-            {modalOpen && (
+            {props.isModalOpen && (
                 <div className="fixed inset-0 z-50 overflow-y-auto">
                     <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
                         <div
@@ -44,15 +44,15 @@ const ModalVerification = () => {
                                 <div className="flex items-center">
                                     <div className=" w-full text-center sm:mt-0 ">
                                         {/* Question Mark icon */}
-                                        <i className="fa-solid fa-circle-question pb-3 text-9xl text-success" />
-                                        <h1 className="pb-5 text-xl font-bold uppercase tracking-[0.2em] text-success">
-                                            Start Generator?
+                                        <i className={`fa-solid fa-circle-question pb-3 text-9xl ${statusColor}`} />
+                                        <h1 className={`pb-5 text-xl font-bold uppercase tracking-[0.2em] ${statusColor}`}>
+                                            {props.modalTitle}
                                         </h1>
-                                        <p className="pb-8 text-sm">
+                                        <p className="pb-8 text-sm font-normal">
                                             You are about to turn the generator
-                                            <span className="font-semibold text-success">
+                                            <span className={`font-semibold ${statusColor}`}>
                                                 {" "}
-                                                ON
+                                                {props.modalStatus}
                                             </span>
                                             . If you wish to continue, please
                                             enter your account credentials
@@ -76,7 +76,7 @@ const ModalVerification = () => {
                                                     id="username"
                                                     type="text"
                                                     // {...register("username")}
-                                                    className=" grow bg-secondary p-3 text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
+                                                    className=" grow bg-secondary font-normal p-3 text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
                                                     placeholder="USERNAME"
                                                 />
                                             </label>
@@ -99,7 +99,7 @@ const ModalVerification = () => {
                                                     id="password"
                                                     type="password"
                                                     // {...register("password")}
-                                                    className=" grow rounded-none bg-secondary p-3 text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
+                                                    className=" grow rounded-none font-normal bg-secondary p-3 text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
                                                     placeholder="PASSWORD"
                                                 />
                                             </label>
@@ -107,10 +107,10 @@ const ModalVerification = () => {
                                             <div className="flex w-full flex-row gap-5">
                                                 {/* CANCEL BTN */}
                                                 <button
-                                                    type="submit"
-                                                    onClick={closeModal}
+                                                    type="button"
+                                                    onClick={props.closeModal}
                                                     className="h-[3rem] w-full border-[1px] border-[#CCCCCC] px-[1rem] text-center text-xs font-normal tracking-[0.2em] duration-200 hover:bg-accent focus:bg-secondary"
-                                                    // disabled={isSubmitting}
+                                                // disabled={isSubmitting}
                                                 >
                                                     CANCEL
                                                     {/* {isSubmitting
@@ -120,9 +120,10 @@ const ModalVerification = () => {
 
                                                 {/* SUBMIT BTN */}
                                                 <button
-                                                    type="submit"
+                                                    type="button"
+                                                    onClick={props.submitModal}
                                                     className="h-[3rem] w-full border-[1px] border-[#CCCCCC] bg-[#CCCCCC] px-[1rem] text-center text-xs font-normal tracking-[0.2em] text-base-300 duration-200 hover:bg-white focus:bg-info"
-                                                    // disabled={isSubmitting}
+                                                // disabled={isSubmitting}
                                                 >
                                                     SUBMIT
                                                     {/* {isSubmitting
@@ -137,7 +138,7 @@ const ModalVerification = () => {
                             <div className=" bg-base-100 px-4 sm:flex sm:flex-row-reverse sm:px-6">
                                 <button
                                     type="button"
-                                    onClick={closeModal}
+                                    onClick={props.closeModal}
                                     className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
                                 >
                                     {/* unicode for X button */}
@@ -151,5 +152,22 @@ const ModalVerification = () => {
         </>
     );
 };
+
+function getStatusColor(modalStatus: string): string {
+    let textColor: string;
+
+    switch (modalStatus) {
+        case "ON":
+            textColor = "text-success";
+            break;
+        case "OFF":
+            textColor = "text-error";
+            break;
+        default:
+            textColor = "text-info";
+            break;
+    }
+    return textColor;
+}
 
 export default ModalVerification;

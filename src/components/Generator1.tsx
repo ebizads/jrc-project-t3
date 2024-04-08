@@ -96,8 +96,8 @@ const Generator1 = (generatorProps: Generator) => {
             </div>
 
             {/* Remote Operation */}
-            <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
-                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+            <div className="text-md m-5 flex flex-col rounded-xl bg-base-100 p-5">
+                <h1 className="mb-6 text-sm font-semibold uppercase tracking-[0.2em]">
                     Remote Operation
                 </h1>
                 <RemoteOperation disabled={false} />

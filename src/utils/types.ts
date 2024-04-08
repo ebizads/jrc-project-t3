@@ -52,10 +52,11 @@ export type ModalVerificationProps = {
 
 export type StatusDiagramProps = {
     loadStatus: string;
-    genStatus: string;
+    degStatus: string;
 };
 
-//=========================== test types beloww ===========================
+//================================== test types below ===================================
+//=========================== to be deleted before deployment ===========================
 export type TestStatus = {
     key: string;
     name: string;

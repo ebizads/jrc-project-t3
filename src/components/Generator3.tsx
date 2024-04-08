@@ -5,6 +5,9 @@ import RemoteOperation from "./RemoteOperation";
 import StatusDayLog from "./StatusDayLog";
 import StatusDiagram from "./StatusDiagram";
 
+const globalDegStatus = "GENERATING";
+const globalLoadStatus = "GENERATOR";
+
 const Generator3 = (generatorProps: Generator) => {
     return (
         <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
@@ -33,7 +36,7 @@ const Generator3 = (generatorProps: Generator) => {
                         {
                             key: "statusSet3",
                             name: "DEG STATUS",
-                            value: "FAILED",
+                            value: `${globalDegStatus}`,
                         },
                         {
                             key: "statusSet4",
@@ -43,7 +46,7 @@ const Generator3 = (generatorProps: Generator) => {
                         {
                             key: "statusSet5",
                             name: "LOAD ON",
-                            value: "COMMERCIAL POWER",
+                            value: `${globalLoadStatus}`,
                         },
                         {
                             key: "statusSet6",
@@ -60,8 +63,8 @@ const Generator3 = (generatorProps: Generator) => {
                     Generator Power Diagram
                 </h1>
                 <StatusDiagram
-                    loadStatus="COMMERCIAL POWER"
-                    genStatus="FAILED"
+                    loadStatus={globalLoadStatus}
+                    degStatus={globalDegStatus}
                 />
             </div>
 

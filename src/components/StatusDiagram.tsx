@@ -44,7 +44,7 @@ const StatusDiagram = (statusDiagram: StatusDiagramProps) => {
         DEG_outerLine,
         DEG_innerLine,
         DEG_dotColor,
-    ] = getDEGColor(statusDiagram.genStatus);
+    ] = getDEGColor(statusDiagram.degStatus);
 
     return (
         <div className="flex flex-col">
@@ -156,7 +156,7 @@ const StatusDiagram = (statusDiagram: StatusDiagramProps) => {
                             Deg
                         </div>
                         <div className=" justify-self-center text-center text-[11px] font-semibold uppercase">
-                            {statusDiagram.genStatus}
+                            {statusDiagram.degStatus}
                         </div>
                     </div>
                 </div>

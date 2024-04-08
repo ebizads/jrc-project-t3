@@ -6,6 +6,9 @@ import StatusDayLog from "./StatusDayLog";
 import StatusDiagram from "./StatusDiagram";
 import TestSwitch from "./TestSwitch";
 
+const globalDegStatus = "STANDBY";
+const globalLoadStatus = "COMMERCIAL POWER";
+
 const Generator2 = (generatorProps: Generator) => {
     return (
         <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
@@ -34,7 +37,7 @@ const Generator2 = (generatorProps: Generator) => {
                         {
                             key: "statusSet3",
                             name: "DEG STATUS",
-                            value: "GENERATING",
+                            value: `${globalDegStatus}`,
                         },
                         {
                             key: "statusSet4",
@@ -44,7 +47,7 @@ const Generator2 = (generatorProps: Generator) => {
                         {
                             key: "statusSet5",
                             name: "LOAD ON",
-                            value: "COMMERCIAL POWER",
+                            value: `${globalLoadStatus}`,
                         },
                         {
                             key: "statusSet6",
@@ -61,8 +64,8 @@ const Generator2 = (generatorProps: Generator) => {
                     Generator Power Diagram
                 </h1>
                 <StatusDiagram
-                    loadStatus="COMMERCIAL POWER"
-                    genStatus="STANDBY"
+                    loadStatus={globalLoadStatus}
+                    degStatus={globalDegStatus}
                 />
             </div>
 

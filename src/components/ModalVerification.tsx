@@ -115,7 +115,7 @@ const ModalVerification = (props: ModalVerificationProps) => {
                                                 <button
                                                     type="button"
                                                     onClick={props.closeModal}
-                                                    className="h-[3rem] w-full border-[1px] border-[#CCCCCC] px-[1rem] text-center text-xs font-normal tracking-[0.2em] duration-200 hover:bg-accent focus:bg-secondary"
+                                                    className="h-[3rem] w-full border-[1px] border-[#CCCCCC] px-[1rem] text-center text-xs font-normal tracking-[0.2em] duration-200 hover:bg-[#424242] focus:bg-secondary"
                                                     // disabled={isSubmitting}
                                                 >
                                                     CANCEL

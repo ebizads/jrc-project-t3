@@ -24,6 +24,22 @@ const GeneratorControlStatus = (props: { id: string; statusSet: Status[] }) => {
                         selectedStatus={status.value}
                     />
                 ))}
+
+                <div className="flex w-full flex-col">
+                    <h2 className=" pb-2 text-xs font-normal uppercase tracking-widest text-[#CCCCCC]">
+                        Running Hours
+                    </h2>
+                    <div className=" flex w-full select-none flex-row gap-2 rounded-full p-1 text-xs uppercase tracking-wider">
+                        <div className="flex h-full w-4/6 flex-row justify-between rounded-full bg-secondary px-6 py-3 font-normal tracking-widest text-[#7E7E7E]">
+                            <h2 className="text-white">07.57</h2>
+                            <h2>Hours</h2>
+                        </div>
+                        <button className="flex h-full w-3/6 flex-row items-center justify-center gap-2 rounded-full border border-[#CCCCCC] p-3 text-center font-normal tracking-widest text-[#CCCCCC] transition-all duration-200 hover:bg-[#424242]">
+                            <h2>EDIT TIME</h2>
+                            <i className="fa-solid fa-pencil" />
+                        </button>
+                    </div>
+                </div>
             </div>
         </>
     );

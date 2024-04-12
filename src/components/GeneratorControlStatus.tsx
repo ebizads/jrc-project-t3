@@ -11,7 +11,11 @@ const redGlow =
 // const optionUnselected =
 //     "flex h-full w-full flex-col rounded-full p-3 text-center font-normal tracking-widest text-[#7E7E7E]";
 
-const GeneratorControlStatus = (props: { id: string; statusSet: Status[] }) => {
+const GeneratorControlStatus = (props: {
+    id: string;
+    runningHours: number;
+    statusSet: Status[];
+}) => {
     return (
         <>
             <div key={props?.id} className="space-y-5">
@@ -31,7 +35,7 @@ const GeneratorControlStatus = (props: { id: string; statusSet: Status[] }) => {
                     </h2>
                     <div className=" flex w-full select-none flex-row gap-2 rounded-full p-1 text-xs uppercase tracking-wider">
                         <div className="flex h-full w-4/6 flex-row justify-between rounded-full bg-secondary px-6 py-3 font-normal tracking-widest text-[#7E7E7E]">
-                            <h2 className="text-white">07.57</h2>
+                            <h2 className="text-white">{props.runningHours}</h2>
                             <h2>Hours</h2>
                         </div>
                         <button className="flex h-full w-3/6 flex-row items-center justify-center gap-2 rounded-full border border-[#CCCCCC] p-3 text-center font-normal tracking-widest text-[#CCCCCC] transition-all duration-200 hover:bg-[#424242]">

@@ -1,5 +1,6 @@
 export type Generator = {
     generatorName: string;
+    runningHours: number;
 };
 
 export type Status = {

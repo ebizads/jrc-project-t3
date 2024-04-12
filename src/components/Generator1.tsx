@@ -55,6 +55,7 @@ const Generator1 = (generatorProps: Generator) => {
                 </h1>
                 <GeneratorControlStatus
                     id={generatorProps.generatorName}
+                    runningHours={generatorProps.runningHours}
                     statusSet={[
                         {
                             key: "statusSet1",

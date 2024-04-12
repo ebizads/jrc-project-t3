@@ -1,11 +1,38 @@
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import ChangePasswordInput from "~/components/ChangePasswordInput";
+import PasswordChecker from "~/components/PasswordChecker";
+import { ChangeUserPass } from "~/server/schemas/user";
 
 const selectedTabStyle =
     "border-b-[3px] border-[#DC000C] text-[#DC000C] cursor-default";
 
+type ChangePass = z.infer<typeof ChangeUserPass>;
+
 export default function Settings() {
     const [selectedTab, setSelectedTab] = useState(0);
+    const [password, setPassword] = useState<String>("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setValue,
+        getValues,
+        watch,
+        formState: { errors, isSubmitting },
+    } = useForm<ChangePass>({
+        resolver: zodResolver(ChangeUserPass),
+    });
+
+    const [handleChangeConfirmPassword, setHandleChangedConfirmPassword] =
+        useState<boolean>();
+
+    useEffect(() => {
+        console.log(getValues("confirmPassword"));
+    }, [getValues("confirmPassword")]);
 
     return (
         <>
@@ -159,7 +186,10 @@ export default function Settings() {
 
                     {/* ACCOUNT TAB */}
                     {selectedTab === 1 && (
-                        <form className="flex h-fit w-full flex-col space-y-8">
+                        <form
+                            className="flex h-fit w-full flex-col space-y-8"
+                            // onSubmit={handleSubmit}
+                        >
                             {/* Dashboard Settings */}
                             <div className="text-md flex flex-col space-y-4">
                                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
@@ -191,10 +221,27 @@ export default function Settings() {
                                                 <input
                                                     id="NewPassword"
                                                     type="password"
+                                                    name="password"
                                                     className="w-full grow bg-secondary p-3 font-normal text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
                                                     placeholder="TYPE HERE..."
+                                                    onChange={(event) => {
+                                                        setValue(
+                                                            "password",
+                                                            event.currentTarget
+                                                                .value
+                                                        );
+                                                        setPassword(
+                                                            event.currentTarget
+                                                                .value
+                                                        );
+                                                    }}
                                                 />
                                             </label>
+                                            {password && (
+                                                <PasswordChecker
+                                                    password={watch().password}
+                                                />
+                                            )}
                                         </div>
 
                                         {/* Confirm Password */}
@@ -206,9 +253,50 @@ export default function Settings() {
                                                 <input
                                                     id="ConfirmPassword"
                                                     type="password"
+                                                    name="confirmPassword"
                                                     className="w-full grow bg-secondary p-3 font-normal text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d] "
                                                     placeholder="TYPE HERE..."
+                                                    value={confirmPassword}
+                                                    onChange={(event) => {
+                                                        setValue(
+                                                            "confirmPassword",
+                                                            event?.currentTarget
+                                                                .value
+                                                        );
+                                                        setConfirmPassword(
+                                                            event.currentTarget
+                                                                .value
+                                                        );
+
+                                                        if (
+                                                            getValues(
+                                                                "confirmPassword"
+                                                            ) !=
+                                                            getValues(
+                                                                "password"
+                                                            )
+                                                        ) {
+                                                            console.log(
+                                                                "passwords do not match!"
+                                                            );
+                                                        } else {
+                                                            console.log(
+                                                                "passwords match!"
+                                                            );
+                                                        }
+                                                        console.log(password);
+                                                    }}
                                                 />
+                                                {confirmPassword != null &&
+                                                handleChangeConfirmPassword ==
+                                                    true ? (
+                                                    <p>
+                                                        {" "}
+                                                        Password does not match!
+                                                    </p>
+                                                ) : (
+                                                    <></>
+                                                )}
                                             </label>
                                         </div>
                                     </div>

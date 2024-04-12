@@ -52,13 +52,22 @@ export default function Home() {
                 >
                     <div className="flex h-full w-full flex-row ">
                         {/* Generator Card 1 */}
-                        <Generator1 generatorName="CDORFFWC" />
+                        <Generator1
+                            generatorName="CDORFFWC"
+                            runningHours={3.49}
+                        />
 
                         {/* Generator Card 2 */}
-                        <Generator2 generatorName="XR1 - LIBONA" />
+                        <Generator2
+                            generatorName="XR1 - LIBONA"
+                            runningHours={7.89}
+                        />
 
                         {/* Generator Card 3 */}
-                        <Generator3 generatorName="XR2 - DAGUMBAAN" />
+                        <Generator3
+                            generatorName="XR2 - DAGUMBAAN"
+                            runningHours={17.36}
+                        />
                     </div>
                 </main>
             </div>

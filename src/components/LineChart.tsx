@@ -9,7 +9,7 @@ import {
 import { useEffect } from "react";
 import { Line } from "react-chartjs-2";
 
-import { dataApi } from "~/utils/dataApi";
+import { fetchData } from "~/utils/dataApi";
 // Register ChartJS components using ChartJS.register
 ChartJS.register(
     CategoryScale,
@@ -23,7 +23,7 @@ function LineChartExample() {
 
     // const { data: hander } = handler
     useEffect(() => {
-        console.log(dataApi())
+        // console.log(fetchData())
     }, [])
     return (
         <div className="bg-white">

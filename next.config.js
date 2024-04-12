@@ -17,6 +17,15 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/v1/:path*',
+        destination: 'http://10.190.12.26/api/v1/:path*'
+      },
+    ]
+  }
+
 };
 
 export default config;

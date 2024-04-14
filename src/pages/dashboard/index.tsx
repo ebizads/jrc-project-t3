@@ -194,7 +194,10 @@ export default function Home() {
                   ]}
                 />
               </div>
-              <LineChartExample></LineChartExample>
+
+              <div className="text-md m-5 bg-base-100 h-fit rounded-xl p-5">
+                <LineChartExample></LineChartExample>
+              </div>
 
               {/* Status Logs */}
               <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
@@ -334,7 +337,10 @@ export default function Home() {
                   ]}
                 />
               </div>
-              {/* <LineChartExample></LineChartExample> */}
+
+              <div className="text-md m-5 bg-base-100 h-fit rounded-xl p-5">
+                <LineChartExample></LineChartExample>
+              </div>
 
               {/* Status Logs */}
               <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
@@ -474,7 +480,10 @@ export default function Home() {
                   ]}
                 />
               </div>
-              {/* <LineChartExample></LineChartExample> */}
+
+              <div className="text-md m-5 bg-base-100 h-fit rounded-xl p-5">
+                <LineChartExample></LineChartExample>
+              </div>
 
               {/* Status Logs */}
               <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">

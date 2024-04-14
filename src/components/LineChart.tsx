@@ -98,7 +98,7 @@ function LineChartExample() {
     }, []);
 
     return (
-        <div className="bg-white">
+        <div className="">
             <Line
                 // redraw={true}
                 ref={chartRef}

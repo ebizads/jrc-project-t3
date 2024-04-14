@@ -334,7 +334,7 @@ export default function Home() {
                   ]}
                 />
               </div>
-              <LineChartExample></LineChartExample>
+              {/* <LineChartExample></LineChartExample> */}
 
               {/* Status Logs */}
               <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
@@ -474,7 +474,7 @@ export default function Home() {
                   ]}
                 />
               </div>
-              <LineChartExample></LineChartExample>
+              {/* <LineChartExample></LineChartExample> */}
 
               {/* Status Logs */}
               <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">

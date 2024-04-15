@@ -1,43 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import ChangePasswordInput from "~/components/ChangePasswordInput";
-import PasswordChecker from "~/components/PasswordChecker";
-import { ChangeUserPass } from "~/server/schemas/user";
+import { useState } from "react";
+import NewPassword from "~/components/NewPassword";
 
 const selectedTabStyle =
     "border-b-[3px] border-[#DC000C] text-[#DC000C] cursor-default";
 
-type ChangePass = z.infer<typeof ChangeUserPass>;
-
 export default function Settings() {
     const [selectedTab, setSelectedTab] = useState(0);
-    const [password, setPassword] = useState<String>("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const {
-        register,
-        handleSubmit,
-        reset,
-        setValue,
-        getValues,
-        watch,
-        formState: { errors, isSubmitting },
-    } = useForm<ChangePass>({
-        resolver: zodResolver(ChangeUserPass),
-    });
-
-    const [handleChangeConfirmPassword, setHandleChangedConfirmPassword] =
-        useState<boolean>();
-
-    useEffect(() => {
-        console.log(getValues("confirmPassword"));
-    }, [getValues("confirmPassword")]);
 
     return (
         <>
             <main
-                className={`flex min-h-screen w-full flex-col items-start justify-start space-y-8 bg-[#202020] px-24 py-24 font-normal text-primary lg:px-80 `}
+                className={`flex min-h-screen w-full flex-col items-start justify-start space-y-8 bg-[#202020] px-24 py-24 font-normal text-primary xl:px-80 `}
             >
                 <h1 className="text-3xl font-bold">Settings</h1>
                 <div className="flex w-full flex-row items-start border-b-2 border-secondary">
@@ -210,96 +183,7 @@ export default function Settings() {
                                             />
                                         </label>
                                     </div>
-
-                                    <div className="flex flex-row gap-7">
-                                        {/* New Password */}
-                                        <div className="flex w-full flex-col space-y-2">
-                                            <h2 className="text-sm font-normal uppercase tracking-widest text-[#CCCCCC]">
-                                                New Password
-                                            </h2>
-                                            <label className="input w-full items-center gap-4 rounded-none bg-secondary">
-                                                <input
-                                                    id="NewPassword"
-                                                    type="password"
-                                                    name="password"
-                                                    className="w-full grow bg-secondary p-3 font-normal text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
-                                                    placeholder="TYPE HERE..."
-                                                    onChange={(event) => {
-                                                        setValue(
-                                                            "password",
-                                                            event.currentTarget
-                                                                .value
-                                                        );
-                                                        setPassword(
-                                                            event.currentTarget
-                                                                .value
-                                                        );
-                                                    }}
-                                                />
-                                            </label>
-                                            {password && (
-                                                <PasswordChecker
-                                                    password={watch().password}
-                                                />
-                                            )}
-                                        </div>
-
-                                        {/* Confirm Password */}
-                                        <div className="flex w-full flex-col space-y-2">
-                                            <h2 className="text-sm font-normal uppercase tracking-widest text-[#CCCCCC]">
-                                                Confirm Password
-                                            </h2>
-                                            <label className="input w-full items-center gap-4 rounded-none bg-secondary">
-                                                <input
-                                                    id="ConfirmPassword"
-                                                    type="password"
-                                                    name="confirmPassword"
-                                                    className="w-full grow bg-secondary p-3 font-normal text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d] "
-                                                    placeholder="TYPE HERE..."
-                                                    value={confirmPassword}
-                                                    onChange={(event) => {
-                                                        setValue(
-                                                            "confirmPassword",
-                                                            event?.currentTarget
-                                                                .value
-                                                        );
-                                                        setConfirmPassword(
-                                                            event.currentTarget
-                                                                .value
-                                                        );
-
-                                                        if (
-                                                            getValues(
-                                                                "confirmPassword"
-                                                            ) !=
-                                                            getValues(
-                                                                "password"
-                                                            )
-                                                        ) {
-                                                            console.log(
-                                                                "passwords do not match!"
-                                                            );
-                                                        } else {
-                                                            console.log(
-                                                                "passwords match!"
-                                                            );
-                                                        }
-                                                        console.log(password);
-                                                    }}
-                                                />
-                                                {confirmPassword != null &&
-                                                handleChangeConfirmPassword ==
-                                                    true ? (
-                                                    <p>
-                                                        {" "}
-                                                        Password does not match!
-                                                    </p>
-                                                ) : (
-                                                    <></>
-                                                )}
-                                            </label>
-                                        </div>
-                                    </div>
+                                    <NewPassword />
                                 </div>
                                 {/* <ChangePasswordInput /> */}
                             </div>

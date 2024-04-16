@@ -185,7 +185,6 @@ export default function Settings() {
                                     </div>
                                     <NewPassword />
                                 </div>
-                                {/* <ChangePasswordInput /> */}
                             </div>
 
                             {/* Form Buttons */}

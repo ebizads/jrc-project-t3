@@ -75,7 +75,7 @@ const Generator1 = (generatorProps: Generator) => {
                         {
                             key: "statusSet4",
                             name: "REMOTE OPERATION",
-                            value: "ON",
+                            value: "N/A",
                         },
                         {
                             key: "statusSet5",

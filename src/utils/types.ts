@@ -1,3 +1,8 @@
+export type Generator = {
+    generatorName: string;
+    runningHours: number;
+};
+
 export type Status = {
     key: string;
     name: string;
@@ -35,7 +40,24 @@ export type RemoteOperationProps = {
     disabled: boolean;
 };
 
-//=========================== test types beloww ===========================
+export type CloseModalFunction = () => void;
+type SubmitModalFunction = () => void;
+
+export type ModalVerificationProps = {
+    isModalOpen: boolean;
+    modalTitle: string;
+    modalStatus: string;
+    submitModal: SubmitModalFunction;
+    closeModal: CloseModalFunction;
+};
+
+export type StatusDiagramProps = {
+    loadStatus: string;
+    degStatus: string;
+};
+
+//================================== test types below ===================================
+//=========================== to be deleted before deployment ===========================
 export type TestStatus = {
     key: string;
     name: string;

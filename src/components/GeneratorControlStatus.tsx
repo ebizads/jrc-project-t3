@@ -1,5 +1,6 @@
 import type { Status } from "~/utils/types";
 import StatusGroup from "./StatusGroup";
+import EditHoursButton from "./EditHoursButton";
 
 //STATUS COLORS
 const yellowGlow =
@@ -11,7 +12,11 @@ const redGlow =
 // const optionUnselected =
 //     "flex h-full w-full flex-col rounded-full p-3 text-center font-normal tracking-widest text-[#7E7E7E]";
 
-const GeneratorControlStatus = (props: { id: string; statusSet: Status[] }) => {
+const GeneratorControlStatus = (props: {
+    id: string;
+    runningHours: number;
+    statusSet: Status[];
+}) => {
     return (
         <>
             <div key={props?.id} className="space-y-5">
@@ -24,6 +29,8 @@ const GeneratorControlStatus = (props: { id: string; statusSet: Status[] }) => {
                         selectedStatus={status.value}
                     />
                 ))}
+
+                <EditHoursButton runningHours={props.runningHours} />
             </div>
         </>
     );
@@ -52,8 +59,9 @@ const getStatusList = (statusName: string) => {
             ];
         case "REMOTE OPERATION":
             return [
-                { key: "status1", option: "STANDBY", color: yellowGlow },
-                { key: "status2", option: "ON", color: greenGlow },
+                { key: "status1", option: "ON", color: greenGlow },
+                { key: "status2", option: "STANDBY", color: yellowGlow },
+                { key: "status3", option: "N/A", color: redGlow },
             ];
         case "LOAD ON":
             return [

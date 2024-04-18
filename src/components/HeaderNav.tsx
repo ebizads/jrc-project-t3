@@ -1,12 +1,13 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const HeaderNav = () => {
     return (
         <>
-            <div className="navbar  px-10">
+            <div className="navbar bg-neutral px-10">
                 <div className="flex-1">
-                    <div className="relative">
+                    <Link className="relative" href="/dashboard">
                         <Image
                             src="/images/JRC_Logo_Dark.png"
                             alt="JRC Logo"
@@ -14,7 +15,7 @@ const HeaderNav = () => {
                             width={200}
                             height={0}
                         />
-                    </div>
+                    </Link>
                 </div>
                 <div className="flex-none gap-2">
                     <div className="form-control">
@@ -40,16 +41,16 @@ const HeaderNav = () => {
                         </div>
                         <ul
                             tabIndex={0}
-                            className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow"
+                            className="menu dropdown-content menu-sm z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 font-normal shadow"
                         >
-                            <li>
+                            {/* <li>
                                 <a className="justify-between">
                                     Profile
-                                    {/* <span className="badge">New</span> */}
+                                    <span className="badge">New</span>
                                 </a>
-                            </li>
+                            </li> */}
                             <li>
-                                <a>Settings</a>
+                                <Link href="/settings">Settings</Link>
                             </li>
                             <li>
                                 <a>Logout</a>

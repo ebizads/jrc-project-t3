@@ -1,15 +1,18 @@
-import { Generator } from "~/utils/types";
+import { Generator, Status } from "~/utils/types";
 import GeneratorControlStatus from "./GeneratorControlStatus";
 import PowerSupplyStatus from "./PowerSupplyStatus";
 import StatusDayLog from "./StatusDayLog";
 import StatusDiagram from "./StatusDiagram";
 import TestSwitch from "./TestSwitch";
 import RemoteOperation from "./RemoteOperation";
+import LineChartExample from "./LineChart";
 
 const globalDegStatus = "FAILED";
 const globalLoadStatus = "COMMERCIAL POWER";
 
-const Generator1 = (generatorProps: Generator) => {
+const Generator1 = (
+    generatorProps: Generator,
+) => {
     return (
         <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
             <div className=" sticky top-0 z-40 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
@@ -56,38 +59,7 @@ const Generator1 = (generatorProps: Generator) => {
                 <GeneratorControlStatus
                     id={generatorProps.generatorName}
                     runningHours={generatorProps.runningHours}
-                    statusSet={[
-                        {
-                            key: "statusSet1",
-                            name: "COMMERCIAL POWER",
-                            value: "OFF",
-                        },
-                        {
-                            key: "statusSet2",
-                            name: "DEG MODE",
-                            value: "MANUAL",
-                        },
-                        {
-                            key: "statusSet3",
-                            name: "DEG STATUS",
-                            value: `${globalDegStatus}`,
-                        },
-                        {
-                            key: "statusSet4",
-                            name: "REMOTE OPERATION",
-                            value: "N/A",
-                        },
-                        {
-                            key: "statusSet5",
-                            name: "LOAD ON",
-                            value: `${globalLoadStatus}`,
-                        },
-                        {
-                            key: "statusSet6",
-                            name: "FUEL LEVEL",
-                            value: "HIGH",
-                        },
-                    ]}
+                    statusSet={generatorProps.generatorData}
                 />
             </div>
 
@@ -119,22 +91,26 @@ const Generator1 = (generatorProps: Generator) => {
                     id="CDORFFWC"
                     statusSet={[
                         {
-                            key: "statusSet1",
                             name: "DC POWER SUPPLY STATUS",
                             value: "ALARM",
                         },
                         {
-                            key: "statusSet2",
                             name: "COMMERCIAL POWER",
                             value: "ON",
                         },
                         {
-                            key: "statusSet3",
                             name: "BATTERY TEMPERATURE",
                             value: "HIGH",
                         },
                     ]}
                 />
+            </div>
+
+            <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
+                <h1 className="text-sm font-semibold tracking-[0.2em]">
+                    GRAPHICAL REPORT
+                </h1>
+                <LineChartExample/>
             </div>
 
             {/* Status Logs */}

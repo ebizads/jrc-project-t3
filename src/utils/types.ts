@@ -1,10 +1,11 @@
 export type Generator = {
     generatorName: string;
+    generatorData: Status[],
     runningHours: number;
 };
 
 export type Status = {
-    key: string;
+    // key: string;
     name: string;
     value: string;
 };
@@ -59,7 +60,6 @@ export type StatusDiagramProps = {
 //================================== test types below ===================================
 //=========================== to be deleted before deployment ===========================
 export type TestStatus = {
-    key: string;
     name: string;
     value: boolean;
 };

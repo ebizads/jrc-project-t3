@@ -26,32 +26,26 @@ const Generator2 = (generatorProps: Generator) => {
                     runningHours={generatorProps.runningHours}
                     statusSet={[
                         {
-                            key: "statusSet1",
                             name: "COMMERCIAL POWER",
                             value: "ON",
                         },
                         {
-                            key: "statusSet2",
                             name: "DEG MODE",
                             value: "AUTO",
                         },
                         {
-                            key: "statusSet3",
                             name: "DEG STATUS",
                             value: `${globalDegStatus}`,
                         },
                         {
-                            key: "statusSet4",
                             name: "REMOTE OPERATION",
                             value: "STANDBY",
                         },
                         {
-                            key: "statusSet5",
                             name: "LOAD ON",
                             value: `${globalLoadStatus}`,
                         },
                         {
-                            key: "statusSet6",
                             name: "FUEL LEVEL",
                             value: "HIGH",
                         },
@@ -87,17 +81,14 @@ const Generator2 = (generatorProps: Generator) => {
                     id={generatorProps.generatorName}
                     statusSet={[
                         {
-                            key: "statusSet1",
                             name: "DC POWER SUPPLY STATUS",
                             value: "OPERATING",
                         },
                         {
-                            key: "statusSet2",
                             name: "COMMERCIAL POWER",
                             value: "OFF",
                         },
                         {
-                            key: "statusSet3",
                             name: "BATTERY TEMPERATURE",
                             value: "HIGH",
                         },

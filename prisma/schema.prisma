@@ -44,14 +44,15 @@ model Session {
 
 model User {
   name          String?
-  email         String?   @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
-  uid           String    @id @default(cuid())
-  id            Int       @default(autoincrement())
+  uid           String       @id @default(cuid())
+  id            Int          @default(autoincrement())
   accounts      Account?
   posts         Post[]
   sessions      Session[]
+  StatusLogs    StatusLogs[]
 }
 
 model VerificationToken {
@@ -60,4 +61,16 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model StatusLogs {
+  id          Int       @id @default(autoincrement())
+  status_type String?
+  status_msg  String?
+  status      String?
+  createdAt   DateTime  @default(now())
+  deleted     Boolean   @default(false)
+  deletedAt   DateTime?
+  uid         String
+  user        User      @relation(fields: [uid], references: [uid], onDelete: Cascade)
 }

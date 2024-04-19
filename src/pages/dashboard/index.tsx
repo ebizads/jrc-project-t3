@@ -12,29 +12,54 @@ import StatusDiagram from "~/components/StatusDiagram";
 import TestSwitch from "~/components/TestSwitch";
 
 import { api } from "~/utils/api";
-import { Status } from "~/utils/types";
-import { fetchData } from "~/utils/dataApi";
+import { DraftStatus, Status, TestStatus } from "~/utils/types";
+// import { fetchData } from "~/utils/dataApi";
 import { useState } from "react";
 
 import Generator1 from "~/components/Generator1";
 import Generator2 from "~/components/Generator2";
 import Generator3 from "~/components/Generator3";
 import ModalVerification from "~/components/ModalVerification";
+import { getDataValueEquivalent, getDataValueEquivalentTest } from "~/utils/functions";
 
 
 export default function Home() {
   // const hello = api.post.hello.useQuery({ text: "from tRPC" });
-  // const [testData, setTestData] = useState<string[]>()
-  // useEffect(() => {
-  //   const fetchDataClient = async () => {
-  //     const data = await fetchData();
-  //     setTestData(data);
-  //   }
+  const [testData, setTestData] = useState<Array<TestStatus> | null>(null)
+  const [testDataFinal, setTestDataFinal] = useState<Status[]>([])
 
-  //   void fetchDataClient()
 
-  //   console.log(testData)
-  // }, [])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/fetchApi');
+        const jsonData = await response.json() as TestStatus[];
+
+        setTestData(jsonData)
+        console.log(testData)
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+
+    void fetchData()
+
+    // console.log("test data", testData)
+
+
+    testData?.map((data: TestStatus, idx) => (
+      setTestDataFinal([...testDataFinal, { name: data.name, value: getDataValueEquivalentTest(data.name, data.value) }])
+    ))
+
+    testData?.forEach((data) => {
+      testDataFinal.push({ name: data.name, value: getDataValueEquivalentTest(data.name, data.value) })
+    })
+
+    console.log("final test data1", testDataFinal)
+
+  }, [])
   return (
     <>
       <div>
@@ -78,6 +103,7 @@ export default function Home() {
             {/* Generator Card 1 */}
             <Generator1
               generatorName="CDORFFWC"
+              generatorData={testDataFinal ?? []}
               runningHours={3.49}
             />
 

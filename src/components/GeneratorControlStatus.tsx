@@ -20,12 +20,13 @@ const GeneratorControlStatus = (props: {
     return (
         <>
             <div key={props?.id} className="space-y-5">
-                {props?.statusSet.map((status: Status) => (
+                {props?.statusSet.map((status: Status, idx) => (
                     <StatusGroup
-                        key={status.key}
+                        key={idx}
                         groupName={status.name}
                         // Define statusList dynamically based on status name
-                        statusList={getStatusList(status.name)}
+                        // statusList={getStatusList(status.name)}
+                        statusList={getStatusListTest(status.name)}
                         selectedStatus={status.value}
                     />
                 ))}
@@ -73,6 +74,56 @@ const getStatusList = (statusName: string) => {
                 { key: "status2", option: "GENERATOR", color: greenGlow },
             ];
         case "FUEL LEVEL":
+            return [
+                {
+                    key: "status1",
+                    option: "LOW",
+                    color: redGlow,
+                },
+                { key: "status2", option: "HIGH", color: greenGlow },
+            ];
+        default:
+            return [];
+    }
+};
+
+
+const getStatusListTest = (statusName: string) => {
+    // Define statusList based on status name
+    switch (statusName) {
+        case "COMMERCIAL POWER":
+            return [
+                { key: "status1", option: "OFF", color: redGlow },
+                { key: "status2", option: "ON", color: greenGlow },
+            ];
+        case "DEG MODE":
+            return [
+                { key: "status1", option: "GENERATING", color: greenGlow },
+                { key: "status2", option: "MANUAL", color: yellowGlow },
+                { key: "status3", option: "AUTO", color: greenGlow },
+            ];
+        case "DEG STATUS":
+            return [
+                { key: "status1", option: "FAILED", color: redGlow },
+                { key: "status2", option: "STANDBY", color: yellowGlow },
+                { key: "status3", option: "GENERATING", color: greenGlow },
+            ];
+        case "UNDER_REMOTE_OPERATION":
+            return [
+                { key: "status1", option: "ON", color: greenGlow },
+                { key: "status2", option: "STANDBY", color: yellowGlow },
+                { key: "status3", option: "N/A", color: redGlow },
+            ];
+        case "LOAD ON":
+            return [
+                {
+                    key: "status1",
+                    option: "COMMERCIAL POWER",
+                    color: greenGlow,
+                },
+                { key: "status2", option: "GENERATOR", color: greenGlow },
+            ];
+        case "LOW_FUEL_LEVEL":
             return [
                 {
                     key: "status1",

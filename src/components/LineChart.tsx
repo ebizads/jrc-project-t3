@@ -14,7 +14,7 @@ import {
 } from 'chart.js';
 import 'chartjs-adapter-moment'
 
-import { fetchData } from "~/utils/dataApi";
+// import { fetchData } from "~/utils/dataApi";
 
 // Register necessary components
 ChartJS.register(
@@ -28,7 +28,7 @@ ChartJS.register(
 );
 
 
-function LineChartExample() {
+const LineChartExample=() =>{
 
     const chartRef = useRef<ChartJS<"line">>(null);
 
@@ -85,7 +85,7 @@ function LineChartExample() {
                 newData[0]?.data.shift(); // Remove the first data point from each dataset
             }
 
-            console.log(newLabels, newData[0]?.data)
+            // console.log(newLabels, newData[0]?.data)
             return { ...prevChartData, labels: newLabels, datasets: newData };
         });
     };

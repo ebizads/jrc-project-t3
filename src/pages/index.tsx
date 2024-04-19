@@ -152,7 +152,7 @@ const LoginForm = () => {
                             </div>
                         </form>
                         {error && (
-                            <div className="toast toast-end toast-top">
+                            <div className="toast toast-end toast-bottom">
                                 <div role="alert" className="alert alert-error">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"

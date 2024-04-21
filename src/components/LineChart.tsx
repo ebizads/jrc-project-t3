@@ -128,7 +128,7 @@ const LineChartExample = () => {
     //     }
     // } ?? [];
 
-    const unit: 'minute' | 'hour' | 'day' | 'month' = 'hour' as 'hour';
+    const unit: 'minute' | 'hour' | 'day' | 'month' = 'minute' as 'minute';
 
     const options = {
         scales: {

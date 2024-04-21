@@ -10,8 +10,8 @@ import {
     Legend,
     TimeScale,
     DatasetChartOptions,
-    ChartData
 } from 'chart.js';
+// import 'chartjs-adapter-date-fns';
 import 'chartjs-adapter-moment'
 
 // import { fetchData } from "~/utils/dataApi";
@@ -27,32 +27,116 @@ ChartJS.register(
     TimeScale
 );
 
+// Define interfaces for the data point and dataset
+interface DataPoint {
+    x: string;
+    y: number;
+}
 
-const LineChartExample=() =>{
+interface DataSet {
+    label: string;
+    borderColor: string;
+    backgroundColor: string;
+    data: DataPoint[];
+}
+
+interface ChartData {
+    datasets: DataSet[];
+}
+
+
+const LineChartExample = () => {
 
     const chartRef = useRef<ChartJS<"line">>(null);
-
-    const [chartData, setChartData] = useState<ChartData<"line">>({
-        labels: [], //Initial labels
+    const [chartData, setChartData] = useState<ChartData>({
         datasets: [
             {
-                label: 'Sample Dataset',
+                label: 'Data 1',
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.5)',
                 data: [],
-                fill: false,
-                borderColor: 'rgba(75,192,192,1)',
-                tension: 0.4
             },
-        ],
+            {
+                label: 'Data 2',
+                borderColor: 'rgb(54, 162, 235)',
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                data: [],
+            },
+            {
+                label: 'Data 3',
+                borderColor: 'rgb(0, 255, 153)',
+                backgroundColor: 'rgb(0, 255, 153, 0.5)',
+                data: [],
+            }
+        ]
     });
 
+    // Function to add new data points
+    const addDataPointsData1 = () => {
+        const newTime = new Date().toISOString();
+
+        setChartData(prevChartData => ({
+            datasets: prevChartData.datasets.map(dataset => {
+                let value
+                if (dataset.label === "Data 1") {
+                    value = Math.round(Math.random())  // value betweeon 0 and 1
+                }
+                else if (dataset.label === "Data 2") {
+                    value = Math.round(Math.random()) * 1 + 2  // value betweeon 2 and 3
+                }
+                else if (dataset.label === "Data 3") {
+                    value = Math.round(Math.random()) * 1 + 4 // value betweeon 4 and 5
+                }
+
+
+                const newDataPoint: DataPoint = { x: newTime, y: value ?? 0 };
+                const newData = [...dataset.data, newDataPoint];
+
+                // Keep only the latest 20 data points
+                if (newData.length > 20) {
+                    newData.shift();
+                }
+                return { ...dataset, data: newData };
+            })
+        }));
+    };
+
+    useEffect(() => {
+        const interval = setInterval(
+            addDataPointsData1
+            , 60000); // Update every 2000 milliseconds
+        return () => clearInterval(interval); // Cleanup on unmount
+    }, []);
+
     // Chart options
+    // const options = {
+    //     scales: {
+    //         // type:'time',
+    //         x: {
+    //             type: 'time' as const,
+    //             time: {
+    //                 tooltipFormat: 'll HH:mm:ss' // Formatting time for tooltip
+    //             },
+    //             title: {
+    //                 display: true,
+    //                 text: 'Time'
+    //             }
+    //         },
+    //         y: {
+    //             beginAtZero: true
+    //         }
+    //     }
+    // } ?? [];
+
+    const unit: 'minute' | 'hour' | 'day' | 'month' = 'hour' as 'hour';
+
     const options = {
         scales: {
-            // type:'time',
             x: {
                 type: 'time' as const,
                 time: {
-                    tooltipFormat: 'll HH:mm:ss' // Formatting time for tooltip
+                    tooltipFormat: 'll HH:mm:ss',
+                    unit: unit as 'minute' | 'hour' | 'day' | 'month'
                 },
                 title: {
                     display: true,
@@ -60,48 +144,17 @@ const LineChartExample=() =>{
                 }
             },
             y: {
-                beginAtZero: true
+                beginAtZero: false
             }
         }
-    } ?? [];
-
-    // Function to add new data points
-    const addDataPoint = () => {
-        const newTime = new Date(); // Use current time as the new label
-        const newDataPoint = Math.floor(Math.random() * 100);
-        setChartData(prevChartData => {
-            // Copy the existing data
-            const newLabels = [...prevChartData.labels ?? [], new Date().toISOString()];
-            const newData = prevChartData.datasets.map(dataset => ({
-                ...dataset,
-                data: [...dataset.data, newDataPoint]
-            }));
-
-            const dataLength = newData[0]?.data.length ?? 0
-            // Optionally, remove the oldest data point if the dataset becomes too large
-            if ( dataLength > 5) { // Let's say we keep at most 20 data points
-                // Remove the first label
-                newLabels.shift();
-                newData[0]?.data.shift(); // Remove the first data point from each dataset
-            }
-
-            // console.log(newLabels, newData[0]?.data)
-            return { ...prevChartData, labels: newLabels, datasets: newData };
-        });
     };
 
-    // Set up an interval for updating the chart
-    useEffect(() => {
-        const interval = setInterval(addDataPoint, 2000); // Update every 2000 milliseconds (2 seconds)
-
-        return () => clearInterval(interval); // Cleanup on unmount
-    }, []);
 
     return (
         <div className="">
             <Line
                 // redraw={true}
-                ref={chartRef}
+                // ref={chartRef}
                 data={chartData}
                 options={options}
             />

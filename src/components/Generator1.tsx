@@ -1,18 +1,67 @@
-import { Generator, Status } from "~/utils/types";
+import { Generator, TestGenerator } from "~/utils/types";
 import GeneratorControlStatus from "./GeneratorControlStatus";
 import PowerSupplyStatus from "./PowerSupplyStatus";
 import StatusDayLog from "./StatusDayLog";
 import StatusDiagram from "./StatusDiagram";
 import TestSwitch from "./TestSwitch";
 import RemoteOperation from "./RemoteOperation";
-import LineChartExample from "./LineChart";
+import { getMappedStatus } from "~/utils/functions";
 
-const globalDegStatus = "FAILED";
-const globalLoadStatus = "COMMERCIAL POWER";
+const Generator1 = (generatorProps: TestGenerator) => {
+    // let sensorParameters = generatorProps.generatorData;
+    // let commercialPower = "OFF";
+    // let remoteOperation = "ON";
 
-const Generator1 = (
-    generatorProps: Generator,
-) => {
+    // sensorParameters.forEach((parameter) => {
+    //     switch (parameter.name) {
+    //         case "AC_POWER_FAILURE":
+    //             switch (parameter.value) {
+    //                 case true:
+    //                     return (commercialPower = "OFF");
+    //                 case false:
+    //                     return (commercialPower = "ON");
+    //             }
+    //         case "AC_POWER_FAILURE_P":
+    //             if (parameter.value === true) {
+    //                 console.log("AC_POWER_FAILURE_P - Value is true");
+    //             } else {
+    //                 console.log("AC_POWER_FAILURE_P - Value is false");
+    //             }
+    //             break;
+    //         case "RECTIFIER_ABNORMAL_ALARM":
+    //             if (parameter.value === true) {
+    //                 console.log("Rectifier Abnormal Alarm - Value is true");
+    //             } else {
+    //                 console.log("Rectifier Abnormal Alarm - Value is false");
+    //             }
+    //             break;
+    //         case "UNDER_REMOTE_OPERATION":
+    //             if (parameter.value === true) {
+    //                 console.log("Under Remote Operation - Value is true");
+    //             } else {
+    //                 console.log("Under Remote Operation - Value is false");
+    //             }
+    //             break;
+    //         default:
+    //             console.log("Default case");
+    //     }
+    // });
+
+    const [
+        commercialPower,
+        degMode,
+        degStatus,
+        remoteOperation,
+        loadOn,
+        fuelLevel,
+        powerSupply,
+        commercialPowerDC,
+        batteryTemp,
+    ] = getMappedStatus(generatorProps);
+
+    const globalDegStatus = degStatus;
+    const globalLoadStatus = loadOn;
+
     return (
         <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
             <div className=" sticky top-0 z-40 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
@@ -59,7 +108,32 @@ const Generator1 = (
                 <GeneratorControlStatus
                     id={generatorProps.generatorName}
                     runningHours={generatorProps.runningHours}
-                    statusSet={generatorProps.generatorData}
+                    statusSet={[
+                        {
+                            name: "COMMERCIAL POWER",
+                            value: commercialPower,
+                        },
+                        {
+                            name: "DEG MODE",
+                            value: degMode,
+                        },
+                        {
+                            name: "DEG STATUS",
+                            value: `${globalDegStatus}`,
+                        },
+                        {
+                            name: "REMOTE OPERATION",
+                            value: remoteOperation,
+                        },
+                        {
+                            name: "LOAD ON",
+                            value: `${globalLoadStatus}`,
+                        },
+                        {
+                            name: "FUEL LEVEL",
+                            value: fuelLevel,
+                        },
+                    ]}
                 />
             </div>
 
@@ -92,25 +166,18 @@ const Generator1 = (
                     statusSet={[
                         {
                             name: "DC POWER SUPPLY STATUS",
-                            value: "ALARM",
+                            value: powerSupply,
                         },
                         {
                             name: "COMMERCIAL POWER",
-                            value: "ON",
+                            value: commercialPowerDC,
                         },
                         {
                             name: "BATTERY TEMPERATURE",
-                            value: "HIGH",
+                            value: batteryTemp,
                         },
                     ]}
                 />
-            </div>
-
-            <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
-                <h1 className="text-sm font-semibold tracking-[0.2em]">
-                    GRAPHICAL REPORT
-                </h1>
-                <LineChartExample/>
             </div>
 
             {/* Status Logs */}

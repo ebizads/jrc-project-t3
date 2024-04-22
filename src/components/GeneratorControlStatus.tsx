@@ -26,7 +26,7 @@ const GeneratorControlStatus = (props: {
                         groupName={status.name}
                         // Define statusList dynamically based on status name
                         // statusList={getStatusList(status.name)}
-                        statusList={getStatusListTest(status.name)}
+                        statusList={getStatusList(status.name)}
                         selectedStatus={status.value}
                     />
                 ))}
@@ -86,7 +86,6 @@ const getStatusList = (statusName: string) => {
             return [];
     }
 };
-
 
 const getStatusListTest = (statusName: string) => {
     // Define statusList based on status name

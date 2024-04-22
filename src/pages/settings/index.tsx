@@ -159,7 +159,7 @@ export default function Settings() {
 
                     {/* ACCOUNT TAB */}
                     {selectedTab === 1 && (
-                        <form
+                        <div
                             className="flex h-fit w-full flex-col space-y-8"
                             // onSubmit={handleSubmit}
                         >
@@ -168,48 +168,14 @@ export default function Settings() {
                                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                                     Change Password
                                 </h1>
-                                <div className="flex w-full flex-col space-y-7 bg-base-100 p-7">
-                                    <div className="flex flex-col space-y-2">
-                                        <h2 className=" text-sm font-normal uppercase tracking-widest text-[#CCCCCC]">
-                                            Old Password
-                                        </h2>
-                                        {/* Old Password */}
-                                        <label className="input w-full items-center gap-4 rounded-none bg-secondary">
-                                            <input
-                                                id="OldPassword"
-                                                type="password"
-                                                className="w-full grow bg-secondary p-3 font-normal text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
-                                                placeholder="TYPE HERE..."
-                                            />
-                                        </label>
-                                    </div>
+                                <div className="flex w-full flex-col">
+                                  
                                     <NewPassword />
                                 </div>
                             </div>
 
-                            {/* Form Buttons */}
-                            <div className="flex w-full flex-row gap-5">
-                                {/* DISCARD BTN */}
-                                <button
-                                    type="button"
-                                    // onClick={props.closeModal}
-                                    className="h-[3rem] border-[1px] border-[#CCCCCC] px-[1.5rem] text-center text-xs font-normal uppercase tracking-[0.2em] duration-200 hover:bg-[#424242] focus:bg-secondary"
-                                    // disabled={isSubmitting}
-                                >
-                                    Discard Changes
-                                </button>
-
-                                {/* SAVE BTN */}
-                                <button
-                                    type="button"
-                                    // onClick={props.submitModal}
-                                    className="h-[3rem] border-[1px] border-success bg-success px-[1.5rem] text-center text-xs font-normal uppercase tracking-[0.2em] text-white duration-200 hover:bg-[#5ec772] focus:bg-[#3d8b4b]"
-                                    // disabled={isSubmitting}
-                                >
-                                    Save Changes
-                                </button>
-                            </div>
-                        </form>
+                         
+                        </div>
                     )}
                 </div>
             </main>

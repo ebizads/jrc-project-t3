@@ -19,7 +19,7 @@ model Post {
 }
 
 model Account {
-  userId        String  @unique
+  userId        String   @unique
   type          String
   refresh_token String?
   access_token  String?
@@ -29,9 +29,10 @@ model Account {
   id_token      String?
   session_state String?
   password      String
-  username      String  @unique
-  id            Int     @id @default(autoincrement())
-  user          User    @relation(fields: [userId], references: [uid], onDelete: Cascade)
+  oldPassword   String[]
+  username      String   @unique
+  id            Int      @id @default(autoincrement())
+  user          User     @relation(fields: [userId], references: [uid], onDelete: Cascade)
 }
 
 model Session {
@@ -71,6 +72,6 @@ model StatusLogs {
   createdAt   DateTime  @default(now())
   deleted     Boolean   @default(false)
   deletedAt   DateTime?
-  uid         String
-  user        User      @relation(fields: [uid], references: [uid], onDelete: Cascade)
+  uid         String?
+  user        User?     @relation(fields: [uid], references: [uid], onDelete: Cascade)
 }

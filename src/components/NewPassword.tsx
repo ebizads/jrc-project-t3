@@ -8,8 +8,8 @@ import PasswordChecker from "~/components/PasswordChecker";
 type ChangePass = z.infer<typeof ChangeUserPass>;
 
 const NewPassword = () => {
-    const [password, setPassword] = useState<String>("");
-    const [confirmPassword, setConfirmPassword] = useState<String>("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const {
         register,
         handleSubmit,

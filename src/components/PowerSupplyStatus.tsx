@@ -1,5 +1,6 @@
 import type { Status } from "~/utils/types";
 import StatusGroup from "./StatusGroup";
+import { BatteryTemp, CommercialPower, PowerSupply } from "~/utils/enums";
 
 //STATUS COLORS
 const greenGlow =
@@ -31,18 +32,42 @@ const getStatusList = (statusName: string) => {
     switch (statusName) {
         case "DC POWER SUPPLY STATUS":
             return [
-                { key: "status1", option: "ALARM", color: redGlow },
-                { key: "status2", option: "OPERATING", color: greenGlow },
+                {
+                    key: "status1",
+                    option: PowerSupply.ALARM,
+                    color: redGlow,
+                },
+                {
+                    key: "status2",
+                    option: PowerSupply.OPERATING,
+                    color: greenGlow,
+                },
             ];
         case "COMMERCIAL POWER":
             return [
-                { key: "status1", option: "OFF", color: redGlow },
-                { key: "status2", option: "ON", color: greenGlow },
+                {
+                    key: "status1",
+                    option: CommercialPower.OFF,
+                    color: redGlow,
+                },
+                {
+                    key: "status2",
+                    option: CommercialPower.ON,
+                    color: greenGlow,
+                },
             ];
         case "BATTERY TEMPERATURE":
             return [
-                { key: "status1", option: "HIGH", color: redGlow },
-                { key: "status2", option: "GOOD", color: greenGlow },
+                {
+                    key: "status1",
+                    option: BatteryTemp.HIGH,
+                    color: redGlow,
+                },
+                {
+                    key: "status2",
+                    option: BatteryTemp.GOOD,
+                    color: greenGlow,
+                },
             ];
         default:
             return [];

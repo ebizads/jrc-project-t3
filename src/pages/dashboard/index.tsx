@@ -12,7 +12,7 @@ import StatusDiagram from "~/components/StatusDiagram";
 import TestSwitch from "~/components/TestSwitch";
 
 import { api } from "~/utils/api";
-import { DraftStatus, Status, TestStatus } from "~/utils/types";
+import { Status, TestStatus } from "~/utils/types";
 // import { fetchData } from "~/utils/dataApi";
 import { useState } from "react";
 
@@ -20,134 +20,141 @@ import Generator1 from "~/components/Generator1";
 import Generator2 from "~/components/Generator2";
 import Generator3 from "~/components/Generator3";
 import ModalVerification from "~/components/ModalVerification";
-import { getDataValueEquivalent, getDataValueEquivalentTest } from "~/utils/functions";
-
+import {
+    getDataValueEquivalent,
+    getDataValueEquivalentTest,
+} from "~/utils/functions";
 
 export default function Home() {
-  // const hello = api.post.hello.useQuery({ text: "from tRPC" });
-  const [testData, setTestData] = useState<Array<TestStatus> | null>(null)
-  const [testDataFinal, setTestDataFinal] = useState<Status[]>([])
+    // const hello = api.post.hello.useQuery({ text: "from tRPC" });
+    const [testData, setTestData] = useState<Array<TestStatus> | null>(null);
+    const [testDataFinal, setTestDataFinal] = useState<Status[]>([]);
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("/api/fetchApi");
+                const jsonData = (await response.json()) as TestStatus[];
 
+                setTestData(jsonData);
+                console.log(testData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/fetchApi');
-        const jsonData = await response.json() as TestStatus[];
+        void fetchData();
 
-        setTestData(jsonData)
-        console.log(testData)
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+        console.log("test data", testData);
 
+        // testData?.map((data: TestStatus, idx) =>
+        //     setTestDataFinal([
+        //         ...testDataFinal,
+        //         {
+        //             name: data.name,
+        //             value: getDataValueEquivalentTest(data.name, data.value),
+        //         },
+        //     ])
+        // );
 
-    void fetchData()
+        // testData?.forEach((data) => {
+        //     testDataFinal.push({
+        //         name: data.name,
+        //         value: getDataValueEquivalentTest(data.name, data.value),
+        //     });
+        // });
 
-    // console.log("test data", testData)
+        // console.log("final test data1", testDataFinal);
+    }, []);
+    return (
+        <>
+            <div>
+                <Head>
+                    <title>JRC Monitoring & Control System Dashboard</title>
+                    <meta
+                        name="description"
+                        content="JRC Monitoring Dashboard"
+                    />
+                    <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1"
+                    />
+                    <link rel="icon" href="/jrc-icon.svg" />
+                </Head>
 
+                <div className=" absolute -z-50 min-h-[130vh] w-full bg-[url('https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg')] bg-cover bg-no-repeat opacity-25 blur-sm ">
+                    <div className="absolute h-full w-full bg-gradient-to-b from-transparent to-base-100"></div>
+                </div>
 
-    testData?.map((data: TestStatus, idx) => (
-      setTestDataFinal([...testDataFinal, { name: data.name, value: getDataValueEquivalentTest(data.name, data.value) }])
-    ))
+                <div className=" hero min-h-[40vh]">
+                    {/* <div className="hero-overlay bg-opacity-60"></div> */}
+                    <div className="hero-content text-center text-neutral-content">
+                        <div className="max-w-3xl">
+                            <h1 className="mb-2 text-3xl font-bold">
+                                The Project for Improving Flood Forecasting and
+                                Warning System for Cagayan De Oro River Basin
+                            </h1>
+                            <p className="mb-5 text-base font-semibold uppercase tracking-[0.15em]">
+                                Monitoring & Control System
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-    testData?.forEach((data) => {
-      testDataFinal.push({ name: data.name, value: getDataValueEquivalentTest(data.name, data.value) })
-    })
+                {/* main */}
+                <main
+                    className={`flex min-h-screen w-full flex-col items-center justify-between px-12 pb-12 text-primary `}
+                >
+                    <div className="flex h-full w-full flex-row ">
+                        {/* Generator Card 1 */}
+                        <Generator1
+                            generatorName="CDORFFWC"
+                            generatorData={testData ?? []}
+                            runningHours={3.49}
+                        />
 
-    console.log("final test data1", testDataFinal)
+                        {/* Generator Card 2 */}
+                        <Generator2
+                            generatorName="XR1 - LIBONA"
+                            generatorData={testDataFinal ?? []}
+                            runningHours={7.89}
+                        />
 
-  }, [])
-  return (
-    <>
-      <div>
-        <Head>
-          <title>JRC Monitoring & Control System Dashboard</title>
-          <meta
-            name="description"
-            content="JRC Monitoring Dashboard"
-          />
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1"
-          />
-          <link rel="icon" href="/jrc-icon.svg" />
-        </Head>
-
-        <div className=" absolute -z-50 min-h-[130vh] w-full bg-[url('https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg')] bg-cover bg-no-repeat opacity-25 blur-sm ">
-          <div className="absolute h-full w-full bg-gradient-to-b from-transparent to-base-100"></div>
-        </div>
-
-        <div className=" hero min-h-[40vh]">
-          {/* <div className="hero-overlay bg-opacity-60"></div> */}
-          <div className="hero-content text-center text-neutral-content">
-            <div className="max-w-3xl">
-              <h1 className="mb-2 text-3xl font-bold">
-                The Project for Improving Flood Forecasting and
-                Warning System for Cagayan De Oro River Basin
-              </h1>
-              <p className="mb-5 text-base font-semibold uppercase tracking-[0.15em]">
-                Monitoring & Control System
-              </p>
+                        {/* Generator Card 3 */}
+                        <Generator3
+                            generatorName="XR2 - DAGUMBAAN"
+                            generatorData={testDataFinal ?? []}
+                            runningHours={17.36}
+                        />
+                    </div>
+                </main>
             </div>
-          </div>
-        </div>
-
-        {/* main */}
-        <main
-          className={`flex min-h-screen w-full flex-col items-center justify-between px-12 pb-12 text-primary `}
-        >
-          <div className="flex h-full w-full flex-row ">
-            {/* Generator Card 1 */}
-            <Generator1
-              generatorName="CDORFFWC"
-              generatorData={testDataFinal ?? []}
-              runningHours={3.49}
-            />
-
-            {/* Generator Card 2 */}
-            <Generator2
-              generatorName="XR1 - LIBONA"
-              runningHours={7.89}
-            />
-
-            {/* Generator Card 3 */}
-            <Generator3
-              generatorName="XR2 - DAGUMBAAN"
-              runningHours={17.36}
-            />
-          </div>
-        </main>
-      </div>
-      {/* main */}
-
-    </>
-  );
+            {/* main */}
+        </>
+    );
 }
 
 function AuthShowcase() {
-  const { data: sessionData } = useSession();
+    const { data: sessionData } = useSession();
 
-  const secretMessage = "secret message";
+    const secretMessage = "secret message";
 
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl text-white">
-        {sessionData && (
-          <span>Logged in as {sessionData.user?.name}</span>
-        )}
-        {secretMessage && <span> - {secretMessage}</span>}
-      </p>
-      <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-        onClick={
-          sessionData ? () => void signOut() : () => void signIn()
-        }
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
-  );
+    return (
+        <div className="flex flex-col items-center justify-center gap-4">
+            <p className="text-center text-2xl text-white">
+                {sessionData && (
+                    <span>Logged in as {sessionData.user?.name}</span>
+                )}
+                {secretMessage && <span> - {secretMessage}</span>}
+            </p>
+            <button
+                className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+                onClick={
+                    sessionData ? () => void signOut() : () => void signIn()
+                }
+            >
+                {sessionData ? "Sign out" : "Sign in"}
+            </button>
+        </div>
+    );
 }

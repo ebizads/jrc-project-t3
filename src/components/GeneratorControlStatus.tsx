@@ -1,6 +1,14 @@
 import type { Status } from "~/utils/types";
 import StatusGroup from "./StatusGroup";
 import EditHoursButton from "./EditHoursButton";
+import {
+    CommercialPower,
+    DegMode,
+    DegStatus,
+    FuelLevel,
+    LoadOn,
+    RemoteOperation,
+} from "~/utils/enums";
 
 //STATUS COLORS
 const yellowGlow =
@@ -43,97 +51,149 @@ const getStatusList = (statusName: string) => {
     switch (statusName) {
         case "COMMERCIAL POWER":
             return [
-                { key: "status1", option: "OFF", color: redGlow },
-                { key: "status2", option: "ON", color: greenGlow },
+                {
+                    key: "status1",
+                    option: CommercialPower.OFF,
+                    color: redGlow,
+                },
+                {
+                    key: "status2",
+                    option: CommercialPower.ON,
+                    color: greenGlow,
+                },
             ];
         case "DEG MODE":
             return [
-                { key: "status1", option: "GENERATING", color: greenGlow },
-                { key: "status2", option: "MANUAL", color: yellowGlow },
-                { key: "status3", option: "AUTO", color: greenGlow },
+                {
+                    key: "status1",
+                    option: DegMode.GENERATING,
+                    color: greenGlow,
+                },
+                {
+                    key: "status2",
+                    option: DegMode.MANUAL,
+                    color: yellowGlow,
+                },
+                {
+                    key: "status3",
+                    option: DegMode.AUTO,
+                    color: greenGlow,
+                },
             ];
         case "DEG STATUS":
             return [
-                { key: "status1", option: "FAILED", color: redGlow },
-                { key: "status2", option: "STANDBY", color: yellowGlow },
-                { key: "status3", option: "GENERATING", color: greenGlow },
+                {
+                    key: "status1",
+                    option: DegStatus.FAILED,
+                    color: redGlow,
+                },
+                {
+                    key: "status2",
+                    option: DegStatus.STANDBY,
+                    color: yellowGlow,
+                },
+                {
+                    key: "status3",
+                    option: DegStatus.GENERATING,
+                    color: greenGlow,
+                },
             ];
         case "REMOTE OPERATION":
             return [
-                { key: "status1", option: "ON", color: greenGlow },
-                { key: "status2", option: "STANDBY", color: yellowGlow },
-                { key: "status3", option: "N/A", color: redGlow },
+                {
+                    key: "status1",
+                    option: RemoteOperation.ON,
+                    color: greenGlow,
+                },
+                {
+                    key: "status2",
+                    option: RemoteOperation.STANDBY,
+                    color: yellowGlow,
+                },
+                {
+                    key: "status3",
+                    option: RemoteOperation.NA,
+                    color: redGlow,
+                },
             ];
         case "LOAD ON":
             return [
                 {
                     key: "status1",
-                    option: "COMMERCIAL POWER",
+                    option: LoadOn.COMMERCIALPOWER,
                     color: greenGlow,
                 },
-                { key: "status2", option: "GENERATOR", color: greenGlow },
+                {
+                    key: "status2",
+                    option: LoadOn.GENERATOR,
+                    color: greenGlow,
+                },
             ];
         case "FUEL LEVEL":
             return [
                 {
                     key: "status1",
-                    option: "LOW",
+                    option: FuelLevel.LOW,
                     color: redGlow,
                 },
-                { key: "status2", option: "HIGH", color: greenGlow },
+                {
+                    key: "status2",
+                    option: FuelLevel.HIGH,
+                    color: greenGlow,
+                },
             ];
         default:
             return [];
     }
 };
 
-const getStatusListTest = (statusName: string) => {
-    // Define statusList based on status name
-    switch (statusName) {
-        case "COMMERCIAL POWER":
-            return [
-                { key: "status1", option: "OFF", color: redGlow },
-                { key: "status2", option: "ON", color: greenGlow },
-            ];
-        case "DEG MODE":
-            return [
-                { key: "status1", option: "GENERATING", color: greenGlow },
-                { key: "status2", option: "MANUAL", color: yellowGlow },
-                { key: "status3", option: "AUTO", color: greenGlow },
-            ];
-        case "DEG STATUS":
-            return [
-                { key: "status1", option: "FAILED", color: redGlow },
-                { key: "status2", option: "STANDBY", color: yellowGlow },
-                { key: "status3", option: "GENERATING", color: greenGlow },
-            ];
-        case "UNDER_REMOTE_OPERATION":
-            return [
-                { key: "status1", option: "ON", color: greenGlow },
-                { key: "status2", option: "STANDBY", color: yellowGlow },
-                { key: "status3", option: "N/A", color: redGlow },
-            ];
-        case "LOAD ON":
-            return [
-                {
-                    key: "status1",
-                    option: "COMMERCIAL POWER",
-                    color: greenGlow,
-                },
-                { key: "status2", option: "GENERATOR", color: greenGlow },
-            ];
-        case "LOW_FUEL_LEVEL":
-            return [
-                {
-                    key: "status1",
-                    option: "LOW",
-                    color: redGlow,
-                },
-                { key: "status2", option: "HIGH", color: greenGlow },
-            ];
-        default:
-            return [];
-    }
-};
+// const getStatusListTest = (statusName: string) => {
+//     // Define statusList based on status name
+//     switch (statusName) {
+//         case "COMMERCIAL POWER":
+//             return [
+//                 { key: "status1", option: "OFF", color: redGlow },
+//                 { key: "status2", option: "ON", color: greenGlow },
+//             ];
+//         case "DEG MODE":
+//             return [
+//                 { key: "status1", option: "GENERATING", color: greenGlow },
+//                 { key: "status2", option: "MANUAL", color: yellowGlow },
+//                 { key: "status3", option: "AUTO", color: greenGlow },
+//             ];
+//         case "DEG STATUS":
+//             return [
+//                 { key: "status1", option: "FAILED", color: redGlow },
+//                 { key: "status2", option: "STANDBY", color: yellowGlow },
+//                 { key: "status3", option: "GENERATING", color: greenGlow },
+//             ];
+//         case "UNDER_REMOTE_OPERATION":
+//             return [
+//                 { key: "status1", option: "ON", color: greenGlow },
+//                 { key: "status2", option: "STANDBY", color: yellowGlow },
+//                 { key: "status3", option: "N/A", color: redGlow },
+//             ];
+//         case "LOAD ON":
+//             return [
+//                 {
+//                     key: "status1",
+//                     option: "COMMERCIAL POWER",
+//                     color: greenGlow,
+//                 },
+//                 { key: "status2", option: "GENERATOR", color: greenGlow },
+//             ];
+//         case "LOW_FUEL_LEVEL":
+//             return [
+//                 {
+//                     key: "status1",
+//                     option: "LOW",
+//                     color: redGlow,
+//                 },
+//                 { key: "status2", option: "HIGH", color: greenGlow },
+//             ];
+//         default:
+//             return [];
+//     }
+// };
 
 export default GeneratorControlStatus;

@@ -1,3 +1,4 @@
+import { DegStatus, LoadOn } from "~/utils/enums";
 import { StatusDiagramProps } from "~/utils/types";
 
 // Line Colors
@@ -175,7 +176,7 @@ function getCPColor(
     let CP_dotColor: string;
     let CP_isLoaded: boolean;
 
-    if (loadType === "COMMERCIAL POWER") {
+    if (loadType === LoadOn.COMMERCIALPOWER) {
         // GREEN
         CP_boxBorder = greenParent;
         CP_boxInner = greenChild;
@@ -211,14 +212,14 @@ function getDEGColor(
     let DEG_innerLine: string;
     let DEG_dotColor: string;
 
-    if (genStatus === "GENERATING") {
+    if (genStatus === DegStatus.GENERATING) {
         // GREEN
         DEG_boxBorder = greenParent;
         DEG_boxInner = greenChild;
         DEG_outerLine = greenLineGradient;
         DEG_innerLine = greenLine;
         DEG_dotColor = greenBorder;
-    } else if (genStatus === "STANDBY") {
+    } else if (genStatus === DegStatus.STANDBY) {
         // YELLOW
         DEG_boxBorder = yellowParent;
         DEG_boxInner = yellowChild;

@@ -15,9 +15,9 @@ const TestSwitch = (props: { id: string; statusSet: TestStatus[] }) => {
     return (
         <>
             <div key={props?.id} className="space-y-5">
-                {props?.statusSet.map((status: TestStatus) => (
+                {props?.statusSet.map((status: TestStatus, idx) => (
                     <TestStatusGroup
-                        key={status.key}
+                        key={idx}
                         groupName={status.name}
                         // Define statusList dynamically based on status name
                         testStatusList={getStatusList(status.name)}

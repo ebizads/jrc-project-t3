@@ -1,4 +1,12 @@
 import { TestGenerator } from "~/utils/types";
+import {
+    BatteryTemp,
+    CommercialPower,
+    DegStatus,
+    FuelLevel,
+    PowerSupply,
+    RemoteOperation,
+} from "./enums";
 
 export const getDataValueEquivalent = (statusName: string, value: boolean) => {
     switch (statusName) {
@@ -228,7 +236,7 @@ export const getDataValueEquivalentTest = (
 export const getMappedStatus = (
     generatorProps: TestGenerator
 ): [string, string, string, string, string, string, string, string, string] => {
-    let sensorParameters = generatorProps.generatorData;
+    const sensorParameters = generatorProps.generatorData;
 
     // Generator Status
     let commercialPower = "";
@@ -249,70 +257,65 @@ export const getMappedStatus = (
             case "AC_POWER_FAILURE":
                 switch (parameter.value) {
                     case true:
-                        commercialPower = "OFF";
+                    // commercialPower = CommercialPower.ON;
                     case false:
-                        commercialPower = "ON";
+                    // commercialPower = CommercialPower.ON;
                 }
                 break;
             case "AC_POWER_FAILURE_P":
                 switch (parameter.value) {
                     case true:
-                    // commercialPower = "OFF";
+                    // commercialPower = CommercialPower.OFF;
                     case false:
-                    // commercialPower = "ON";
+                    // commercialPower = CommercialPower.ON;
                 }
                 break;
             case "AC_POWER_RECEIVING":
                 switch (parameter.value) {
                     case true:
-                        commercialPower = "ON";
+                        commercialPower = CommercialPower.ON;
+                        commercialPowerDC = CommercialPower.ON;
                     case false:
-                        commercialPower = "OFF";
+                        commercialPower = CommercialPower.OFF;
+                        commercialPowerDC = CommercialPower.OFF;
                 }
                 break;
             case "BATTERY_HIGH_TEMPERATURE":
                 switch (parameter.value) {
                     case true:
-                        // commercialPower = "OFF";
-                        batteryTemp = "HIGH";
+                        batteryTemp = BatteryTemp.HIGH;
                     case false:
-                        // commercialPower = "ON";
-                        batteryTemp = "GOOD";
+                        batteryTemp = BatteryTemp.GOOD;
                 }
                 break;
             case "LOW_FUEL_LEVEL":
                 switch (parameter.value) {
                     case true:
-                        fuelLevel = "LOW";
+                        fuelLevel = FuelLevel.LOW;
                     case false:
-                        fuelLevel = "HIGH";
+                        fuelLevel = FuelLevel.HIGH;
                 }
                 break;
             case "RECTIFIER_ABNORMAL_ALARM":
                 switch (parameter.value) {
                     case true:
-                    // commercialPower = "OFF";
+                        powerSupply = PowerSupply.ALARM;
+                        degStatus = DegStatus.FAILED;
                     case false:
-                        // commercialPower = "ON";
-                        degMode = "MANUAL";
+                        powerSupply = PowerSupply.OPERATING;
+                        degStatus = DegStatus.GENERATING;
+                    // degStatus = DegStatus.STANDBY;
                 }
                 break;
             case "UNDER_REMOTE_OPERATION":
                 switch (parameter.value) {
                     case true:
-                        remoteOperation = "ON";
+                        remoteOperation = RemoteOperation.ON;
+                    // remoteOperation = RemoteOperation.STANDBY;
                     case false:
-                        remoteOperation = "STANDY";
+                        remoteOperation = RemoteOperation.NA;
                 }
                 break;
-            // default:
-            //     commercialPower = "";
-            //     degMode = "";
-            //     degStatus = "";
-            //     remoteOperation = "";
-            //     loadOn = "";
-            //     fuelLevel = "";
-            //     console.log("Default case");
         }
     });
 

@@ -15,8 +15,8 @@ const NewPassword = () => {
     const [userId, setUserId] = useState<number>(0)
     const { data: session } = useSession()
 
-    const [password, setPassword] = useState<String>("");
-    const [confirmPassword, setConfirmPassword] = useState<String>("");
+    const [password, setPassword] = useState<string>("");
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
 
     const userData = api.account.findOne.useQuery(userId?? 0)
 

@@ -6,6 +6,7 @@ import StatusDiagram from "./StatusDiagram";
 import TestSwitch from "./TestSwitch";
 import RemoteOperation from "./RemoteOperation";
 import { getMappedStatus } from "~/utils/functions";
+import LineChartExample from "./LineChart";
 
 const Generator1 = (generatorProps: TestGenerator) => {
     // let sensorParameters = generatorProps.generatorData;
@@ -179,6 +180,18 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     ]}
                 />
             </div>
+
+            <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-3 h-fit tracking-normal">
+                <h1 className="text-sm font-semibold tracking-[0.2em]">
+                    GRAPHICAL REPORT
+                </h1>
+                <LineChartExample
+                    generatorName={generatorProps.generatorName}
+                    runningHours={generatorProps.runningHours}
+                    generatorData={generatorProps.generatorData }
+                />
+            </div>
+
 
             {/* Status Logs */}
             <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">

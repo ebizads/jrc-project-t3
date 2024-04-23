@@ -1,5 +1,14 @@
-// import { create } from "zustand";
+import { create } from "zustand";
 
+type CommercialPowerState = {
+    commercialPower: string | null
+    setCommercialPower: (commercialPower: string) => void
+}
+
+export const useCommercialPowerStore = create<CommercialPowerState>((set) => ({
+    commercialPower: null,
+    setCommercialPower: (commercialPowerValue: string) => set({ commercialPower: commercialPowerValue }),
+}))
 // type LoadState = {
 //     loadState: string;
 //     degState: string;

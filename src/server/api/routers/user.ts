@@ -12,7 +12,7 @@ export const accountRouter = createTRPCRouter({
     findOne: protectedProcedure.input(z.number()).query(async ({ input, ctx }) => {
         const account = await ctx.db.account.findUnique({
             where: {
-                id: Number(input) as number,
+                id: input,
             },
             include: {
                 user: true

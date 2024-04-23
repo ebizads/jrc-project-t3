@@ -9,6 +9,16 @@ export const useCommercialPowerStore = create<CommercialPowerState>((set) => ({
     commercialPower: null,
     setCommercialPower: (commercialPowerValue: string) => set({ commercialPower: commercialPowerValue }),
 }))
+
+type FuelLevelState = {
+    fuelLevel: string | null
+    setFuelLevel: (fuelLevel: string) => void
+}
+
+export const useFuelLevelStore = create<FuelLevelState>((set) => ({
+    fuelLevel: null,
+    setFuelLevel: (fuelLevelValue: string) => set({ fuelLevel: fuelLevelValue }),
+}))
 // type LoadState = {
 //     loadState: string;
 //     degState: string;

@@ -182,7 +182,7 @@ const LineChartExample = (
         layout: {
             padding: 0
         },
-        responsive: false,
+        responsive: true,
         maintainAspectRatio: false,
         grid: {
             color: '#5A5A5A'

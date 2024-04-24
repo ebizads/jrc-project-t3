@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { RemoteOperationProps } from "~/utils/types";
+import { useEffect, useState } from "react";
+import { RemoteOperationProps, TestStatus } from "~/utils/types";
 import ModalVerification from "./ModalVerification";
 
 const greenGlow =
@@ -12,12 +12,36 @@ const optionUnselected =
 const RemoteOperation = (props: RemoteOperationProps) => {
     const [selected, setSelected] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [testDigitalOutputs, setTestDigitlOutputs] = useState<Array<TestStatus> | null>(null);
 
     // const openModal = () => {
     //     setModalOpen(true);
     //     document.body.style.overflow = "hidden";
     // };
 
+    const generatorRemoteOperation = async (status: boolean) => {
+        try {
+            const response = await fetch("/api/setDigitalOutputValues",
+                {
+                    method: 'POST',
+                    body: JSON.stringify(
+                        {
+                            value: status
+                        }),
+                    next: {
+                        revalidate: 600
+                    }
+                });
+            const jsonData = (await response.json()) as TestStatus[];
+
+
+            setTestDigitlOutputs(jsonData)
+            // console.log(testData);
+            // console.log("aaa")
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
     const openModal = () => {
         if (!props.disabled) {
@@ -29,7 +53,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
 
     const submitModal = (index: number) => {
         if (!props.disabled) {
-            setSelected(1);
+            // setSelected(1);
             setIsModalOpen(false);
             document.body.style.overflow = "auto";
 
@@ -43,7 +67,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                     isModalOpen={isModalOpen}
                     modalTitle="Start Generator?"
                     modalStatus="ON"
-                    submitModal={() => { setSelected(1); setIsModalOpen(false); document.body.style.overflow = "auto"; }}
+                    submitModal={() => { setSelected(1); setIsModalOpen(false); document.body.style.overflow = "auto"; void generatorRemoteOperation(true) }}
                     closeModal={() => { setIsModalOpen(false); document.body.style.overflow = "auto"; }}
                 />
             }
@@ -53,7 +77,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                     isModalOpen={isModalOpen}
                     modalTitle="Stop Generator?"
                     modalStatus="OFF"
-                    submitModal={() => { setSelected(0); setIsModalOpen(false); document.body.style.overflow = "auto"; }}
+                    submitModal={() => { setSelected(0); setIsModalOpen(false); document.body.style.overflow = "auto"; void generatorRemoteOperation(false) }}
                     closeModal={() => { setIsModalOpen(false); document.body.style.overflow = "auto"; }}
                 />
             }
@@ -61,10 +85,14 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                 {/* Handle Click for STOP button */}
                 <div
                     // onClick={() => handleClick(0)}
-                    onClick={() => openModal()}
+                    onClick={() => {
+                        openModal()
+                    }}
+
                     className={
                         !props.disabled
-                            ? selected === 0
+                            // ? selected === 0
+                            ? props.remoteOperationStatus === false
                                 ? redGlow
                                 : `${optionUnselected} cursor-pointer transition-all ease-in hover:bg-[#4B4B4B]`
                             : `${optionUnselected} cursor-not-allowed`
@@ -77,10 +105,13 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                 {/* Handle Click for START button */}
                 <div
                     // onClick={() => handleClick(1)}
-                    onClick={() => openModal()}
+                    onClick={() => {
+                        openModal()
+                    }}
                     className={
                         !props.disabled
-                            ? selected === 1
+                            // ? selected === 1
+                            ? props.remoteOperationStatus === true
                                 ? greenGlow
                                 : `${optionUnselected} cursor-pointer transition-all ease-in hover:bg-[#4B4B4B]`
                             : `${optionUnselected} cursor-not-allowed`

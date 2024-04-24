@@ -28,44 +28,50 @@ import {
 export default function Home() {
     // const hello = api.post.hello.useQuery({ text: "from tRPC" });
     const [testData, setTestData] = useState<Array<TestStatus> | null>(null);
+    const [testDigitalOutputs, setTestDigitlOutputs] = useState<Array<TestStatus> | null>(null);
+
     const [testDataFinal, setTestDataFinal] = useState<Status[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/fetchApi");
+                const response = await fetch("/api/fetchDigitalInputs",
+                    {
+                        next: {
+                            revalidate: 600
+                        }
+                    });
                 const jsonData = (await response.json()) as TestStatus[];
 
+                const response1 = await fetch("/api/fetchDigitalOutputs",
+                    {
+                        next: {
+                            revalidate: 600
+                        }
+                    });
+                const jsonData1 = (await response1.json()) as TestStatus[];
+
                 setTestData(jsonData);
-                console.log(testData);
+                setTestDigitlOutputs(jsonData1)
+                // console.log(testData);
+                // console.log("aaa")
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
 
-        void fetchData();
+        const interval = setInterval(() => {
+            void fetchData();
 
-        console.log("test data", testData);
+        }, 5000);
 
-        // testData?.map((data: TestStatus, idx) =>
-        //     setTestDataFinal([
-        //         ...testDataFinal,
-        //         {
-        //             name: data.name,
-        //             value: getDataValueEquivalentTest(data.name, data.value),
-        //         },
-        //     ])
-        // );
+        // setInterval(, 1000);
+        // void fetchData()
+        return () => clearInterval(interval);
+        // console.log("test data", testData);
+    });
 
-        // testData?.forEach((data) => {
-        //     testDataFinal.push({
-        //         name: data.name,
-        //         value: getDataValueEquivalentTest(data.name, data.value),
-        //     });
-        // });
 
-        // console.log("final test data1", testDataFinal);
-    }, []);
     return (
         <>
             <div>
@@ -110,6 +116,7 @@ export default function Home() {
                         <Generator1
                             generatorName="CDORFFWC"
                             generatorData={testData ?? []}
+                            generatorOutputData={testDigitalOutputs ?? []}
                             runningHours={3.49}
                         />
 

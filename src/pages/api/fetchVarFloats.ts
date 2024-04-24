@@ -21,18 +21,18 @@ export default async function handler(
         headers.append("Authorization", basicAuth);
 
         const response = await fetch(
-            "http://10.190.12.26/api/v1/device/strategy/ios/digitalInputs",
+            "http://10.190.12.26/api/v1/device/strategy/vars/floats",
             {
+                next: { revalidate: 10 },
                 headers: headers,
-            }
-        );
+            },);
 
         // if (!response.ok) {
         //     throw new Error('Network response was not ok');
         // }
         const jsonData = (await response.json()) as string[];
 
-        console.log(jsonData);
+        // console.log(jsonData);
         // return jsonData
         res.status(200).json(jsonData);
     } catch (error) {

@@ -19,6 +19,17 @@ export const useFuelLevelStore = create<FuelLevelState>((set) => ({
     fuelLevel: null,
     setFuelLevel: (fuelLevelValue: string) => set({ fuelLevel: fuelLevelValue }),
 }))
+
+
+type DieselGenStartFloat = {
+    genStartFloat: number | null
+    setGenStartFloat: (genStartFloat : number) => void
+}
+
+export const useDieselGenStartFloat = create<DieselGenStartFloat>((set) => ({
+    genStartFloat: null,
+    setGenStartFloat: (genStartFloatValue: number) => set({ genStartFloat: genStartFloatValue }),
+}))
 // type LoadState = {
 //     loadState: string;
 //     degState: string;

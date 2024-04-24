@@ -38,6 +38,7 @@ export type statusList = {
 };
 
 export type RemoteOperationProps = {
+    remoteOperationStatus: boolean,
     disabled: boolean;
 };
 
@@ -62,12 +63,18 @@ export type StatusDiagramProps = {
 export type TestGenerator = {
     generatorName: string;
     generatorData: TestStatus[];
+    generatorOutputData?: TestStatus[]
     runningHours: number;
 };
 
 export type TestStatus = {
     name: string;
     value: boolean;
+};
+
+export type TestStatusFloat = {
+    name: string;
+    value: number;
 };
 
 export type testStatusList = {

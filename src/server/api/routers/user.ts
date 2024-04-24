@@ -43,6 +43,7 @@ export const accountRouter = createTRPCRouter({
                     })
                 }
 
+                // eslint-disable-next-line @typescript-eslint/prefer-for-of
                 for (let i = 0; i < sample.length; i++) {
                     const match = await bcrypt.compare(password, `${sample[i]}`)
                     if (match) {

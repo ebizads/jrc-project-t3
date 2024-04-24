@@ -1,4 +1,4 @@
-import { TestGenerator } from "~/utils/types";
+import { TestGenerator, TestStatus } from "~/utils/types";
 import {
     BatteryTemp,
     CommercialPower,
@@ -6,6 +6,7 @@ import {
     FuelLevel,
     PowerSupply,
     RemoteOperation,
+    RemoteOperationStatus,
 } from "./enums";
 
 export const getDataValueEquivalent = (statusName: string, value: boolean) => {
@@ -252,7 +253,7 @@ export const getMappedStatus = (
     let batteryTemp = "";
 
     sensorParameters.forEach((parameter) => {
-        console.log(parameter.name);
+        // console.log(parameter.name);
         switch (parameter.name) {
             case "AC_POWER_FAILURE":
                 switch (parameter.value) {
@@ -329,5 +330,35 @@ export const getMappedStatus = (
         powerSupply,
         commercialPowerDC,
         batteryTemp,
+    ];
+};
+
+
+export const getMappedStatusDigitalOutputs = (
+    generatorProps: TestGenerator
+): [boolean | null | undefined] => {
+    // Generator Status
+    let remoteOperationStatus;
+    const sensorParameters = generatorProps.generatorOutputData ?? [];
+    // DC 48V Power Supply Status
+
+    sensorParameters.forEach((parameter) => {
+        switch (parameter.name) {
+            case "DIESEL_GENERATOR_START":
+                switch (parameter.value) {
+                    case true:
+                        // remoteOperationStatus = RemoteOperationStatus.START;
+                        remoteOperationStatus = true
+                    // remoteOperation = RemoteOperation.STANDBY;
+                    case false:
+                        // remoteOperationStatus = RemoteOperationStatus.STOP;
+                        remoteOperationStatus = false
+                }
+                break;
+        }
+    })
+
+    return [
+        remoteOperationStatus
     ];
 };

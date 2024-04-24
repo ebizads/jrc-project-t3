@@ -42,3 +42,8 @@ export enum BatteryTemp {
     HIGH = "HIGH",
     GOOD = "GOOD",
 }
+
+export enum RemoteOperationStatus {
+    START = "START",
+    STOP = "STOP",
+}

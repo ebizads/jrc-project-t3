@@ -1,14 +1,18 @@
-import { Generator, TestGenerator } from "~/utils/types";
+import { Generator, TestGenerator, TestStatusFloat } from "~/utils/types";
 import GeneratorControlStatus from "./GeneratorControlStatus";
 import PowerSupplyStatus from "./PowerSupplyStatus";
 import StatusDayLog from "./StatusDayLog";
 import StatusDiagram from "./StatusDiagram";
 import TestSwitch from "./TestSwitch";
 import RemoteOperation from "./RemoteOperation";
-import { getMappedStatus } from "~/utils/functions";
+import { getMappedStatus, getMappedStatusDigitalOutputs } from "~/utils/functions";
 import LineChartExample from "./LineChart";
+import { useEffect, useState } from "react";
+import { useDieselGenStartFloat } from "~/utils/useStore";
 
 const Generator1 = (generatorProps: TestGenerator) => {
+    const [testDataFloat, setTestDataFloat] = useState<Array<TestStatusFloat> | null>(null);
+    const {genStartFloat, setGenStartFloat}= useDieselGenStartFloat()
     // let sensorParameters = generatorProps.generatorData;
     // let commercialPower = "OFF";
     // let remoteOperation = "ON";
@@ -47,6 +51,28 @@ const Generator1 = (generatorProps: TestGenerator) => {
     //             console.log("Default case");
     //     }
     // });
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch("/api/fetchVarsFloats",
+    //                 {
+    //                     next: {
+    //                         revalidate: 10
+    //                     }
+    //                 });
+    //             const jsonData = (await response.json()) as TestStatusFloat[];
+
+    //             setTestDataFloat(jsonData);
+                    
+    //             // console.log(testData);
+    //             // console.log("aaa")
+    //         } catch (error) {
+    //             console.error("Error fetching data:", error);
+    //         }
+    //     };
+
+    //     void fetchData()
+    // }, [])
 
     const [
         commercialPower,
@@ -59,6 +85,10 @@ const Generator1 = (generatorProps: TestGenerator) => {
         commercialPowerDC,
         batteryTemp,
     ] = getMappedStatus(generatorProps);
+    
+    const [
+        remoteOperationStatus
+    ] = getMappedStatusDigitalOutputs(generatorProps)
 
     const globalDegStatus = degStatus;
     const globalLoadStatus = loadOn;
@@ -154,7 +184,9 @@ const Generator1 = (generatorProps: TestGenerator) => {
                 <h1 className="mb-6 text-sm font-semibold uppercase tracking-[0.2em]">
                     Remote Operation
                 </h1>
-                <RemoteOperation disabled={false} />
+                <RemoteOperation
+                    remoteOperationStatus={remoteOperationStatus ?? true}
+                    disabled={false} />
             </div>
 
             {/* Power Supply Status */}
@@ -188,7 +220,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                 <LineChartExample
                     generatorName={generatorProps.generatorName}
                     runningHours={generatorProps.runningHours}
-                    generatorData={generatorProps.generatorData }
+                    generatorData={generatorProps.generatorData}
                 />
             </div>
 

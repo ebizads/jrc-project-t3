@@ -254,25 +254,36 @@ export const getMappedStatus = (
     let commercialPowerDC = "";
     let batteryTemp = "";
 
+    // DASHBOARD STATUS MAPPINGS
     sensorParameters.forEach((parameter) => {
         // console.log(parameter.name);
         switch (parameter.name) {
             case "AC_POWER_FAILURE":
                 switch (parameter.value) {
                     case true:
-                    // commercialPower = CommercialPower.ON;
+                        degStatus = DegStatus.FAILED;
+                        degMode = DegMode.MANUAL; //TO CONFIRM IF DEG MODE SHOULD BE MANUAL
+                        loadOn = LoadOn.COMMERCIALPOWER;
+                        break;
                     case false:
-                        // commercialPower = CommercialPower.ON;
+                        degStatus = DegStatus.GENERATING;
                         degMode = DegMode.GENERATING;
+                        loadOn = LoadOn.GENERATOR;
                         break;
                 }
                 break;
             case "AC_POWER_FAILURE_P":
                 switch (parameter.value) {
                     case true:
-                    // commercialPower = CommercialPower.OFF;
+                        commercialPower = CommercialPower.OFF;
+                        degStatus = DegStatus.GENERATING;
+                        degMode = DegMode.GENERATING;
+                        loadOn = LoadOn.GENERATOR;
                     case false:
-                    // commercialPower = CommercialPower.ON;
+                        commercialPower = CommercialPower.ON;
+                        degStatus = DegStatus.STANDBY;
+                        degMode = DegMode.AUTO;
+                        loadOn = LoadOn.COMMERCIALPOWER;
                 }
                 break;
             case "AC_POWER_RECEIVING":
@@ -280,11 +291,18 @@ export const getMappedStatus = (
                     case true:
                         commercialPower = CommercialPower.ON;
                         commercialPowerDC = CommercialPower.ON;
+                        degStatus = DegStatus.STANDBY;
+                        degMode = DegMode.AUTO;
                         loadOn = LoadOn.COMMERCIALPOWER;
+                        powerSupply = PowerSupply.OPERATING;
                         break;
                     case false:
                         commercialPower = CommercialPower.OFF;
                         commercialPowerDC = CommercialPower.OFF;
+                        // powerSupply = PowerSupply.ALARM;
+                        degStatus = DegStatus.GENERATING;
+                        degMode = DegMode.GENERATING;
+                        loadOn = LoadOn.GENERATOR;
                         break;
                 }
                 break;
@@ -308,15 +326,45 @@ export const getMappedStatus = (
                         break;
                 }
                 break;
+            case "MANUAL_LOCAL":
+                switch (parameter.value) {
+                    case true:
+                        degMode = DegMode.MANUAL;
+                        degStatus = DegStatus.STANDBY;
+                        remoteOperation = RemoteOperation.STANDBY;
+                        powerSupply = PowerSupply.OPERATING;
+                        break;
+                    case false:
+                        degMode = DegMode.AUTO;
+                        break;
+                }
+                break;
+            case "OPERATION":
+                switch (parameter.value) {
+                    case true:
+                        remoteOperation = RemoteOperation.ON;
+                        degStatus = DegStatus.STANDBY;
+                        degMode = DegMode.MANUAL;
+                        powerSupply = PowerSupply.OPERATING;
+                        break;
+                    case false:
+                        remoteOperation = RemoteOperation.STANDBY;
+                        break;
+                }
+                break;
             case "RECTIFIER_ABNORMAL_ALARM":
                 switch (parameter.value) {
                     case true:
                         powerSupply = PowerSupply.ALARM;
                         degStatus = DegStatus.FAILED;
+                        remoteOperation = RemoteOperation.NA;
                         break;
                     case false:
                         powerSupply = PowerSupply.OPERATING;
                         degStatus = DegStatus.GENERATING;
+                        // degStatus = DegStatus.GENERATING;
+                        // degStatus = DegStatus.STANDBY;
+                        remoteOperation = RemoteOperation.ON;
                         break;
                     // degStatus = DegStatus.STANDBY;
                 }
@@ -325,6 +373,8 @@ export const getMappedStatus = (
                 switch (parameter.value) {
                     case true:
                         remoteOperation = RemoteOperation.ON;
+                        // remoteOperation = RemoteOperation.STANDBY;
+                        degStatus = DegStatus.GENERATING; //TO CLARIFY
                         break;
                     // remoteOperation = RemoteOperation.STANDBY;
                     case false:

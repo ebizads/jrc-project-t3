@@ -2,8 +2,10 @@ import { TestGenerator, TestStatus } from "~/utils/types";
 import {
     BatteryTemp,
     CommercialPower,
+    DegMode,
     DegStatus,
     FuelLevel,
+    LoadOn,
     PowerSupply,
     RemoteOperation,
     RemoteOperationStatus,
@@ -260,7 +262,9 @@ export const getMappedStatus = (
                     case true:
                     // commercialPower = CommercialPower.ON;
                     case false:
-                    // commercialPower = CommercialPower.ON;
+                        // commercialPower = CommercialPower.ON;
+                        degMode = DegMode.GENERATING;
+                        break;
                 }
                 break;
             case "AC_POWER_FAILURE_P":
@@ -276,6 +280,7 @@ export const getMappedStatus = (
                     case true:
                         commercialPower = CommercialPower.ON;
                         commercialPowerDC = CommercialPower.ON;
+                        loadOn = LoadOn.COMMERCIALPOWER;
                         break;
                     case false:
                         commercialPower = CommercialPower.OFF;
@@ -287,16 +292,20 @@ export const getMappedStatus = (
                 switch (parameter.value) {
                     case true:
                         batteryTemp = BatteryTemp.HIGH;
+                        break;
                     case false:
                         batteryTemp = BatteryTemp.GOOD;
+                        break;
                 }
                 break;
             case "LOW_FUEL_LEVEL":
                 switch (parameter.value) {
                     case true:
                         fuelLevel = FuelLevel.LOW;
+                        break;
                     case false:
                         fuelLevel = FuelLevel.HIGH;
+                        break;
                 }
                 break;
             case "RECTIFIER_ABNORMAL_ALARM":
@@ -304,19 +313,23 @@ export const getMappedStatus = (
                     case true:
                         powerSupply = PowerSupply.ALARM;
                         degStatus = DegStatus.FAILED;
+                        break;
                     case false:
                         powerSupply = PowerSupply.OPERATING;
                         degStatus = DegStatus.GENERATING;
-                    // degStatus = DegStatus.STANDBY;
+                        // degStatus = DegStatus.STANDBY;
+                        break;
                 }
                 break;
             case "UNDER_REMOTE_OPERATION":
                 switch (parameter.value) {
                     case true:
                         remoteOperation = RemoteOperation.ON;
-                    // remoteOperation = RemoteOperation.STANDBY;
+                        // remoteOperation = RemoteOperation.STANDBY;
+                        break;
                     case false:
                         remoteOperation = RemoteOperation.NA;
+                        break;
                 }
                 break;
         }

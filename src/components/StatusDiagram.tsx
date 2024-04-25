@@ -176,7 +176,7 @@ function getCPColor(
     let CP_dotColor: string;
     let CP_isLoaded: boolean;
 
-    if (loadType === LoadOn.COMMERCIALPOWER) {
+    if (loadType === LoadOn.COMMERCIALPOWER.toString()) {
         // GREEN
         CP_boxBorder = greenParent;
         CP_boxInner = greenChild;
@@ -212,14 +212,14 @@ function getDEGColor(
     let DEG_innerLine: string;
     let DEG_dotColor: string;
 
-    if (genStatus === DegStatus.GENERATING) {
+    if (genStatus === DegStatus.GENERATING.toString()) {
         // GREEN
         DEG_boxBorder = greenParent;
         DEG_boxInner = greenChild;
         DEG_outerLine = greenLineGradient;
         DEG_innerLine = greenLine;
         DEG_dotColor = greenBorder;
-    } else if (genStatus === DegStatus.STANDBY) {
+    } else if (genStatus === DegStatus.STANDBY.toString()) {
         // YELLOW
         DEG_boxBorder = yellowParent;
         DEG_boxInner = yellowChild;

@@ -2,26 +2,29 @@ import { useMemo } from "react";
 
 const PasswordChecker = ({ password }: { password: string }) => {
     const hasEnoughCharacter = useMemo(() => {
-        return password && password.length >= 12 && password.length < 20
-            ? true
-            : false;
+        return password?.length >= 12 && password?.length < 20;
     }, [password]);
+
     const hasNumber = useMemo(() => {
         const checkNumber = /(?=.*\d)/gm;
-        return password && password.match(checkNumber) ? true : false;
+        return !!password?.match(checkNumber);
     }, [password]);
+
     const hasSmallLetter = useMemo(() => {
         const checkSmallLetter = /(?=.*[a-z])/gm;
-        return password && password.match(checkSmallLetter) ? true : false;
+        return !!password?.match(checkSmallLetter);
     }, [password]);
+
     const hasCapitalLetter = useMemo(() => {
         const checkCapitalLetter = /(?=.*[A-Z])/gm;
-        return password && password.match(checkCapitalLetter) ? true : false;
+        return !!password?.match(checkCapitalLetter);
     }, [password]);
+
     const hasSpecialCharacter = useMemo(() => {
         const checkSpecialCharacter = /(?=.*[-+!@#$%^&*.,?_])/gm;
-        return password && password.match(checkSpecialCharacter) ? true : false;
+        return !!password?.match(checkSpecialCharacter);
     }, [password]);
+
     // const noConsecutiveNumber = useMemo(() => {
     //   const checkConsecutiveNumber = /\d{2,}/gm
     //   return password.match(checkConsecutiveNumber) ? false : true

@@ -69,7 +69,7 @@ const Generator2 = (generatorProps: Generator) => {
                 <h1 className="mb-6 text-sm font-semibold uppercase tracking-[0.2em]">
                     Remote Operation
                 </h1>
-                <RemoteOperation disabled={true} />
+                {/* <RemoteOperation disabled={true} /> */}
             </div>
 
             {/* Power Supply Status */}

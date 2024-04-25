@@ -12,13 +12,13 @@ type ChangePass = z.infer<typeof ChangeUserPass>;
 const NewPassword = () => {
     const [error, setErrors] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
-    const [userId, setUserId] = useState<number>(0)
-    const { data: session } = useSession()
+    const [userId, setUserId] = useState<number>(0);
+    const { data: session } = useSession();
 
     const [password, setPassword] = useState<string>("");
     const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-    const userData = api.account.findOne.useQuery(userId?? 0)
+    const userData = api.account.findOne.useQuery(userId ?? 0);
 
     const {
         register,
@@ -39,22 +39,25 @@ const NewPassword = () => {
 
     const { mutate } = api.account.change.useMutation({
         onSuccess: () => {
-            setSuccess("Successfully changed password!")
+            setSuccess("Successfully changed password!");
         },
 
         onError: (error) => {
-            setError("currentPassword", { type: 'custom', message: `${error.message}` })
+            setError("currentPassword", {
+                type: "custom",
+                message: `${error.message}`,
+            });
             // console.log(error.message)
             // console.log(error.data)
             // if (error.data == 404) {
             //     setError("currentPassword", { type: 'custom', message: `${error.message}` })
             // }
-        }
-    })
+        },
+    });
 
     useEffect(() => {
-        setUserId(Number(session?.user?.id))
-    }, [session])
+        setUserId(Number(session?.user?.id));
+    }, [session]);
 
     useEffect(() => {
         // console.log("conf pass: ", getValues("confirmPassword"));
@@ -69,25 +72,25 @@ const NewPassword = () => {
     // });
 
     async function onSubmit(user: ChangePass) {
-        console.log(user)
-        mutate(
-            {
-                ...user,
-                id: userId,
-                oldPassword: userData.data?.oldPassword ,
-            }
-        )
+        console.log(user);
+        mutate({
+            ...user,
+            id: userId,
+            oldPassword: userData.data?.oldPassword,
+        });
 
-        reset()
-        clearErrors()
+        reset();
+        clearErrors();
     }
-
 
     // }
     return (
         <>
-            <form className="flex flex-col gap-7 " onSubmit={handleSubmit(onSubmit)}>
-                <div className="bg-base-100 space-y-7 p-7">
+            <form
+                className="flex flex-col gap-7 "
+                onSubmit={handleSubmit(onSubmit)}
+            >
+                <div className="space-y-7 bg-base-100 p-7">
                     <div className="flex flex-col space-y-2 ">
                         <h2 className=" text-sm font-normal uppercase tracking-widest text-[#CCCCCC]">
                             Old Password
@@ -103,16 +106,19 @@ const NewPassword = () => {
                                 placeholder="TYPE HERE..."
                             />
                         </label>
-                        {(errors?.currentPassword && watch().currentPassword.length < 1) ? (
+                        {errors?.currentPassword &&
+                        watch().currentPassword.length < 1 ? (
                             <div
-                                className={`space-y-2 rounded-md border-[#b97c7c] bg-[#362626] text-xs font-normal text-[#b97c7c] max-h-96 border p-4`}
+                                className={`max-h-96 space-y-2 rounded-md border border-[#b97c7c] bg-[#362626] p-4 text-xs font-normal text-[#b97c7c]`}
                             >
                                 <p className={`flex items-center gap-2`}>
                                     <i className={`fa-solid fa-xmark`} />
                                     {errors.currentPassword.message}
                                 </p>
                             </div>
-                        ) : <></>}
+                        ) : (
+                            <></>
+                        )}
                     </div>
                     <div className="flex flex-row gap-7">
                         {/* New Password */}
@@ -129,7 +135,10 @@ const NewPassword = () => {
                                     className="w-full grow bg-secondary p-3 font-normal text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
                                     placeholder="TYPE HERE..."
                                     onChange={(event) => {
-                                        setValue("password", event.currentTarget.value);
+                                        setValue(
+                                            "password",
+                                            event.currentTarget.value
+                                        );
                                         setPassword(event.currentTarget.value);
 
                                         if (
@@ -137,27 +146,31 @@ const NewPassword = () => {
                                             getValues("confirmPassword")
                                         ) {
                                             // console.log("password matches!");
-                                            setHandleChangedConfirmPassword(true);
+                                            setHandleChangedConfirmPassword(
+                                                true
+                                            );
                                         } else {
                                             // console.log("password do not match!");
-                                            setHandleChangedConfirmPassword(false);
+                                            setHandleChangedConfirmPassword(
+                                                false
+                                            );
                                         }
-                                    }
-
-                                    }
+                                    }}
                                 />
                             </label>
 
-                            {(errors?.password && password.length < 1) ? (
+                            {errors?.password && password.length < 1 ? (
                                 <div
-                                    className={`space-y-2 overflow-hidden rounded-md border-[#b97c7c] bg-[#362626] text-xs font-normal text-[#b97c7c] max-h-96 border p-4`}
+                                    className={`max-h-96 space-y-2 overflow-hidden rounded-md border border-[#b97c7c] bg-[#362626] p-4 text-xs font-normal text-[#b97c7c]`}
                                 >
                                     <p className={`flex items-center gap-2`}>
                                         <i className={`fa-solid fa-xmark`} />
                                         {errors.password.message}
                                     </p>
                                 </div>
-                            ) : <></>}
+                            ) : (
+                                <></>
+                            )}
 
                             {password && (
                                 <PasswordChecker password={watch().password} />
@@ -182,37 +195,48 @@ const NewPassword = () => {
                                             "confirmPassword",
                                             event?.currentTarget.value
                                         );
-                                        setConfirmPassword(event.currentTarget.value);
+                                        setConfirmPassword(
+                                            event.currentTarget.value
+                                        );
 
                                         if (
                                             getValues("confirmPassword") ==
                                             getValues("password")
                                         ) {
                                             // console.log("password matches!");
-                                            setHandleChangedConfirmPassword(true);
+                                            setHandleChangedConfirmPassword(
+                                                true
+                                            );
                                         } else {
                                             // console.log("password do not match!");
-                                            setHandleChangedConfirmPassword(false);
-                                            setError("confirmPassword", { type: "custom" })
+                                            setHandleChangedConfirmPassword(
+                                                false
+                                            );
+                                            setError("confirmPassword", {
+                                                type: "custom",
+                                            });
                                         }
                                         // console.log(password);
                                     }}
                                 />
                             </label>
 
-                            {(errors?.confirmPassword && watch().confirmPassword.length < 1) ? (
+                            {errors?.confirmPassword &&
+                            watch().confirmPassword.length < 1 ? (
                                 <div
-                                    className={`space-y-2 rounded-md border-[#b97c7c] bg-[#362626] text-xs font-normal text-[#b97c7c] max-h-96 border p-4`}
+                                    className={`max-h-96 space-y-2 rounded-md border border-[#b97c7c] bg-[#362626] p-4 text-xs font-normal text-[#b97c7c]`}
                                 >
                                     <p className={`flex items-center gap-2`}>
                                         <i className={`fa-solid fa-xmark`} />
                                         {errors.confirmPassword.message}
                                     </p>
                                 </div>
-                            ) : <></>}
+                            ) : (
+                                <></>
+                            )}
 
                             {confirmPassword != "" &&
-                                handleChangeConfirmPassword == true ? (
+                            handleChangeConfirmPassword == true ? (
                                 <div
                                     className={`space-y-2 overflow-hidden rounded-md border-[#7cb987] bg-[#283626] text-xs font-normal text-[#7cb987] ${confirmPassword.length === 0 ? "max-h-0" : "max-h-96 border p-4"}`}
                                 >
@@ -236,7 +260,10 @@ const NewPassword = () => {
 
                             {success && (
                                 <div className="toast toast-end toast-bottom">
-                                    <div role="alert" className="alert alert-success">
+                                    <div
+                                        role="alert"
+                                        className="alert alert-success"
+                                    >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             className="h-6 w-6 shrink-0 stroke-current"
@@ -264,7 +291,7 @@ const NewPassword = () => {
                         type="button"
                         // onClick={props.closeModal}
                         className="h-[3rem] border-[1px] border-[#CCCCCC] px-[1.5rem] text-center text-xs font-normal uppercase tracking-[0.2em] duration-200 hover:bg-[#424242] focus:bg-secondary"
-                    // disabled={isSubmitting}
+                        // disabled={isSubmitting}
                     >
                         Discard Changes
                     </button>
@@ -274,7 +301,7 @@ const NewPassword = () => {
                         type="submit"
                         // onClick={props.submitModal}
                         className="h-[3rem] border-[1px] border-success bg-success px-[1.5rem] text-center text-xs font-normal uppercase tracking-[0.2em] text-white duration-200 hover:bg-[#5ec772] focus:bg-[#3d8b4b]"
-                    // disabled={isSubmitting}
+                        // disabled={isSubmitting}
                     >
                         Save Changes
                     </button>

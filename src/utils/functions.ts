@@ -276,9 +276,11 @@ export const getMappedStatus = (
                     case true:
                         commercialPower = CommercialPower.ON;
                         commercialPowerDC = CommercialPower.ON;
+                        break;
                     case false:
                         commercialPower = CommercialPower.OFF;
                         commercialPowerDC = CommercialPower.OFF;
+                        break;
                 }
                 break;
             case "BATTERY_HIGH_TEMPERATURE":
@@ -333,7 +335,6 @@ export const getMappedStatus = (
     ];
 };
 
-
 export const getMappedStatusDigitalOutputs = (
     generatorProps: TestGenerator
 ): [boolean | null | undefined] => {
@@ -348,17 +349,15 @@ export const getMappedStatusDigitalOutputs = (
                 switch (parameter.value) {
                     case true:
                         // remoteOperationStatus = RemoteOperationStatus.START;
-                        remoteOperationStatus = true
+                        remoteOperationStatus = true;
                     // remoteOperation = RemoteOperation.STANDBY;
                     case false:
                         // remoteOperationStatus = RemoteOperationStatus.STOP;
-                        remoteOperationStatus = false
+                        remoteOperationStatus = false;
                 }
                 break;
         }
-    })
+    });
 
-    return [
-        remoteOperationStatus
-    ];
+    return [remoteOperationStatus];
 };

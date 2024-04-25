@@ -1,5 +1,12 @@
-import { useEffect, useRef, MouseEvent, useState, Context, useContext } from "react";
-import { Line } from 'react-chartjs-2';
+import {
+    useEffect,
+    useRef,
+    MouseEvent,
+    useState,
+    Context,
+    useContext,
+} from "react";
+import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -11,9 +18,9 @@ import {
     TimeScale,
     Filler,
     DatasetChartOptions,
-} from 'chart.js';
+} from "chart.js";
 // import 'chartjs-adapter-date-fns';
-import 'chartjs-adapter-moment'
+import "chartjs-adapter-moment";
 import { getMappedStatus } from "~/utils/functions";
 import { TestGenerator, TestStatus } from "~/utils/types";
 
@@ -43,23 +50,20 @@ interface DataSet {
     backgroundColor?: string | CanvasGradient;
     data: DataPoint[];
     fillColor?: string | CanvasGradient;
-    fill?: boolean | string,
-    stepped?: boolean,
-    yAxisID?: string,
+    fill?: boolean | string;
+    stepped?: boolean;
+    yAxisID?: string;
 }
 
 interface ChartData {
     datasets: DataSet[];
 }
 
-
-const LineChartExample = (
-    generatorData: TestGenerator
-) => {
-    const chartRef = useRef<ChartJS<"line">>(null);
-    const [gradientCP, setGradientCP] = useState<CanvasGradient>()
-    const [gradientDS, setGradientDS] = useState<CanvasGradient>()
-    const [gradientFL, setGradientFL] = useState<CanvasGradient>()
+const LineChartExample = (generatorData: TestGenerator) => {
+    const chartRef = useRef<ChartJS<"line", DataPoint[]>>(null);
+    const [gradientCP, setGradientCP] = useState<CanvasGradient>();
+    const [gradientDS, setGradientDS] = useState<CanvasGradient>();
+    const [gradientFL, setGradientFL] = useState<CanvasGradient>();
 
     const [
         commercialPower,
@@ -74,87 +78,82 @@ const LineChartExample = (
     ] = getMappedStatus(generatorData);
 
     useEffect(() => {
-        const ctx = chartRef.current?.canvas.getContext('2d')
+        const ctx = chartRef.current?.canvas.getContext("2d");
         if (ctx) {
-            setGradientCP(ctx.createLinearGradient(0, 0, 0, 400))
-            gradientCP?.addColorStop(0, 'rgba(48, 101, 54, 1)')
-            gradientCP?.addColorStop(0.5, 'rgba(48, 101, 54, 0)')
+            setGradientCP(ctx.createLinearGradient(0, 0, 0, 400));
+            gradientCP?.addColorStop(0, "rgba(48, 101, 54, 1)");
+            gradientCP?.addColorStop(0.5, "rgba(48, 101, 54, 0)");
 
-            setGradientDS(ctx.createLinearGradient(0, 0, 0, 400))
-            gradientDS?.addColorStop(0, 'rgba(142, 40, 45, 1)')
-            gradientDS?.addColorStop(1, 'rgba(142, 40, 45, 0)')
+            setGradientDS(ctx.createLinearGradient(0, 0, 0, 400));
+            gradientDS?.addColorStop(0, "rgba(142, 40, 45, 1)");
+            gradientDS?.addColorStop(1, "rgba(142, 40, 45, 0)");
 
-            setGradientFL(ctx.createLinearGradient(0, 0, 0, 400))
-            gradientFL?.addColorStop(0, 'rgba(36, 114, 168, 1)')
-            gradientFL?.addColorStop(1, 'rgba(36, 114, 168, 0)')
+            setGradientFL(ctx.createLinearGradient(0, 0, 0, 400));
+            gradientFL?.addColorStop(0, "rgba(36, 114, 168, 1)");
+            gradientFL?.addColorStop(1, "rgba(36, 114, 168, 0)");
         }
-
-    }, [generatorData])
-
+    }, [generatorData]);
 
     const [chartData, setChartData] = useState<ChartData>({
         datasets: [
             {
-                label: 'FUEL LEVEL',
-                borderColor: '#85CDFF',
+                label: "FUEL LEVEL",
+                borderColor: "#85CDFF",
                 backgroundColor: gradientCP,
                 data: [],
                 fill: true,
                 stepped: true,
-                yAxisID: 'FL'
+                yAxisID: "FL",
             },
             {
-                label: 'DEG STATUS',
-                borderColor: '#F08288',
+                label: "DEG STATUS",
+                borderColor: "#F08288",
                 backgroundColor: gradientFL,
                 data: [],
                 fill: true,
                 stepped: true,
-                yAxisID: 'DS'
+                yAxisID: "DS",
             },
             {
-                label: 'COMMERCIAL POWER',
-                borderColor: '#B4FFBC',
+                label: "COMMERCIAL POWER",
+                borderColor: "#B4FFBC",
                 backgroundColor: gradientDS,
                 // fillColor: gradient,,
                 fill: true,
                 data: [],
                 stepped: true,
-                yAxisID: 'CP',
+                yAxisID: "CP",
             },
-
-
-        ]
+        ],
     });
 
     // Function to add new data points
     const addDataPointsData1 = () => {
         const newTime = new Date().toISOString();
 
-        setChartData(prevChartData => ({
-            datasets: prevChartData.datasets.map(dataset => {
-                let valueTemp
-                let value
+        setChartData((prevChartData) => ({
+            datasets: prevChartData.datasets.map((dataset) => {
+                let valueTemp;
+                let value;
 
                 switch (dataset.label) {
                     case "FUEL LEVEL":
                         // console.log(fuelLevel)
-                        value = fuelLevel
-                        dataset.backgroundColor = gradientFL
+                        value = fuelLevel;
+                        dataset.backgroundColor = gradientFL;
                         break;
                     case "DEG STATUS":
                         // valueTemp = Math.round(Math.random()) * 1 + 2  // value betweeon 2 and 3
-                        console.log(degStatus)
-                        value = degStatus
-                        dataset.backgroundColor = gradientDS
+                        console.log(degStatus);
+                        value = degStatus;
+                        dataset.backgroundColor = gradientDS;
                         break;
                     case "COMMERCIAL POWER":
                         // valueTemp = Math.round(Math.random()) * 1 + 4 // value betweeon 4 and 5
                         // console.log(valueTemp)
-                        value = commercialPower
-                        dataset.backgroundColor = gradientCP
+                        value = commercialPower;
+                        dataset.backgroundColor = gradientCP;
                         break;
-
                 }
                 // console.log(dataset)
                 const newDataPoint: DataPoint = { x: newTime, y: value ?? "" };
@@ -164,139 +163,153 @@ const LineChartExample = (
                 if (newData.length > 20) {
                     newData.shift();
                 }
-                return { ...dataset, data: newData, };
-            })
+                return { ...dataset, data: newData };
+            }),
         }));
     };
 
     useEffect(() => {
-        const interval = setInterval(
-            addDataPointsData1
-            , 60000); // Update every 2000 milliseconds
+        const interval = setInterval(addDataPointsData1, 60000); // Update every 2000 milliseconds
         return () => clearInterval(interval); // Cleanup on unmount
     }, []);
 
-    const unit: 'minute' | 'hour' | 'day' | 'month' = 'minute' as 'minute';
+    const unit: "minute" | "hour" | "day" | "month" = "minute" as "minute";
+    const type: "category" = "category" as "category";
+    const position: "left" | "center" | "right" | "top" | "bottom" =
+        "left" as "left";
 
     const options = {
         layout: {
-            padding: 0
+            padding: 0,
         },
         responsive: true,
         maintainAspectRatio: false,
         grid: {
-            color: '#5A5A5A'
+            color: "#5A5A5A",
         },
         border: {
-            color: '#5A5A5A'
+            color: "#5A5A5A",
         },
         plugins: {
-
             legend: {
                 labels: {
                     // This more specific font property overrides the global property
                     font: {
-                        size: 12
+                        size: 12,
                     },
                     padding: 12,
-                    color: '#CCCCCC'
-                }
-            }
+                    color: "#CCCCCC",
+                },
+            },
         },
         scales: {
             x: {
-                type: 'time' as const,
+                type: "time" as const,
                 time: {
-                    displayFormat: 'HH:mm',
-                    unit: unit as 'minute' | 'hour' | 'day' | 'month'
+                    displayFormat: "HH:mm",
+                    unit: unit as "minute" | "hour" | "day" | "month",
                     // displayFormats: {
                     //     minute: 'HH:mm'
                     // }
                 },
                 title: {
                     display: true,
-                    text: 'Time (HH::mm)',
-                    color: '#CCCCCC'
+                    text: "Time (HH::mm)",
+                    color: "#CCCCCC",
                 },
                 ticks: {
                     font: {
                         size: 9.5,
                     },
-                    color: '#CCCCCC',
+                    color: "#CCCCCC",
                 },
                 grid: {
-                    color: '#5A5A5A'
+                    color: "#5A5A5A",
                 },
                 border: {
-                    color: '#5A5A5A'
-                }
+                    color: "#5A5A5A",
+                },
             },
             // FUEL LEVEL STYLES
             FL: {
-                type: 'category',
-                labels: ['HIGH', 'LOW'],
-                position: 'left',
-                stack: 'demo',
+                type: type as "category",
+                labels: ["HIGH", "LOW"],
+                position: position as
+                    | "left"
+                    | "center"
+                    | "right"
+                    | "top"
+                    | "bottom",
+                stack: "demo",
                 stackWeight: 1,
                 offset: true,
                 grid: {
-                    color: '#5A5A5A'
+                    color: "#5A5A5A",
                 },
                 border: {
-                    color: '#5A5A5A'
+                    color: "#5A5A5A",
                 },
                 ticks: {
                     font: {
                         size: 8,
                     },
-                    color: '#CCCCCC',
+                    color: "#CCCCCC",
                 },
             },
             // DEG STATUS STYLES
             DS: {
-                type: 'category',
-                labels: ['GENERATING', 'STANDBY', 'FAILED'],
-                position: 'left',
-                stack: 'demo',
+                type: type as "category",
+                labels: ["GENERATING", "STANDBY", "FAILED"],
+                position: position as
+                    | "left"
+                    | "center"
+                    | "right"
+                    | "top"
+                    | "bottom",
+                stack: "demo",
                 stackWeight: 1,
                 offset: true,
                 grid: {
-                    color: '#5A5A5A'
+                    color: "#5A5A5A",
                 },
                 border: {
-                    color: '#5A5A5A'
+                    color: "#5A5A5A",
                 },
                 ticks: {
                     font: {
                         size: 8,
                     },
-                    color: '#CCCCCC',
+                    color: "#CCCCCC",
                 },
             },
             // COMMERCIAL POWER STYLES
             CP: {
-                type: 'category',
-                labels: ['ON', 'OFF'],
-                position: 'left',
-                stack: 'demo',
+                type: type as "category",
+                labels: ["ON", "OFF"],
+                position: position as
+                    | "left"
+                    | "center"
+                    | "right"
+                    | "top"
+                    | "bottom",
+                stack: "demo",
                 stackWeight: 1,
                 offset: true,
                 grid: {
-                    color: '#5A5A5A'
+                    color: "#5A5A5A",
                 },
                 border: {
-                    color: '#5A5A5A'
+                    color: "#5A5A5A",
                 },
                 ticks: {
                     font: {
                         size: 8,
                     },
-                    color: '#CCCCCC',
+                    color: "#CCCCCC",
                 },
             },
-        }
+        },
     };
-
 
     return (
         <div className="h-[60vh] w-full ">
@@ -308,6 +321,6 @@ const LineChartExample = (
             />
         </div>
     );
-}
+};
 
 export default LineChartExample;

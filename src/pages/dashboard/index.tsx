@@ -28,31 +28,30 @@ import {
 export default function Home() {
     // const hello = api.post.hello.useQuery({ text: "from tRPC" });
     const [testData, setTestData] = useState<Array<TestStatus> | null>(null);
-    const [testDigitalOutputs, setTestDigitlOutputs] = useState<Array<TestStatus> | null>(null);
+    const [testDigitalOutputs, setTestDigitlOutputs] =
+        useState<Array<TestStatus> | null>(null);
 
     const [testDataFinal, setTestDataFinal] = useState<Status[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/fetchDigitalInputs",
-                    {
-                        next: {
-                            revalidate: 600
-                        }
-                    });
+                const response = await fetch("/api/fetchDigitalInputs", {
+                    next: {
+                        revalidate: 600,
+                    },
+                });
                 const jsonData = (await response.json()) as TestStatus[];
 
-                const response1 = await fetch("/api/fetchDigitalOutputs",
-                    {
-                        next: {
-                            revalidate: 600
-                        }
-                    });
+                const response1 = await fetch("/api/fetchDigitalOutputs", {
+                    next: {
+                        revalidate: 600,
+                    },
+                });
                 const jsonData1 = (await response1.json()) as TestStatus[];
 
                 setTestData(jsonData);
-                setTestDigitlOutputs(jsonData1)
+                setTestDigitlOutputs(jsonData1);
                 // console.log(testData);
                 // console.log("aaa")
             } catch (error) {
@@ -62,7 +61,6 @@ export default function Home() {
 
         const interval = setInterval(() => {
             void fetchData();
-
         }, 5000);
 
         // setInterval(, 1000);
@@ -70,7 +68,6 @@ export default function Home() {
         return () => clearInterval(interval);
         // console.log("test data", testData);
     });
-
 
     return (
         <>
@@ -121,16 +118,16 @@ export default function Home() {
                         />
 
                         {/* Generator Card 2 */}
-                        <Generator2
+                        <Generator1
                             generatorName="XR1 - LIBONA"
-                            generatorData={testDataFinal ?? []}
+                            generatorData={testData ?? []}
                             runningHours={7.89}
                         />
 
                         {/* Generator Card 3 */}
-                        <Generator3
+                        <Generator1
                             generatorName="XR2 - DAGUMBAAN"
-                            generatorData={testDataFinal ?? []}
+                            generatorData={testData ?? []}
                             runningHours={17.36}
                         />
                     </div>

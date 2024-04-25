@@ -1,4 +1,11 @@
 import { z } from "zod";
+export const loginSchema = z.object({
+    username: z.string().min(1, { message: "Username is required" }).trim(),
+    password: z
+        .string()
+        .min(1, { message: "The password is invalid" })
+        .max(20, { message: "The password is invalid" }),
+});
 
 export const ChangeUserPass = z.object({
     id: z.number().optional(),

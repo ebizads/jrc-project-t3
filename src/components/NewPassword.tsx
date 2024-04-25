@@ -56,7 +56,7 @@ const NewPassword = () => {
     });
 
     useEffect(() => {
-        setUserId(Number(session?.user?.id));
+        setUserId(Number(session?.account.id));
     }, [session]);
 
     useEffect(() => {

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-export const dynamic = "force-dynamic"; // defaults to auto
+// export const dynamic = "force-dynamic"; // defaults to auto
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
@@ -24,7 +24,7 @@ export default async function handler(
             `http://10.190.12.26/api/v1/device/strategy/ios/digitalOutputs/DIESEL_GENERATOR_START/state`,
             {
                 method: 'POST',
-                next: { revalidate: 1800 },
+                // next: { revalidate: 1800 },
                 headers: headers,
                 body: req.body as BodyInit
             },);
@@ -36,7 +36,9 @@ export default async function handler(
 
         // console.log(jsonData);
         // return jsonData
-        res.status(200).json(jsonData);
+        void res.revalidate('/dashboard')
+        res.status(200).json({ revalidated: true, jsonData });
+
     } catch (error) {
         console.error("Error fetching data from external API:", error);
         res.status(500).json({

@@ -22,7 +22,7 @@ import {
 // import 'chartjs-adapter-date-fns';
 import "chartjs-adapter-moment";
 import { getMappedStatus } from "~/utils/functions";
-import { TestGenerator, TestStatus } from "~/utils/types";
+import { type TestGenerator, TestStatus } from "~/utils/types";
 
 // import { fetchData } from "~/utils/dataApi";
 
@@ -82,7 +82,7 @@ const LineChartExample = (generatorData: TestGenerator) => {
         if (ctx) {
             setGradientCP(ctx.createLinearGradient(0, 0, 0, 400));
             gradientCP?.addColorStop(0, "rgba(48, 101, 54, 1)");
-            gradientCP?.addColorStop(0.5, "rgba(48, 101, 54, 0)");
+            gradientCP?.addColorStop(1, "rgba(48, 101, 54, 0)");
 
             setGradientDS(ctx.createLinearGradient(0, 0, 0, 400));
             gradientDS?.addColorStop(0, "rgba(142, 40, 45, 1)");
@@ -90,7 +90,7 @@ const LineChartExample = (generatorData: TestGenerator) => {
 
             setGradientFL(ctx.createLinearGradient(0, 0, 0, 400));
             gradientFL?.addColorStop(0, "rgba(36, 114, 168, 1)");
-            gradientFL?.addColorStop(1, "rgba(36, 114, 168, 0)");
+            gradientFL?.addColorStop(0.8, "rgba(36, 114, 168, 0)");
         }
     }, [generatorData]);
 
@@ -99,7 +99,7 @@ const LineChartExample = (generatorData: TestGenerator) => {
             {
                 label: "FUEL LEVEL",
                 borderColor: "#85CDFF",
-                backgroundColor: gradientCP,
+                backgroundColor: gradientFL,
                 data: [],
                 fill: true,
                 stepped: true,
@@ -108,7 +108,7 @@ const LineChartExample = (generatorData: TestGenerator) => {
             {
                 label: "DEG STATUS",
                 borderColor: "#F08288",
-                backgroundColor: gradientFL,
+                backgroundColor: gradientDS,
                 data: [],
                 fill: true,
                 stepped: true,
@@ -117,7 +117,7 @@ const LineChartExample = (generatorData: TestGenerator) => {
             {
                 label: "COMMERCIAL POWER",
                 borderColor: "#B4FFBC",
-                backgroundColor: gradientDS,
+                backgroundColor: gradientCP,
                 // fillColor: gradient,,
                 fill: true,
                 data: [],
@@ -128,55 +128,56 @@ const LineChartExample = (generatorData: TestGenerator) => {
     });
 
     // Function to add new data points
-    const addDataPointsData1 = () => {
-        const newTime = new Date().toISOString();
-
-        setChartData((prevChartData) => ({
-            datasets: prevChartData.datasets.map((dataset) => {
-                let valueTemp;
-                let value;
-
-                switch (dataset.label) {
-                    case "FUEL LEVEL":
-                        // console.log(fuelLevel)
-                        value = fuelLevel;
-                        dataset.backgroundColor = gradientFL;
-                        break;
-                    case "DEG STATUS":
-                        // valueTemp = Math.round(Math.random()) * 1 + 2  // value betweeon 2 and 3
-                        console.log(degStatus);
-                        value = degStatus;
-                        dataset.backgroundColor = gradientDS;
-                        break;
-                    case "COMMERCIAL POWER":
-                        // valueTemp = Math.round(Math.random()) * 1 + 4 // value betweeon 4 and 5
-                        // console.log(valueTemp)
-                        value = commercialPower;
-                        dataset.backgroundColor = gradientCP;
-                        break;
-                }
-                // console.log(dataset)
-                const newDataPoint: DataPoint = { x: newTime, y: value ?? "" };
-                const newData = [...dataset.data, newDataPoint];
-
-                // Keep only the latest 20 data points
-                if (newData.length > 20) {
-                    newData.shift();
-                }
-                return { ...dataset, data: newData };
-            }),
-        }));
-    };
 
     useEffect(() => {
-        const interval = setInterval(addDataPointsData1, 60000); // Update every 2000 milliseconds
-        return () => clearInterval(interval); // Cleanup on unmount
-    }, []);
+        const addDataPointsData1 = () => {
+            const newTime = new Date().toISOString();
 
-    const unit: "minute" | "hour" | "day" | "month" = "minute" as const;
-    const type: "category" = "category" as const;
+            setChartData((prevChartData) => ({
+                datasets: prevChartData.datasets.map((dataset) => {
+                    let valueTemp;
+                    let value;
+
+                    switch (dataset.label) {
+                        case "FUEL LEVEL":
+                            // console.log(fuelLevel)
+                            value = fuelLevel;
+                            dataset.backgroundColor = gradientFL;
+                            break;
+                        case "DEG STATUS":
+                            // valueTemp = Math.round(Math.random()) * 1 + 2  // value betweeon 2 and 3
+                            // console.log(degStatus);
+                            value = degStatus;
+                            dataset.backgroundColor = gradientDS;
+                            break;
+                        case "COMMERCIAL POWER":
+                            // valueTemp = Math.round(Math.random()) * 1 + 4 // value betweeon 4 and 5
+                            // console.log(valueTemp)
+                            value = commercialPower;
+                            dataset.backgroundColor = gradientCP;
+                            break;
+                    }
+                    // console.log(dataset)
+                    const newDataPoint: DataPoint = { x: newTime, y: value ?? "" };
+                    const newData = [...dataset.data, newDataPoint];
+
+                    // Keep only the latest 20 data points
+                    if (newData.length > 20) {
+                        newData.shift();
+                    }
+                    return { ...dataset, data: newData };
+                }),
+            }));
+        };
+
+        const interval = setInterval(addDataPointsData1, 60000); // Update every 60000 milliseconds
+        return () => clearInterval(interval); // Cleanup on unmount
+    }, [commercialPower, degStatus, fuelLevel]);
+
+    const unit: "minute" | "hour" | "day" | "month" = "minute";
+    const type = "category";
     const position: "left" | "center" | "right" | "top" | "bottom" =
-        "left" as const;
+        "left";
 
     const options = {
         layout: {

@@ -13,6 +13,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { Account } from "next-auth";
+import { DefaultJWT } from "next-auth/jwt";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -22,24 +23,39 @@ import { Account } from "next-auth";
  */
 declare module "next-auth" {
     interface Session extends DefaultSession {
-        user: DefaultSession["user"] & {
+        account: DefaultSession["user"] & {
             id: number;
             // ...other properties
             // role: UserRole;
+            username: string;
+            type: string;
+
         };
     }
 
     interface Account {
         id: number;
+        username: string;
+        // type: string;
     }
 
     interface User {
         id: number;
         // ...other properties
         // role: UserRole;
+        username: string;
+        type: string;
     }
+
+
 }
 
+declare module "next-auth/jwt" {
+    interface JWT extends DefaultJWT {
+        username: string;
+        type: string;
+    }
+}
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -47,23 +63,27 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
     callbacks: {
-        jwt: async ({ token, user }) => {
-            if (user) {
-                token.id = user.id;
-                token.email = user.email;
+        jwt: async ({ token, account }) => {
+            if (account) {
+                token.id = account.id;
+                token.username = account.username;
+                token.type = account.type
             }
 
             return token;
         },
         session({ session, token }) {
-            if (session.user) {
-                session.user.id = Number(token.sub);
+            if (session.account) {
+                session.account.id = Number(token.sub);
+                session.account.username = token.username
+                session.account.type = token.type
+
             }
             return session;
         },
     },
     pages: {
-        signIn: "/user/login",
+        signIn: "/",
     },
     session: { strategy: "jwt" },
     adapter: PrismaAdapter(db) as Adapter,
@@ -101,7 +121,7 @@ export const authOptions: NextAuthOptions = {
                         console.log(encryptedPassword);
 
                         console.log("User found:", user);
-                        return user;
+                        return account;
                     }
                     throw new Error("account not found");
                 }

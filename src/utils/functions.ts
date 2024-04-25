@@ -317,16 +317,16 @@ export const getMappedStatus = (
                     case false:
                         powerSupply = PowerSupply.OPERATING;
                         degStatus = DegStatus.GENERATING;
-                        // degStatus = DegStatus.STANDBY;
                         break;
+                    // degStatus = DegStatus.STANDBY;
                 }
                 break;
             case "UNDER_REMOTE_OPERATION":
                 switch (parameter.value) {
                     case true:
                         remoteOperation = RemoteOperation.ON;
-                        // remoteOperation = RemoteOperation.STANDBY;
                         break;
+                    // remoteOperation = RemoteOperation.STANDBY;
                     case false:
                         remoteOperation = RemoteOperation.NA;
                         break;
@@ -356,17 +356,19 @@ export const getMappedStatusDigitalOutputs = (
     const sensorParameters = generatorProps.generatorOutputData ?? [];
     // DC 48V Power Supply Status
 
-    sensorParameters.forEach((parameter) => {
+    generatorProps.generatorOutputData?.forEach((parameter) => {
         switch (parameter.name) {
             case "DIESEL_GENERATOR_START":
                 switch (parameter.value) {
                     case true:
                         // remoteOperationStatus = RemoteOperationStatus.START;
-                        remoteOperationStatus = true;
+                        remoteOperationStatus = true
+                        break;
                     // remoteOperation = RemoteOperation.STANDBY;
                     case false:
                         // remoteOperationStatus = RemoteOperationStatus.STOP;
-                        remoteOperationStatus = false;
+                        remoteOperationStatus = false
+                        break;
                 }
                 break;
         }

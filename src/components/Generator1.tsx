@@ -9,8 +9,11 @@ import {
     getMappedStatusDigitalOutputs,
 } from "~/utils/functions";
 import LineChartExample from "./LineChart";
+// import { useEffect, useState } from "react";
 
 const Generator1 = (generatorProps: TestGenerator) => {
+    // const [testDataFloat, setTestDataFloat] = useState<Array<TestStatusFloat> | null>(null);
+
     const [
         commercialPower,
         degMode,
@@ -23,8 +26,9 @@ const Generator1 = (generatorProps: TestGenerator) => {
         batteryTemp,
     ] = getMappedStatus(generatorProps);
 
-    const [remoteOperationStatus] =
-        getMappedStatusDigitalOutputs(generatorProps);
+    const [
+        remoteOperationStatus
+    ] = getMappedStatusDigitalOutputs(generatorProps)
 
     const globalDegStatus = degStatus;
     const globalLoadStatus = loadOn;

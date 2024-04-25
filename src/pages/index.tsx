@@ -2,19 +2,12 @@ import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { z } from "zod";
+import type { z } from "zod";
 import { useForm } from "react-hook-form";
-
-const userSchema = z.object({
-    username: z.string().min(1, { message: "Username is required" }).trim(),
-    password: z
-        .string()
-        .min(1, { message: "The password is invalid" })
-        .max(20, { message: "The password is invalid" }),
-});
+import type { loginSchema } from "~/server/schemas/user";
 
 // Infer the TS type according to the zod schema.
-type User = z.infer<typeof userSchema>;
+type User = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
     const router = useRouter();

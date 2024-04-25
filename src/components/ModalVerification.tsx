@@ -1,8 +1,18 @@
 import { useState } from "react";
-import { ModalVerificationProps } from "~/utils/types";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { loginSchema } from "~/server/schemas/user";
+import { api } from "~/utils/api";
+import type { ModalVerificationProps, TestStatus } from "~/utils/types";
+
+type User = z.infer<typeof loginSchema>;
 
 const ModalVerification = (props: ModalVerificationProps) => {
+    const [error, setErrors] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
+
     const statusColor = getStatusColor(props.modalStatus);
+    const [testDigitalOutputs, setTestDigitlOutputs] = useState<Array<TestStatus> | null>(null);
 
     // const [modalOpen, setModalOpen] = useState(false);
 
@@ -15,6 +25,69 @@ const ModalVerification = (props: ModalVerificationProps) => {
     //     setModalOpen(false);
     //     document.body.style.overflow = "auto";
     // };
+    const { mutate } = api.account.findOneWithUsernamePassword.useMutation({
+        onError(error) {
+            setErrors(error.message)
+            setTimeout(() => setErrors(null), 3000)
+        },
+        onSuccess() {
+            props.submitModal()
+            if (props.modalStatus == "ON") {
+                void generatorRemoteOperation(true)
+            } else {
+                void generatorRemoteOperation(false)
+            }
+            setSuccess("Successfully Started/Stopped Generator")
+            setTimeout(() => setSuccess(null), 3000)
+        },
+    })
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        reset,
+        clearErrors,
+        formState: { errors, isSubmitting },
+    } = useForm<User>({
+        // resolver: zodResolver(userSchema), // Configuration the validation with the zod schema.
+        defaultValues: {
+            // username: "",
+            // password: "",
+        },
+    });
+
+    const generatorRemoteOperation = async (status: boolean) => {
+        try {
+            const response = await fetch("/api/setDigitalOutputValues",
+                {
+                    method: 'POST',
+                    body: JSON.stringify(
+                        {
+                            value: status
+                        }),
+                    next: {
+                        revalidate: 600
+                    }
+                });
+            const jsonData = (await response.json()) as TestStatus[];
+
+
+            setTestDigitlOutputs(jsonData)
+            // console.log(testData);
+            // console.log("aaa")
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    async function onSubmit(user: User) {
+        console.log(user);
+        mutate({ ...user });
+
+        reset();
+        clearErrors();
+    }
 
     return (
         <>
@@ -65,7 +138,7 @@ const ModalVerification = (props: ModalVerificationProps) => {
                                             below.
                                         </p>
                                         <form
-                                            // onSubmit={handleSubmit(onSubmit)}
+                                            onSubmit={handleSubmit(onSubmit)}
                                             className=" flex w-full flex-col gap-5"
                                         >
                                             {/* USERNAME */}
@@ -81,7 +154,7 @@ const ModalVerification = (props: ModalVerificationProps) => {
                                                 <input
                                                     id="username"
                                                     type="text"
-                                                    // {...register("username")}
+                                                    {...register("username")}
                                                     className=" grow bg-secondary p-3 font-normal text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
                                                     placeholder="USERNAME"
                                                 />
@@ -104,7 +177,7 @@ const ModalVerification = (props: ModalVerificationProps) => {
                                                 <input
                                                     id="password"
                                                     type="password"
-                                                    // {...register("password")}
+                                                    {...register("password")}
                                                     className=" grow rounded-none bg-secondary p-3 font-normal text-[#CCCCCC] placeholder:text-xs placeholder:tracking-[0.2em] placeholder:text-[#8d8d8d]"
                                                     placeholder="PASSWORD"
                                                 />
@@ -116,7 +189,7 @@ const ModalVerification = (props: ModalVerificationProps) => {
                                                     type="button"
                                                     onClick={props.closeModal}
                                                     className="h-[3rem] w-full border-[1px] border-[#CCCCCC] px-[1rem] text-center text-xs font-normal tracking-[0.2em] duration-200 hover:bg-[#424242] focus:bg-secondary"
-                                                    // disabled={isSubmitting}
+                                                // disabled={isSubmitting}
                                                 >
                                                     CANCEL
                                                     {/* {isSubmitting
@@ -126,10 +199,10 @@ const ModalVerification = (props: ModalVerificationProps) => {
 
                                                 {/* SUBMIT BTN */}
                                                 <button
-                                                    type="button"
-                                                    onClick={props.submitModal}
+                                                    type="submit"
+                                                    // onClick={props.submitModal}
                                                     className="h-[3rem] w-full border-[1px] border-[#CCCCCC] bg-[#CCCCCC] px-[1rem] text-center text-xs font-normal tracking-[0.2em] text-base-300 duration-200 hover:bg-white focus:bg-info"
-                                                    // disabled={isSubmitting}
+                                                // disabled={isSubmitting}
                                                 >
                                                     SUBMIT
                                                     {/* {isSubmitting
@@ -153,8 +226,52 @@ const ModalVerification = (props: ModalVerificationProps) => {
                             </div>
                         </div>
                     </div>
+
+                    {error && (
+                        <div className="toast toast-end toast-bottom">
+                            <div role="alert" className="alert alert-error">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6 shrink-0 stroke-current"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                                <span>{error}</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
+
+            {success && (
+                <div className="toast toast-end toast-bottom">
+                    <div
+                        role="alert"
+                        className="alert alert-success"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="stroke-current shrink-0 h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{success}</span>
+                    </div>
+                </div>
+            )}
+
         </>
     );
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 const HeaderNav = () => {
     return (
@@ -53,7 +54,12 @@ const HeaderNav = () => {
                                 <Link href="/settings">Settings</Link>
                             </li>
                             <li>
-                                <a>Logout</a>
+                                <a
+                                    onClick={() =>
+                                        signOut({
+                                            callbackUrl: "/",
+                                        })
+                                    }>Logout</a>
                             </li>
                         </ul>
                     </div>

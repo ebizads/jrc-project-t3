@@ -24,6 +24,60 @@ export const accountRouter = createTRPCRouter({
             return account;
         }),
 
+    findOneWithUsernamePassword: protectedProcedure
+        .input(
+            z.object({
+                username: z.string(),
+                password: z.string()
+
+            }))
+        .mutation(async ({ input, ctx }) => {
+            const encryptedPassword = await bcrypt.hash(input.password, 10)
+
+            console.log("encrypted password", encryptedPassword)
+            try {
+                const account = await ctx.db.account.findUnique({
+                    where: {
+                        username: input.username,
+                        // password: await bcrypt.hash(input.password, 10)
+                    },
+                    include: {
+                        user: true,
+                    },
+                });
+
+                if (account == null) {
+                    throw new TRPCError({
+                        code: "BAD_REQUEST",
+                        message: "The provided account does not exist",
+                    })
+                }
+
+                const match = await bcrypt.compare(input.password, account?.password)
+                if (!match) {
+                    throw new TRPCError({
+                        code: "BAD_REQUEST",
+                        message: "Incorrect password",
+                    })
+                }
+
+                // console.log(account)
+
+                console.log("ACCOUNT", account)
+                if (account?.type != "Admin") {
+                    throw new TRPCError({
+                        code: "BAD_REQUEST",
+                        message: "The  provided account is not authorized to START/STOP",
+                    })
+                }
+                return account;
+            } catch (error) {
+                throw error
+            }
+
+
+        }),
+
     change: protectedProcedure
         .input(ChangeUserPass)
         .mutation(async ({ input, ctx }) => {

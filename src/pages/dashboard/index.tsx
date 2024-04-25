@@ -36,24 +36,24 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/fetchDigitalInputs", {
-                    next: {
-                        revalidate: 600,
-                    },
-                });
+                const response = await fetch("/api/fetchDigitalInputs",
+                    {
+                        // next: {
+                        //     revalidate: 600
+                        // }
+                    });
                 const jsonData = (await response.json()) as TestStatus[];
 
-                const response1 = await fetch("/api/fetchDigitalOutputs", {
-                    next: {
-                        revalidate: 600,
-                    },
-                });
+                const response1 = await fetch("/api/fetchDigitalOutputs",
+                    {
+                        // next: {
+                        //     revalidate: 600
+                        // }
+                    });
                 const jsonData1 = (await response1.json()) as TestStatus[];
 
                 setTestData(jsonData);
-                setTestDigitlOutputs(jsonData1);
-                // console.log(testData);
-                // console.log("aaa")
+                setTestDigitlOutputs(jsonData1)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -61,7 +61,7 @@ export default function Home() {
 
         const interval = setInterval(() => {
             void fetchData();
-        }, 5000);
+        }, 1000);
 
         // setInterval(, 1000);
         // void fetchData()
@@ -135,30 +135,5 @@ export default function Home() {
             </div>
             {/* main */}
         </>
-    );
-}
-
-function AuthShowcase() {
-    const { data: sessionData } = useSession();
-
-    const secretMessage = "secret message";
-
-    return (
-        <div className="flex flex-col items-center justify-center gap-4">
-            <p className="text-center text-2xl text-white">
-                {sessionData && (
-                    <span>Logged in as {sessionData.user?.name}</span>
-                )}
-                {secretMessage && <span> - {secretMessage}</span>}
-            </p>
-            <button
-                className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
-                onClick={
-                    sessionData ? () => void signOut() : () => void signIn()
-                }
-            >
-                {sessionData ? "Sign out" : "Sign in"}
-            </button>
-        </div>
     );
 }

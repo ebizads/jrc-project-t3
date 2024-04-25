@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { RemoteOperationProps, TestStatus } from "~/utils/types";
 import ModalVerification from "./ModalVerification";
+import { api } from "~/utils/api";
+import { Familjen_Grotesk } from "next/font/google";
+import { useSession } from "next-auth/react";
 
 const greenGlow =
     " flex h-full w-full flex-col space-y-1 rounded-xl border-2 border-[#9CFDA6] bg-gradient-to-b from-[#3A463B] to-[#468C4D] px-3 py-6 text-left tracking-widest text-[#B4FFBC] shadow-[0_0_10px_rgba(70,140,77,1)] ";
@@ -10,38 +13,13 @@ const optionUnselected =
     "flex h-full w-full flex-col space-y-1 rounded-xl bg-secondary px-3 py-6 text-left font-normal tracking-widest text-[#7E7E7E]";
 
 const RemoteOperation = (props: RemoteOperationProps) => {
-    const [selected, setSelected] = useState(0);
+    const [selected, setSelected] = useState(props.remoteOperationStatus);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [testDigitalOutputs, setTestDigitlOutputs] = useState<Array<TestStatus> | null>(null);
-
+    const { data: session } = useSession()
     // const openModal = () => {
     //     setModalOpen(true);
     //     document.body.style.overflow = "hidden";
     // };
-
-    const generatorRemoteOperation = async (status: boolean) => {
-        try {
-            const response = await fetch("/api/setDigitalOutputValues",
-                {
-                    method: 'POST',
-                    body: JSON.stringify(
-                        {
-                            value: status
-                        }),
-                    next: {
-                        revalidate: 600
-                    }
-                });
-            const jsonData = (await response.json()) as TestStatus[];
-
-
-            setTestDigitlOutputs(jsonData)
-            // console.log(testData);
-            // console.log("aaa")
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
-    };
 
     const openModal = () => {
         if (!props.disabled) {
@@ -62,37 +40,37 @@ const RemoteOperation = (props: RemoteOperationProps) => {
 
     return (
         <>
-            {selected === 0 &&
+            {selected != true &&
                 <ModalVerification
                     isModalOpen={isModalOpen}
                     modalTitle="Start Generator?"
                     modalStatus="ON"
-                    submitModal={() => { setSelected(1); setIsModalOpen(false); document.body.style.overflow = "auto"; void generatorRemoteOperation(true) }}
+                    submitModal={() => { setSelected(true); setIsModalOpen(false); document.body.style.overflow = "auto"; }}
                     closeModal={() => { setIsModalOpen(false); document.body.style.overflow = "auto"; }}
                 />
             }
 
-            {selected === 1 &&
+            {selected != false &&
                 <ModalVerification
                     isModalOpen={isModalOpen}
                     modalTitle="Stop Generator?"
                     modalStatus="OFF"
-                    submitModal={() => { setSelected(0); setIsModalOpen(false); document.body.style.overflow = "auto"; void generatorRemoteOperation(false) }}
+                    submitModal={() => { setSelected(false); setIsModalOpen(false); document.body.style.overflow = "auto"; }}
                     closeModal={() => { setIsModalOpen(false); document.body.style.overflow = "auto"; }}
                 />
             }
-            <div className="flex w-full select-none flex-row items-center justify-center space-x-4 p-1 text-xs tracking-wider">
+            <div className={`flex w-full select-none flex-row items-center justify-center space-x-4 p-1 text-xs tracking-wider ${session?.account?.type == "Viewer" && ('pointer-events-none')}`}>
                 {/* Handle Click for STOP button */}
-                <div
+                <button
+                    disabled={props.remoteOperationStatus == false}
                     // onClick={() => handleClick(0)}
                     onClick={() => {
                         openModal()
                     }}
-
                     className={
                         !props.disabled
                             // ? selected === 0
-                            ? props.remoteOperationStatus === false
+                            ? props.remoteOperationStatus == false
                                 ? redGlow
                                 : `${optionUnselected} cursor-pointer transition-all ease-in hover:bg-[#4B4B4B]`
                             : `${optionUnselected} cursor-not-allowed`
@@ -100,10 +78,11 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                 >
                     <h2 className="uppercase">Diesel Generator</h2>
                     <h2 className="text-3xl font-semibold uppercase">Stop</h2>
-                </div>
+                </button>
 
                 {/* Handle Click for START button */}
-                <div
+                <button
+                    disabled={props.remoteOperationStatus == true}
                     // onClick={() => handleClick(1)}
                     onClick={() => {
                         openModal()
@@ -111,7 +90,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                     className={
                         !props.disabled
                             // ? selected === 1
-                            ? props.remoteOperationStatus === true
+                            ? props.remoteOperationStatus == true
                                 ? greenGlow
                                 : `${optionUnselected} cursor-pointer transition-all ease-in hover:bg-[#4B4B4B]`
                             : `${optionUnselected} cursor-not-allowed`
@@ -119,7 +98,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                 >
                     <h2 className="uppercase">Diesel Generator</h2>
                     <h2 className="text-3xl font-semibold uppercase">Start</h2>
-                </div>
+                </button>
             </div>
         </>
     );

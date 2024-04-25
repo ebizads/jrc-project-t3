@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-export const dynamic = "force-dynamic"; // defaults to auto
+// export const dynamic = "force-dynamic"; // defaults to auto
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
@@ -23,7 +23,7 @@ export default async function handler(
         const response = await fetch(
             "http://10.190.12.26/api/v1/device/strategy/ios/digitalInputs",
             {
-                next: { revalidate: 1800 },
+                // next: { revalidate: 1800 },
                 headers: headers,
             },);
 
@@ -35,6 +35,7 @@ export default async function handler(
         // console.log(jsonData);
         // return jsonData
         res.status(200).json(jsonData);
+        void res.revalidate("/", { unstable_onlyGenerated: true })
     } catch (error) {
         console.error("Error fetching data from external API:", error);
         res.status(500).json({

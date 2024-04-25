@@ -173,10 +173,10 @@ const LineChartExample = (generatorData: TestGenerator) => {
         return () => clearInterval(interval); // Cleanup on unmount
     }, []);
 
-    const unit: "minute" | "hour" | "day" | "month" = "minute" as "minute";
-    const type: "category" = "category" as "category";
+    const unit: "minute" | "hour" | "day" | "month" = "minute" as const;
+    const type: "category" = "category" as const;
     const position: "left" | "center" | "right" | "top" | "bottom" =
-        "left" as "left";
+        "left" as const;
 
     const options = {
         layout: {

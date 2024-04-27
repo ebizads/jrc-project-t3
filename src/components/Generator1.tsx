@@ -7,13 +7,19 @@ import RemoteOperation from "./RemoteOperation";
 import {
     getMappedStatus,
     getMappedStatusDigitalOutputs,
+    getStatusDEG,
 } from "~/utils/functions";
 import LineChartExample from "./LineChart";
-// import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDieselGenStart } from "~/utils/useStore";
+import { api } from "~/utils/api";
 
 const Generator1 = (generatorProps: TestGenerator) => {
     // const [testDataFloat, setTestDataFloat] = useState<Array<TestStatusFloat> | null>(null);
+    const { genStart, setGenStart } = useDieselGenStart();
+    const { mutate } = api.generator.createLog.useMutation({
 
+    })
     const [
         commercialPower,
         degMode,
@@ -29,6 +35,26 @@ const Generator1 = (generatorProps: TestGenerator) => {
     const [
         remoteOperationStatus
     ] = getMappedStatusDigitalOutputs(generatorProps)
+
+    useEffect(() => {
+        console.log('PREVIOUS REMOTE STATUS (REMORTEOPERATIONSTATUS)', remoteOperationStatus)
+
+        if (remoteOperationStatus != null) {
+            if (genStart == null) {
+                setGenStart(remoteOperationStatus)
+            }
+            console.log("CHANGED REMOTE STATUS (GENSTART)", genStart)
+
+            if (genStart != remoteOperationStatus) {
+                mutate({
+                    status: getStatusDEG(remoteOperationStatus),
+                    status_type: "success",
+                    status_msg: "Diesel Generator remote operation"
+                })
+            }
+        }
+
+    }, [remoteOperationStatus])
 
     const globalDegStatus = degStatus;
     const globalLoadStatus = loadOn;

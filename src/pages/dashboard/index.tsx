@@ -67,7 +67,7 @@ export default function Home() {
         // void fetchData()
         return () => clearInterval(interval);
         // console.log("test data", testData);
-    });
+    },[]);
 
     return (
         <>

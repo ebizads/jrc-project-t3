@@ -35,7 +35,7 @@ export default async function handler(
         // console.log(jsonData);
         // return jsonData
         res.status(200).json(jsonData);
-        void res.revalidate("/", { unstable_onlyGenerated: true })
+        // void res.revalidate("/", { unstable_onlyGenerated: true })
     } catch (error) {
         console.error("Error fetching data from external API:", error);
         res.status(500).json({

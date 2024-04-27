@@ -34,7 +34,7 @@ export const accountRouter = createTRPCRouter({
         .mutation(async ({ input, ctx }) => {
             const encryptedPassword = await bcrypt.hash(input.password, 10)
 
-            console.log("encrypted password", encryptedPassword)
+            // console.log("encrypted password", encryptedPassword)
             try {
                 const account = await ctx.db.account.findUnique({
                     where: {
@@ -63,7 +63,7 @@ export const accountRouter = createTRPCRouter({
 
                 // console.log(account)
 
-                console.log("ACCOUNT", account)
+                // console.log("ACCOUNT", account)
                 if (account?.type != "Admin") {
                     throw new TRPCError({
                         code: "BAD_REQUEST",

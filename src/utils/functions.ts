@@ -426,3 +426,13 @@ export const getMappedStatusDigitalOutputs = (
 
     return [remoteOperationStatus];
 };
+
+
+export const getStatusDEG = (status: boolean) => {
+    switch (status) {
+        case true:
+            return "STARTED"
+        case false:
+            return "STOPPED"
+    }
+} 

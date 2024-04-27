@@ -20,6 +20,9 @@ const RemoteOperation = (props: RemoteOperationProps) => {
     //     setModalOpen(true);
     //     document.body.style.overflow = "hidden";
     // };
+    useEffect(()=>{
+        setSelected(props.remoteOperationStatus)
+    }, [props.remoteOperationStatus, setSelected])
 
     const openModal = () => {
         if (!props.disabled) {

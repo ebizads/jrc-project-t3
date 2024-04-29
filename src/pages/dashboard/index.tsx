@@ -32,6 +32,8 @@ export default function Home() {
         useState<Array<TestStatus> | null>(null);
 
     const [testDataFinal, setTestDataFinal] = useState<Status[]>([]);
+    const { data, refetch } = api.generator.findAllGenerators.useQuery({})
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -112,7 +114,8 @@ export default function Home() {
                         {/* Generator Card 1 */}
                         <Generator1
                             generatorId={1}
-                            generatorName="CDORFFWC"
+                            // generatorName="CDORFFWC"
+                            generatorName={data?.generators[0]?.generatorName ?? ""}
                             generatorData={testData ?? []}
                             generatorOutputData={testDigitalOutputs ?? []}
                             runningHours={3.49}
@@ -121,7 +124,8 @@ export default function Home() {
                         {/* Generator Card 2 */}
                         <Generator1
                             generatorId={2}
-                            generatorName="XR1 - LIBONA"
+                            // generatorName="XR1 - LIBONA"
+                            generatorName={data?.generators[1]?.generatorName ?? ""}
                             generatorData={testData ?? []}
 
                             runningHours={7.89}
@@ -130,7 +134,8 @@ export default function Home() {
                         {/* Generator Card 3 */}
                         <Generator1
                             generatorId={3}
-                            generatorName="XR2 - DAGUMBAAN"
+                            // generatorName="XR2 - DAGUMBAAN"
+                            generatorName={data?.generators[2]?.generatorName ?? ""}
                             generatorData={testData ?? []}
                             runningHours={17.36}
                         />

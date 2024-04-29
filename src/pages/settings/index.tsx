@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -19,9 +20,9 @@ export default function Settings() {
     const [selectedTab, setSelectedTab] = useState(0);
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
     const [inputData, setInputData] = useState<Array<string | undefined>>([
-        data?.generators[0]?.generatorName,
-        data?.generators[1]?.generatorName,
-        data?.generators[2]?.generatorName
+        data?.generators[0]?.generatorName ?? "",
+        data?.generators[1]?.generatorName ?? "",
+        data?.generators[2]?.generatorName ?? ""
     ])
 
     const {
@@ -35,7 +36,7 @@ export default function Settings() {
         clearErrors,
         formState: { errors, isSubmitting, isDirty },
     } = useForm<GeneratorSettings>({
-        // resolver: zodResolver(userSchema), // Configuration the validation with the zod schema.
+        resolver: zodResolver(ChangeGeneratorSettings), // Configuration the validation with the zod schema.
         defaultValues: {
             generatorNames: [
                 {
@@ -253,7 +254,7 @@ export default function Settings() {
                                         tracking-[0.2em] text-white duration-200 
                                         hover:bg-[#5ec772] focus:bg-[#3d8b4b]
                                         disabled:bg-green-700 disabled:border-green-700 disabled:cursor-not-allowed"
-                                // disabled={!isDirty}
+                                    // disabled={isDirty}
                                 >
                                     Save Changes
                                 </button>

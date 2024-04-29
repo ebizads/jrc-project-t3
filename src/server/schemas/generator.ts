@@ -5,7 +5,7 @@ export const ChangeGeneratorSettings = z.object({
     generatorNames: z.array(
         z.object({
             id: z.number(),
-            generatorName: z.string().optional()
+            generatorName: z.string().min(1, { message: "Title cannot be empty" }).optional()
         }).optional()
     ).optional(),
     // generatorName_1: z.string().optional(),

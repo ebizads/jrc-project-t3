@@ -400,9 +400,9 @@ export const getMappedStatus = (
 
 export const getMappedStatusDigitalOutputs = (
     generatorProps: TestGenerator
-): [boolean | undefined ] => {
+): [boolean | undefined] => {
     // Generator Status
-    let remoteOperationStatus ;
+    let remoteOperationStatus;
     const sensorParameters = generatorProps.generatorOutputData ?? [];
     // DC 48V Power Supply Status
 
@@ -435,13 +435,40 @@ export const getStatusDEG = (status: boolean) => {
         case false:
             return "STOPPED"
     }
-} 
+}
 
-export const getStatusDEGMode = (status: string) => {
+export const getStatusTypeDEG = (status: string) => {
     switch (status) {
-        case true:
-            return "STARTED"
-        case false:
-            return "STOPPED"
+        case DegMode.GENERATING:
+            return "success"
+        case DegMode.MANUAL:
+            return "warning"
+        case DegMode.AUTO:
+            return "success"
+        case DegStatus.GENERATING:
+            return "success"
+        case DegStatus.STANDBY:
+            return "warning"
+        case DegStatus.FAILED:
+            return "error"
+    }
+}
+
+export const getStatusTypeRemoteOperationToFuelLevel = (status: string) => {
+    switch (status) {
+        case RemoteOperation.ON:
+            return "success"
+        case RemoteOperation.STANDBY:
+            return "warning"
+        case RemoteOperation.NA:
+            return "error"
+        case LoadOn.COMMERCIALPOWER:
+            return "success"
+        case LoadOn.GENERATOR:
+            return "success"
+        case FuelLevel.LOW:
+            return "error"
+        case FuelLevel.HIGH:
+            return "success"
     }
 } 

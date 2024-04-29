@@ -8,6 +8,8 @@ import {
     getMappedStatus,
     getMappedStatusDigitalOutputs,
     getStatusDEG,
+    getStatusTypeDEG,
+    getStatusTypeRemoteOperationToFuelLevel,
 } from "~/utils/functions";
 import LineChartExample from "./LineChart";
 import { useEffect, useRef } from "react";
@@ -77,9 +79,10 @@ const Generator1 = (generatorProps: TestGenerator) => {
                 previousFuelLevel.current = fuelLevel
                 previousPowerSupply.current = powerSupply
                 previousCommercialPowerDC.current = commercialPowerDC
-                previousBatteryTemp.current = batteryTemp 
+                previousBatteryTemp.current = batteryTemp
             }
 
+            // CREATE STATUS LOG IF REMOTE OPERATION STARTS OR STOPS
             if (previousRemoteOperationStatus.current != remoteOperationStatus) {
                 previousRemoteOperationStatus.current = remoteOperationStatus
                 mutate({
@@ -90,28 +93,74 @@ const Generator1 = (generatorProps: TestGenerator) => {
                 })
             }
 
+            // CREATE STATUS LOG IF COMMERCIAL POWER CHANGES
             if (previousCommercialPower.current != commercialPower) {
-                previousCommercialPower.current = commercialPower
                 mutate({
                     generatorId: generatorProps.generatorId ?? 0,
                     status: commercialPower,
                     status_type: "info",
                     status_msg: "Commercial Power is"
                 })
+                previousCommercialPower.current = commercialPower
             }
 
-            if (previousCommercialPower.current != commercialPower) {
-                previousCommercialPower.current = commercialPower
+            // CREATE STATUS LOG IF DEG MODE CHANGES
+            if (previousDEGMode.current != degMode) {
+                previousDEGMode.current = degMode
                 mutate({
                     generatorId: generatorProps.generatorId ?? 0,
-                    status: commercialPower,
-                    status_type: "info",
-                    status_msg: "Commercial Power is"
+                    status: degMode,
+                    status_type: getStatusTypeDEG(degMode) ?? 'info',
+                    status_msg: "DEG Mode is"
+                })
+            }
+
+            // CREATE STATUS LOG IF DEG STATUS CHANGES
+            if (previousDEGStatus.current != degStatus) {
+                previousDEGStatus.current = degStatus
+                mutate({
+                    generatorId: generatorProps.generatorId ?? 0,
+                    status: degStatus,
+                    status_type: getStatusTypeDEG(degStatus) ?? 'info',
+                    status_msg: "DEG Status is"
+                })
+            }
+
+            // CREATE STATUS LOG IF REMOTE OPERATION CHANGES
+            if (previousRemoteOperation.current != remoteOperation) {
+                previousRemoteOperation.current = remoteOperation
+                mutate({
+                    generatorId: generatorProps.generatorId ?? 0,
+                    status: remoteOperation,
+                    status_type: getStatusTypeRemoteOperationToFuelLevel(remoteOperation) ?? 'info',
+                    status_msg: "Remote Operation is "
+                })
+            }
+
+            // CREATE STATUS LOG IF LOAD ON CHANGES
+            if (previousLoadOn.current != loadOn) {
+                previousLoadOn.current = loadOn
+                mutate({
+                    generatorId: generatorProps.generatorId ?? 0,
+                    status: loadOn,
+                    status_type: getStatusTypeRemoteOperationToFuelLevel(loadOn) ?? 'info',
+                    status_msg: "Load On "
+                })
+            }
+
+            // CREATE STATUS LOG IF LOAD ON CHANGES
+            if (previousFuelLevel.current != fuelLevel) {
+                previousFuelLevel.current = fuelLevel
+                mutate({
+                    generatorId: generatorProps.generatorId ?? 0,
+                    status: fuelLevel,
+                    status_type: getStatusTypeRemoteOperationToFuelLevel(fuelLevel) ?? 'info',
+                    status_msg: "Fuel Level is "
                 })
             }
         }
 
-    }, [remoteOperationStatus])
+    }, [remoteOperationStatus, commercialPower, degMode, degStatus, remoteOperation, loadOn, fuelLevel,])
 
     const globalDegStatus = degStatus;
     const globalLoadStatus = loadOn;
@@ -122,8 +171,8 @@ const Generator1 = (generatorProps: TestGenerator) => {
                 {generatorProps.generatorName}
 
             </div>
-            <h1>{previousCommercialPower.current + " "}</h1>
-            <h1>{commercialPower + " "}</h1>
+            <h1>{previousFuelLevel.current + " "}</h1>
+            <h1>{fuelLevel + " "}</h1>
             {/* Generator Control Status */}
             <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">

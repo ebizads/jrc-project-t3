@@ -56,7 +56,7 @@ const NewPassword = () => {
     });
 
     useEffect(() => {
-        setUserId(Number(session?.account.id));
+        setUserId(session?.account?.id ?? 0);
     }, [session]);
 
     useEffect(() => {
@@ -107,7 +107,7 @@ const NewPassword = () => {
                             />
                         </label>
                         {errors?.currentPassword &&
-                        watch().currentPassword.length < 1 ? (
+                            watch().currentPassword.length < 1 ? (
                             <div
                                 className={`max-h-96 space-y-2 rounded-md border border-[#b97c7c] bg-[#362626] p-4 text-xs font-normal text-[#b97c7c]`}
                             >
@@ -222,7 +222,7 @@ const NewPassword = () => {
                             </label>
 
                             {errors?.confirmPassword &&
-                            watch().confirmPassword.length < 1 ? (
+                                watch().confirmPassword.length < 1 ? (
                                 <div
                                     className={`max-h-96 space-y-2 rounded-md border border-[#b97c7c] bg-[#362626] p-4 text-xs font-normal text-[#b97c7c]`}
                                 >
@@ -236,7 +236,7 @@ const NewPassword = () => {
                             )}
 
                             {confirmPassword != "" &&
-                            handleChangeConfirmPassword == true ? (
+                                handleChangeConfirmPassword == true ? (
                                 <div
                                     className={`space-y-2 overflow-hidden rounded-md border-[#7cb987] bg-[#283626] text-xs font-normal text-[#7cb987] ${confirmPassword.length === 0 ? "max-h-0" : "max-h-96 border p-4"}`}
                                 >
@@ -291,7 +291,7 @@ const NewPassword = () => {
                         type="button"
                         // onClick={props.closeModal}
                         className="h-[3rem] border-[1px] border-[#CCCCCC] px-[1.5rem] text-center text-xs font-normal uppercase tracking-[0.2em] duration-200 hover:bg-[#424242] focus:bg-secondary"
-                        // disabled={isSubmitting}
+                    // disabled={isSubmitting}
                     >
                         Discard Changes
                     </button>
@@ -301,7 +301,7 @@ const NewPassword = () => {
                         type="submit"
                         // onClick={props.submitModal}
                         className="h-[3rem] border-[1px] border-success bg-success px-[1.5rem] text-center text-xs font-normal uppercase tracking-[0.2em] text-white duration-200 hover:bg-[#5ec772] focus:bg-[#3d8b4b]"
-                        // disabled={isSubmitting}
+                    // disabled={isSubmitting}
                     >
                         Save Changes
                     </button>

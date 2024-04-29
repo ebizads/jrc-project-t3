@@ -33,7 +33,7 @@ export default async function handler(
         // }
         const jsonData = (await response.json()) as string[];
 
-        console.log(jsonData);
+        // console.log(jsonData);
         // return jsonData
         res.status(200).json(jsonData);
         // void res.revalidate("/", { unstable_onlyGenerated: true })

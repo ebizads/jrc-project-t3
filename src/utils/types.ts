@@ -10,10 +10,20 @@ export type Status = {
     value: string;
 };
 
+export type StatusLogType = {
+    id: number,
+    status_type: String,
+    status_msg: String,
+    status: String,
+    createdAt: Date
+    deleted: boolean
+    deletedAt: Date
+}
+
 export type StatusCardType = {
     id: string;
     // date: Date,
-    time: string;
+    time: Date;
     statusType: string;
     content: string;
     statusName: string;
@@ -61,6 +71,7 @@ export type StatusDiagramProps = {
 //================================== test types below ===================================
 //=========================== to be deleted before deployment ===========================
 export type TestGenerator = {
+    generatorId: number | undefined
     generatorName: string;
     generatorData: TestStatus[];
     generatorOutputData?: TestStatus[]

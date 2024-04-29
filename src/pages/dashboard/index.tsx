@@ -67,7 +67,7 @@ export default function Home() {
         // void fetchData()
         return () => clearInterval(interval);
         // console.log("test data", testData);
-    },[]);
+    }, []);
 
     return (
         <>
@@ -111,6 +111,7 @@ export default function Home() {
                     <div className="flex h-full w-full flex-row ">
                         {/* Generator Card 1 */}
                         <Generator1
+                            generatorId={1}
                             generatorName="CDORFFWC"
                             generatorData={testData ?? []}
                             generatorOutputData={testDigitalOutputs ?? []}
@@ -119,13 +120,16 @@ export default function Home() {
 
                         {/* Generator Card 2 */}
                         <Generator1
+                            generatorId={2}
                             generatorName="XR1 - LIBONA"
                             generatorData={testData ?? []}
+
                             runningHours={7.89}
                         />
 
                         {/* Generator Card 3 */}
                         <Generator1
+                            generatorId={3}
                             generatorName="XR2 - DAGUMBAAN"
                             generatorData={testData ?? []}
                             runningHours={17.36}

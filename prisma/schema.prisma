@@ -64,14 +64,27 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Generator {
+  id            Int          @id @default(autoincrement())
+  generatorName String?      @unique
+  runningTime   Float?
+  updatedAt     DateTime?    @updatedAt
+  createdAt     DateTime     @default(now())
+  deleted       Boolean      @default(false)
+  deletedAt     DateTime?
+  StatusLogs    StatusLogs[]
+}
+
 model StatusLogs {
-  id          Int       @id @default(autoincrement())
-  status_type String?
-  status_msg  String?
-  status      String?
-  createdAt   DateTime  @default(now())
-  deleted     Boolean   @default(false)
-  deletedAt   DateTime?
-  uid         String?
-  user        User?     @relation(fields: [uid], references: [uid], onDelete: Cascade)
+  id            Int       @id @default(autoincrement())
+  status_type   String?
+  status_msg    String?
+  status        String?
+  createdAt     DateTime  @default(now())
+  deleted       Boolean   @default(false)
+  deletedAt     DateTime?
+  generatorId   Int      
+  generator     Generator @relation(fields: [generatorId], references: [id])
+  uid           String?
+  user          User?     @relation(fields: [uid], references: [uid], onDelete: Cascade)
 }

@@ -1,4 +1,4 @@
-import type { TestGenerator } from "~/utils/types";
+import type { StatusLogType, TestGenerator } from "~/utils/types";
 import GeneratorControlStatus from "./GeneratorControlStatus";
 import PowerSupplyStatus from "./PowerSupplyStatus";
 import StatusDayLog from "./StatusDayLog";
@@ -10,16 +10,29 @@ import {
     getStatusDEG,
 } from "~/utils/functions";
 import LineChartExample from "./LineChart";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDieselGenStart } from "~/utils/useStore";
 import { api } from "~/utils/api";
 
 const Generator1 = (generatorProps: TestGenerator) => {
     // const [testDataFloat, setTestDataFloat] = useState<Array<TestStatusFloat> | null>(null);
     const { genStart, setGenStart } = useDieselGenStart();
-    const { mutate } = api.generator.createLog.useMutation({
 
+    // MUTATE FUNCTION FOR LOGS TAKEN FROM GENERATOR ROUTER
+    const { mutate } = api.generator.createLog.useMutation({
+        onSuccess() {
+            refetchLogs()
+        },
     })
+
+    // DATA OF ALL LOGS AND REFETCH FUNCTION FOR LOGS
+    const { data: statusLogs, refetch: refetchLogs } = api.generator.findAllLogs.useQuery({
+        filter: ({
+            generatorId: generatorProps.generatorId
+        }),
+        limit: 10
+    })
+
     const [
         commercialPower,
         degMode,
@@ -36,20 +49,64 @@ const Generator1 = (generatorProps: TestGenerator) => {
         remoteOperationStatus
     ] = getMappedStatusDigitalOutputs(generatorProps)
 
+    // USEREF TO CHECK ().CURRENT OF REF AND COMPARE WITH MAPPED STATUS
+    const previousRemoteOperationStatus = useRef<boolean | undefined>(remoteOperationStatus);
+    const previousCommercialPower = useRef<string | undefined>(commercialPower);
+    const previousDEGMode = useRef<string | undefined>(degMode);
+    const previousDEGStatus = useRef<string | undefined>(degStatus);
+    const previousRemoteOperation = useRef<string | undefined>(remoteOperation);
+    const previousLoadOn = useRef<string | undefined>(loadOn);
+    const previousFuelLevel = useRef<string | undefined>(fuelLevel);
+    const previousPowerSupply = useRef<string | undefined>(powerSupply);
+    const previousCommercialPowerDC = useRef<string | undefined>(commercialPowerDC);
+    const previousBatteryTemp = useRef<string | undefined>(batteryTemp);
+
+
+
     useEffect(() => {
+        console.log(statusLogs)
         console.log('PREVIOUS REMOTE STATUS (REMORTEOPERATIONSTATUS)', remoteOperationStatus)
-
         if (remoteOperationStatus != null) {
-            if (genStart == null) {
-                setGenStart(remoteOperationStatus)
+            if (previousRemoteOperationStatus.current == undefined) {
+                previousRemoteOperationStatus.current = remoteOperationStatus
+                previousCommercialPower.current = commercialPower
+                previousDEGMode.current = degMode
+                previousDEGStatus.current = degStatus
+                previousRemoteOperation.current = remoteOperation
+                previousLoadOn.current = loadOn
+                previousFuelLevel.current = fuelLevel
+                previousPowerSupply.current = powerSupply
+                previousCommercialPowerDC.current = commercialPowerDC
+                previousBatteryTemp.current = batteryTemp 
             }
-            console.log("CHANGED REMOTE STATUS (GENSTART)", genStart)
 
-            if (genStart != remoteOperationStatus) {
+            if (previousRemoteOperationStatus.current != remoteOperationStatus) {
+                previousRemoteOperationStatus.current = remoteOperationStatus
                 mutate({
+                    generatorId: generatorProps.generatorId ?? 0,
                     status: getStatusDEG(remoteOperationStatus),
                     status_type: "success",
                     status_msg: "Diesel Generator remote operation"
+                })
+            }
+
+            if (previousCommercialPower.current != commercialPower) {
+                previousCommercialPower.current = commercialPower
+                mutate({
+                    generatorId: generatorProps.generatorId ?? 0,
+                    status: commercialPower,
+                    status_type: "info",
+                    status_msg: "Commercial Power is"
+                })
+            }
+
+            if (previousCommercialPower.current != commercialPower) {
+                previousCommercialPower.current = commercialPower
+                mutate({
+                    generatorId: generatorProps.generatorId ?? 0,
+                    status: commercialPower,
+                    status_type: "info",
+                    status_msg: "Commercial Power is"
                 })
             }
         }
@@ -63,8 +120,10 @@ const Generator1 = (generatorProps: TestGenerator) => {
         <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
             <div className=" sticky top-0 z-40 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
                 {generatorProps.generatorName}
-            </div>
 
+            </div>
+            <h1>{previousCommercialPower.current + " "}</h1>
+            <h1>{commercialPower + " "}</h1>
             {/* Generator Control Status */}
             <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
@@ -153,6 +212,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     GRAPHICAL REPORT
                 </h1>
                 <LineChartExample
+                    generatorId={generatorProps.generatorId}
                     generatorName={generatorProps.generatorName}
                     runningHours={generatorProps.runningHours}
                     generatorData={generatorProps.generatorData}
@@ -164,7 +224,31 @@ const Generator1 = (generatorProps: TestGenerator) => {
                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                     Status Logs
                 </h1>
-                <StatusDayLog
+
+                {/* {statusLogs && (
+                    statusLogs
+                )} */}
+
+                {Object.entries(statusLogs?.groupedLogs ?? {}).map(([date, items]) => (
+                    <div key={date}>
+                        <StatusDayLog
+                            id={date}
+                            day={date}
+                            statusLogSet={
+                                items.map((item: StatusLogType) => (
+                                    {
+                                        id: item.id,
+                                        time: item.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                                        statusType: item.status_type,
+                                        content: item.status_msg,
+                                        statusName: item.status,
+                                    }
+                                ))
+                            }
+                        />
+                    </div>
+                ))}
+                {/* <StatusDayLog
                     id="start1"
                     day="MARCH 15, 2024"
                     statusLogSet={[
@@ -209,9 +293,9 @@ const Generator1 = (generatorProps: TestGenerator) => {
                             statusName: "STARTED",
                         },
                     ]}
-                />
+                /> */}
             </div>
-        </div>
+        </div >
     );
 };
 

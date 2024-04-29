@@ -400,9 +400,9 @@ export const getMappedStatus = (
 
 export const getMappedStatusDigitalOutputs = (
     generatorProps: TestGenerator
-): [boolean | null | undefined] => {
+): [boolean | undefined ] => {
     // Generator Status
-    let remoteOperationStatus;
+    let remoteOperationStatus ;
     const sensorParameters = generatorProps.generatorOutputData ?? [];
     // DC 48V Power Supply Status
 
@@ -429,6 +429,15 @@ export const getMappedStatusDigitalOutputs = (
 
 
 export const getStatusDEG = (status: boolean) => {
+    switch (status) {
+        case true:
+            return "STARTED"
+        case false:
+            return "STOPPED"
+    }
+} 
+
+export const getStatusDEGMode = (status: string) => {
     switch (status) {
         case true:
             return "STARTED"

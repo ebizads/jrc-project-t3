@@ -1,5 +1,9 @@
 import { z } from "zod";
-
+export const ChangeDashboardSettings = z.object({
+    // generatorId: z.array(z.number()),
+    headerTitle: z.string().min(1, { message: "Header Title cannot be empty" }).optional(),
+    subHeaderTitle: z.string().min(1, { message: "Sub-Header Title cannot be empty" }).optional()
+})
 export const ChangeGeneratorSettings = z.object({
     // generatorId: z.array(z.number()),
     generatorNames: z.array(

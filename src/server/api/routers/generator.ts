@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { ChangeGeneratorSettings, CreateStatusLog } from "~/server/schemas/generator";
+import { ChangeDashboardSettings, ChangeGeneratorSettings, CreateStatusLog } from "~/server/schemas/generator";
 
 export const generatorRouter = createTRPCRouter({
     findAllGenerators: protectedProcedure
@@ -57,7 +57,7 @@ export const generatorRouter = createTRPCRouter({
                         createdAt: "desc",
                     },
                     where: {
-                       generatorId: input.filter?.generatorId
+                        generatorId: input.filter?.generatorId
                     },
                     // skip: input?.page
                     //     ? (input.page - 1) * (input.limit ?? 10)
@@ -94,8 +94,46 @@ export const generatorRouter = createTRPCRouter({
                 count
             }
         }),
+    changeDashboardTitle: protectedProcedure
+        .input(ChangeDashboardSettings)
+        .mutation(async ({ ctx, input }) => {
+            try {
+                const [changeDashboard] = await ctx.db.$transaction(
+                    [
+                        // change Dashboard Title
+                        ctx.db.generator.update({
+                            where: {
+                                id: 4
+                            },
+                            data: {
+                                generatorName: input.headerTitle
 
-    changeGeneratorData: protectedProcedure
+                            },
+                        }),
+                        ctx.db.generator.update({
+                            where: {
+                                id: 5
+                            },
+                            data: {
+                                generatorName: input.subHeaderTitle
+
+                            },
+                        })
+                    ]
+                )
+
+
+                // return updates
+
+                // return "Generator names successfully updated"
+            } catch (error) {
+                throw new TRPCError({
+                    code: "BAD_REQUEST",
+                    message: JSON.stringify(error),
+                })
+            }
+        }),
+    changeGeneratorSettings: protectedProcedure
         .input(ChangeGeneratorSettings)
         .mutation(async ({ ctx, input }) => {
             try {

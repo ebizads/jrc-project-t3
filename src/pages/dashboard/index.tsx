@@ -96,11 +96,10 @@ export default function Home() {
                     <div className="hero-content text-center text-neutral-content">
                         <div className="max-w-3xl">
                             <h1 className="mb-2 text-3xl font-bold">
-                                The Project for Improving Flood Forecasting and
-                                Warning System for Cagayan De Oro River Basin
+                                {data?.generators[3]?.generatorName}
                             </h1>
                             <p className="mb-5 text-base font-semibold uppercase tracking-[0.15em]">
-                                Monitoring & Control System
+                                {data?.generators[4]?.generatorName}
                             </p>
                         </div>
                     </div>

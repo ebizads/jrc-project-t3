@@ -25,6 +25,7 @@ import {
 } from "~/utils/functions";
 import ModalLoading from "~/components/ModalLoading";
 import Generator2 from "~/components/Generator2";
+import Generator3 from "~/components/Generator3";
 
 export default function Home() {
     // const hello = api.post.hello.useQuery({ text: "from tRPC" });
@@ -97,6 +98,9 @@ export default function Home() {
                 const outputDataXR1 = (await responseOutputXR1.json()) as TestStatus[];
                 const outputDataXR2 = (await responseOutputXR2.json()) as TestStatus[];
 
+                console.log(inputDataCDO)
+                console.log(inputDataXR1)
+                console.log(inputDataXR2)
 
                 setCDOData(inputDataCDO);
                 setXR1Data(inputDataXR1);
@@ -163,7 +167,6 @@ export default function Home() {
                     <div className="flex h-full w-full flex-row ">
                         {/* Generator Card 1 CDO*/}
                         <Generator1
-                            apiPostRoute="api/setDigitalOutputs/setDigitalOutputValuesCDO"
                             generatorId={1}
                             // generatorName="CDORFFWC"
                             generatorName={
@@ -187,8 +190,7 @@ export default function Home() {
                         />
 
                         {/* Generator Card 3  XR2*/}
-                        <Generator1
-                            apiPostRoute="api/setDigitalOutputs/setDigitalOutputValuesXR2"
+                        <Generator3
                             generatorId={3}
                             // generatorName="XR2 - DAGUMBAAN"
                             generatorName={

@@ -21,7 +21,7 @@ export default async function handler(
         headers.append("Authorization", basicAuth);
 
         const response = await fetch(
-            `${process.env.GEN_ENDPOINT_3}/api/v1/device/strategy/ios/digitalOutputs/DIESEL_GENERATOR_START/state`,
+            `${process.env.GEN_ENDPOINT_3}/api/v1/device/strategy/ios/digitalOutputs/DIESEL_GENERATOR_START_XR2/state`,
             {
                 method: 'POST',
                 // next: { revalidate: 1800 },

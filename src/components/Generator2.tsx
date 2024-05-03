@@ -10,6 +10,8 @@ import {
     getStatusDEG,
     getStatusTypeDEG,
     getStatusTypeRemoteOperationToFuelLevel,
+    getMappedStatusDigitalOutputsXR1,
+    getTestMappedStatusXR1,
 } from "~/utils/functions";
 import LineChartExample from "./LineChart";
 import { useEffect, useRef } from "react";
@@ -46,10 +48,10 @@ const Generator2 = (generatorProps: TestGenerator) => {
         powerSupply,
         commercialPowerDC,
         batteryTemp,
-    ] = getTestMappedStatus(generatorProps);
+    ] = getTestMappedStatusXR1(generatorProps);
 
     const [remoteOperationStatus] =
-        getMappedStatusDigitalOutputs(generatorProps);
+        getMappedStatusDigitalOutputsXR1(generatorProps);
 
     // USEREF TO CHECK ().CURRENT OF REF AND COMPARE WITH MAPPED STATUS
     const previousRemoteOperationStatus = useRef<boolean | undefined>(

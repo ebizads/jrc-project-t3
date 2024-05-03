@@ -434,11 +434,11 @@ export const getTestMappedStatus = (
                 switch (parameter.value) {
                     case true:
                         commercialPower = CommercialPower.OFF;
-                        loadOn= LoadOn.GENERATOR;
+                        loadOn = LoadOn.GENERATOR;
                         break;
                     case false:
                         commercialPower = CommercialPower.ON;
-                        loadOn= LoadOn.COMMERCIALPOWER;
+                        loadOn = LoadOn.COMMERCIALPOWER;
                         break;
                 }
                 break;
@@ -539,6 +539,288 @@ export const getTestMappedStatus = (
     ];
 };
 
+export const getTestMappedStatusXR1 = (
+    generatorProps: TestGenerator
+): [string, string, string, string, string, string, string, string, string] => {
+    const sensorParameters = generatorProps.generatorData;
+
+    // Generator Status
+    let commercialPower = "";
+    let degMode = "";
+    let degStatus = "";
+    let remoteOperation = "";
+    let loadOn = "";
+    let fuelLevel = "";
+
+    // DC 48V Power Supply Status
+    let powerSupply = "";
+    let commercialPowerDC = "";
+    let batteryTemp = "";
+
+    // DASHBOARD STATUS MAPPINGS
+    sensorParameters.forEach((parameter) => {
+        // console.log(parameter.name);
+        switch (parameter.name) {
+            case "ABNORMAL_XR1":
+                switch (parameter.value) {
+                    case true:
+                        degStatus = DegStatus.FAILED;
+                        break;
+                    case false:
+                        degStatus = DegStatus.GENERATING;
+                        break;
+                }
+                break;
+            case "AC_POWER_FAILURE_XR1":
+                switch (parameter.value) {
+                    case true:
+                        commercialPower = CommercialPower.OFF;
+                        loadOn = LoadOn.GENERATOR;
+                        break;
+                    case false:
+                        commercialPower = CommercialPower.ON;
+                        loadOn = LoadOn.COMMERCIALPOWER;
+                        break;
+                }
+                break;
+            case "AC_POWER_FAILURE_DC_XR1":
+                switch (parameter.value) {
+                    case true:
+                        commercialPowerDC = CommercialPower.OFF;
+                        break;
+                    case false:
+                        commercialPowerDC = CommercialPower.ON;
+
+                        break;
+                }
+                break;
+            case "AC_POWER_RECEIVING_DC_XR1":
+                switch (parameter.value) {
+                    case true:
+                        commercialPowerDC = CommercialPower.ON;
+                        break;
+                    case false:
+                        commercialPowerDC = CommercialPower.OFF;
+                        break;
+                }
+                break;
+            case "BATTERY_HIGH_TEMPERATURE_ALARM_DC_XR1":
+                switch (parameter.value) {
+                    case true:
+                        batteryTemp = BatteryTemp.HIGH;
+                        break;
+                    case false:
+                        batteryTemp = BatteryTemp.GOOD;
+                        break;
+                }
+                break;
+            case "LOW_FUEL_LEVEL_XR1":
+                switch (parameter.value) {
+                    case true:
+                        fuelLevel = FuelLevel.LOW;
+                        break;
+                    case false:
+                        fuelLevel = FuelLevel.HIGH;
+                        break;
+                }
+                break;
+            case "MANUAL_LOCAL_XR1":
+                switch (parameter.value) {
+                    case true:
+                        degMode = DegMode.MANUAL;
+                        break;
+                    case false:
+                        degMode = DegMode.AUTO;
+                        break;
+                }
+                break;
+            case "OPERATION_XR1":
+                switch (parameter.value) {
+                    case true:
+                        remoteOperation = RemoteOperation.ON;
+                        break;
+                    case false:
+                        remoteOperation = RemoteOperation.STANDBY;
+                        break;
+                }
+                break;
+            case "RECTIFIER_ABNORMAL_ALARM_DC_XR1":
+                switch (parameter.value) {
+                    case true:
+                        powerSupply = PowerSupply.ALARM;
+                        break;
+                    case false:
+                        powerSupply = PowerSupply.OPERATING;
+                        break;
+                }
+                break;
+            case "UNDER_REMOTE_OPERATION_XR1":
+                switch (parameter.value) {
+                    case true:
+                        remoteOperation = RemoteOperation.ON;
+                        break;
+                    case false:
+                        remoteOperation = RemoteOperation.STANDBY;
+                        break;
+                }
+                break;
+        }
+    });
+
+    return [
+        commercialPower,
+        degMode,
+        degStatus,
+        remoteOperation,
+        loadOn,
+        fuelLevel,
+        powerSupply,
+        commercialPowerDC,
+        batteryTemp,
+    ];
+};
+
+export const getTestMappedStatusXR2 = (
+    generatorProps: TestGenerator
+): [string, string, string, string, string, string, string, string, string] => {
+    const sensorParameters = generatorProps.generatorData;
+
+    // Generator Status
+    let commercialPower = "";
+    let degMode = "";
+    let degStatus = "";
+    let remoteOperation = "";
+    let loadOn = "";
+    let fuelLevel = "";
+
+    // DC 48V Power Supply Status
+    let powerSupply = "";
+    let commercialPowerDC = "";
+    let batteryTemp = "";
+
+    // DASHBOARD STATUS MAPPINGS
+    sensorParameters.forEach((parameter) => {
+        // console.log(parameter.name);
+        switch (parameter.name) {
+            case "ABNORMAL_XR2":
+                switch (parameter.value) {
+                    case true:
+                        degStatus = DegStatus.FAILED;
+                        break;
+                    case false:
+                        degStatus = DegStatus.GENERATING;
+                        break;
+                }
+                break;
+            case "AC_POWER_FAILURE_XR2":
+                switch (parameter.value) {
+                    case true:
+                        commercialPower = CommercialPower.OFF;
+                        loadOn = LoadOn.GENERATOR;
+                        break;
+                    case false:
+                        commercialPower = CommercialPower.ON;
+                        loadOn = LoadOn.COMMERCIALPOWER;
+                        break;
+                }
+                break;
+            case "AC_POWER_FAILURE_DC_XR2":
+                switch (parameter.value) {
+                    case true:
+                        commercialPowerDC = CommercialPower.OFF;
+                        break;
+                    case false:
+                        commercialPowerDC = CommercialPower.ON;
+
+                        break;
+                }
+                break;
+            case "AC_POWER_RECEIVING_DC_XR2":
+                switch (parameter.value) {
+                    case true:
+                        commercialPowerDC = CommercialPower.ON;
+                        break;
+                    case false:
+                        commercialPowerDC = CommercialPower.OFF;
+                        break;
+                }
+                break;
+            case "BATTERY_HIGH_TEMPERATURE_ALARM_DC_XR2":
+                switch (parameter.value) {
+                    case true:
+                        batteryTemp = BatteryTemp.HIGH;
+                        break;
+                    case false:
+                        batteryTemp = BatteryTemp.GOOD;
+                        break;
+                }
+                break;
+            case "LOW_FUEL_LEVEL_XR2":
+                switch (parameter.value) {
+                    case true:
+                        fuelLevel = FuelLevel.LOW;
+                        break;
+                    case false:
+                        fuelLevel = FuelLevel.HIGH;
+                        break;
+                }
+                break;
+            case "MANUAL_LOCAL_XR2":
+                switch (parameter.value) {
+                    case true:
+                        degMode = DegMode.MANUAL;
+                        break;
+                    case false:
+                        degMode = DegMode.AUTO;
+                        break;
+                }
+                break;
+            case "OPERATION_XR2":
+                switch (parameter.value) {
+                    case true:
+                        remoteOperation = RemoteOperation.ON;
+                        break;
+                    case false:
+                        remoteOperation = RemoteOperation.STANDBY;
+                        break;
+                }
+                break;
+            case "RECTIFIER_ABNORMAL_ALARM_DC_XR2":
+                switch (parameter.value) {
+                    case true:
+                        powerSupply = PowerSupply.ALARM;
+                        break;
+                    case false:
+                        powerSupply = PowerSupply.OPERATING;
+                        break;
+                }
+                break;
+            case "UNDER_REMOTE_OPERATION_XR2":
+                switch (parameter.value) {
+                    case true:
+                        remoteOperation = RemoteOperation.ON;
+                        break;
+                    case false:
+                        remoteOperation = RemoteOperation.STANDBY;
+                        break;
+                }
+                break;
+        }
+    });
+
+    return [
+        commercialPower,
+        degMode,
+        degStatus,
+        remoteOperation,
+        loadOn,
+        fuelLevel,
+        powerSupply,
+        commercialPowerDC,
+        batteryTemp,
+    ];
+};
+
 export const getMappedStatusDigitalOutputs = (
     generatorProps: TestGenerator
 ): [boolean | undefined] => {
@@ -550,6 +832,64 @@ export const getMappedStatusDigitalOutputs = (
     generatorProps.generatorOutputData?.forEach((parameter) => {
         switch (parameter.name) {
             case "DIESEL_GENERATOR_START":
+                switch (parameter.value) {
+                    case true:
+                        // remoteOperationStatus = RemoteOperationStatus.START;
+                        remoteOperationStatus = true;
+                        break;
+                    // remoteOperation = RemoteOperation.STANDBY;
+                    case false:
+                        // remoteOperationStatus = RemoteOperationStatus.STOP;
+                        remoteOperationStatus = false;
+                        break;
+                }
+                break;
+        }
+    });
+
+    return [remoteOperationStatus];
+};
+
+export const getMappedStatusDigitalOutputsXR1 = (
+    generatorProps: TestGenerator
+): [boolean | undefined] => {
+    // Generator Status
+    let remoteOperationStatus;
+    const sensorParameters = generatorProps.generatorOutputData ?? [];
+    // DC 48V Power Supply Status
+
+    generatorProps.generatorOutputData?.forEach((parameter) => {
+        switch (parameter.name) {
+            case "DIESEL_GENERATOR_START_XR1":
+                switch (parameter.value) {
+                    case true:
+                        // remoteOperationStatus = RemoteOperationStatus.START;
+                        remoteOperationStatus = true;
+                        break;
+                    // remoteOperation = RemoteOperation.STANDBY;
+                    case false:
+                        // remoteOperationStatus = RemoteOperationStatus.STOP;
+                        remoteOperationStatus = false;
+                        break;
+                }
+                break;
+        }
+    });
+
+    return [remoteOperationStatus];
+};
+
+export const getMappedStatusDigitalOutputsXR2 = (
+    generatorProps: TestGenerator
+): [boolean | undefined] => {
+    // Generator Status
+    let remoteOperationStatus;
+    const sensorParameters = generatorProps.generatorOutputData ?? [];
+    // DC 48V Power Supply Status
+
+    generatorProps.generatorOutputData?.forEach((parameter) => {
+        switch (parameter.name) {
+            case "DIESEL_GENERATOR_START_XR2":
                 switch (parameter.value) {
                     case true:
                         // remoteOperationStatus = RemoteOperationStatus.START;

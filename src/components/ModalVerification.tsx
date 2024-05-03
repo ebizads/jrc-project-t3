@@ -33,9 +33,9 @@ const ModalVerification = (props: ModalVerificationProps) => {
         onSuccess() {
             props.submitModal()
             if (props.modalStatus == "ON") {
-                void generatorRemoteOperation(true)
+                void generatorRemoteOperation(true, props.generatorId)
             } else {
-                void generatorRemoteOperation(false)
+                void generatorRemoteOperation(false, props.generatorId)
             }
             setSuccess("Successfully Started/Stopped Generator")
             setTimeout(() => setSuccess(null), 3000)
@@ -57,10 +57,21 @@ const ModalVerification = (props: ModalVerificationProps) => {
         },
     });
 
-    const generatorRemoteOperation = async (status: boolean) => {
+    const generatorRemoteOperation = async (status: boolean, generatorId: number) => {
         try {
-
-            const response = await fetch(props.apiRoute,
+            let apiRoute = "";
+            switch (generatorId) {
+                case 1:
+                    apiRoute = "api/setDigitalOutputs/setDigitalOutputValuesCDO";
+                    break;
+                case 2:
+                    apiRoute = "api/setDigitalOutputs/setDigitalOutputValuesXR1"
+                    break;
+                case 3:
+                    apiRoute = "api/setDigitalOutputs/setDigitalOutputValuesXR2"
+                    break;
+            }
+            const response = await fetch( apiRoute,
                 {
                     method: 'POST',
                     body: JSON.stringify(
@@ -77,7 +88,7 @@ const ModalVerification = (props: ModalVerificationProps) => {
             setTestDigitalOutputs(jsonData)
             // console.log(testData);
             // console.log("aaa")
-
+            
         } catch (error) {
             console.error("Error fetching data:", error);
         }

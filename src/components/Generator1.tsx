@@ -247,7 +247,6 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     Remote Operation
                 </h1>
                 <RemoteOperation
-                    apiRoute={"api/setDigitalOutputs/setDigitalOutputValuesCDO"}
                     generatorId={generatorProps.generatorId ?? 0}
                     remoteOperationStatus={remoteOperationStatus ?? true}
                     disabled={false}
@@ -283,7 +282,6 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     GRAPHICAL REPORT
                 </h1>
                 <LineChartExample
-                    apiPostRoute={generatorProps.apiPostRoute}
                     generatorId={generatorProps.generatorId}
                     generatorName={generatorProps.generatorName}
                     runningHours={generatorProps.runningHours}

@@ -45,7 +45,6 @@ const RemoteOperation = (props: RemoteOperationProps) => {
         <>
             {selected != true &&
                 <ModalVerification
-                    apiRoute={props.apiRoute}
                     generatorId={props.generatorId}
                     isModalOpen={isModalOpen}
                     modalTitle="Start Generator?"
@@ -57,7 +56,6 @@ const RemoteOperation = (props: RemoteOperationProps) => {
 
             {selected != false &&
                 <ModalVerification
-                    apiRoute={props.apiRoute}
                     generatorId={props.generatorId}
                     isModalOpen={isModalOpen}
                     modalTitle="Stop Generator?"

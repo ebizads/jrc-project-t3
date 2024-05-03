@@ -236,7 +236,169 @@ export const getDataValueEquivalentTest = (
     }
 };
 
-export const getMappedStatus = (
+// export const getMappedStatus = (
+//     generatorProps: TestGenerator
+// ): [string, string, string, string, string, string, string, string, string] => {
+//     const sensorParameters = generatorProps.generatorData;
+
+//     // Generator Status
+//     let commercialPower = "";
+//     let degMode = "";
+//     let degStatus = "";
+//     let remoteOperation = "";
+//     let loadOn = "";
+//     let fuelLevel = "";
+
+//     // DC 48V Power Supply Status
+//     let powerSupply = "";
+//     let commercialPowerDC = "";
+//     let batteryTemp = "";
+
+//     // DASHBOARD STATUS MAPPINGS
+//     sensorParameters.forEach((parameter) => {
+//         // console.log(parameter.name);
+//         switch (parameter.name) {
+//             case "AC_POWER_FAILURE":
+//                 switch (parameter.value) {
+//                     case true:
+//                         degStatus = DegStatus.FAILED;
+//                         degMode = DegMode.MANUAL; //TO CONFIRM IF DEG MODE SHOULD BE MANUAL
+//                         loadOn = LoadOn.COMMERCIALPOWER;
+//                         break;
+//                     case false:
+//                         degStatus = DegStatus.GENERATING;
+//                         degMode = DegMode.GENERATING;
+//                         loadOn = LoadOn.GENERATOR;
+//                         break;
+//                 }
+//                 break;
+//             case "AC_POWER_FAILURE_P":
+//                 switch (parameter.value) {
+//                     case true:
+//                         commercialPower = CommercialPower.OFF;
+//                         degStatus = DegStatus.GENERATING;
+//                         degMode = DegMode.GENERATING;
+//                         loadOn = LoadOn.GENERATOR;
+//                     case false:
+//                         commercialPower = CommercialPower.ON;
+//                         degStatus = DegStatus.STANDBY;
+//                         degMode = DegMode.AUTO;
+//                         loadOn = LoadOn.COMMERCIALPOWER;
+//                 }
+//                 break;
+//             case "AC_POWER_RECEIVING":
+//                 switch (parameter.value) {
+//                     case true:
+//                         commercialPower = CommercialPower.ON;
+//                         commercialPowerDC = CommercialPower.ON;
+//                         degStatus = DegStatus.STANDBY;
+//                         degMode = DegMode.AUTO;
+//                         loadOn = LoadOn.COMMERCIALPOWER;
+//                         powerSupply = PowerSupply.OPERATING;
+//                         break;
+//                     case false:
+//                         commercialPower = CommercialPower.OFF;
+//                         commercialPowerDC = CommercialPower.OFF;
+//                         // powerSupply = PowerSupply.ALARM;
+//                         degStatus = DegStatus.GENERATING;
+//                         degMode = DegMode.GENERATING;
+//                         loadOn = LoadOn.GENERATOR;
+//                         break;
+//                 }
+//                 break;
+//             case "BATTERY_HIGH_TEMPERATURE":
+//                 switch (parameter.value) {
+//                     case true:
+//                         batteryTemp = BatteryTemp.HIGH;
+//                         break;
+//                     case false:
+//                         batteryTemp = BatteryTemp.GOOD;
+//                         break;
+//                 }
+//                 break;
+//             case "LOW_FUEL_LEVEL":
+//                 switch (parameter.value) {
+//                     case true:
+//                         fuelLevel = FuelLevel.LOW;
+//                         break;
+//                     case false:
+//                         fuelLevel = FuelLevel.HIGH;
+//                         break;
+//                 }
+//                 break;
+//             case "MANUAL_LOCAL":
+//                 switch (parameter.value) {
+//                     case true:
+//                         degMode = DegMode.MANUAL;
+//                         degStatus = DegStatus.STANDBY;
+//                         remoteOperation = RemoteOperation.STANDBY;
+//                         powerSupply = PowerSupply.OPERATING;
+//                         break;
+//                     case false:
+//                         degMode = DegMode.AUTO;
+//                         break;
+//                 }
+//                 break;
+//             case "OPERATION":
+//                 switch (parameter.value) {
+//                     case true:
+//                         remoteOperation = RemoteOperation.ON;
+//                         degStatus = DegStatus.STANDBY;
+//                         degMode = DegMode.MANUAL;
+//                         powerSupply = PowerSupply.OPERATING;
+//                         break;
+//                     case false:
+//                         remoteOperation = RemoteOperation.STANDBY;
+//                         break;
+//                 }
+//                 break;
+//             case "RECTIFIER_ABNORMAL_ALARM":
+//                 switch (parameter.value) {
+//                     case true:
+//                         powerSupply = PowerSupply.ALARM;
+//                         degStatus = DegStatus.FAILED;
+//                         remoteOperation = RemoteOperation.NA;
+//                         break;
+//                     case false:
+//                         powerSupply = PowerSupply.OPERATING;
+//                         degStatus = DegStatus.GENERATING;
+//                         // degStatus = DegStatus.GENERATING;
+//                         // degStatus = DegStatus.STANDBY;
+//                         remoteOperation = RemoteOperation.ON;
+//                         break;
+//                     // degStatus = DegStatus.STANDBY;
+//                 }
+//                 break;
+//             case "UNDER_REMOTE_OPERATION":
+//                 switch (parameter.value) {
+//                     case true:
+//                         remoteOperation = RemoteOperation.ON;
+//                         // remoteOperation = RemoteOperation.STANDBY;
+//                         degStatus = DegStatus.GENERATING; //TO CLARIFY
+//                         break;
+//                     // remoteOperation = RemoteOperation.STANDBY;
+//                     case false:
+//                         remoteOperation = RemoteOperation.NA;
+//                         break;
+//                 }
+//                 break;
+//         }
+//     });
+
+//     return [
+//         commercialPower,
+//         degMode,
+//         degStatus,
+//         remoteOperation,
+//         loadOn,
+//         fuelLevel,
+//         powerSupply,
+//         commercialPowerDC,
+//         batteryTemp,
+//     ];
+// };
+
+export const getTestMappedStatus = (
     generatorProps: TestGenerator
 ): [string, string, string, string, string, string, string, string, string] => {
     const sensorParameters = generatorProps.generatorData;
@@ -258,55 +420,48 @@ export const getMappedStatus = (
     sensorParameters.forEach((parameter) => {
         // console.log(parameter.name);
         switch (parameter.name) {
-            case "AC_POWER_FAILURE":
+            case "ABNORMAL":
                 switch (parameter.value) {
                     case true:
                         degStatus = DegStatus.FAILED;
-                        degMode = DegMode.MANUAL; //TO CONFIRM IF DEG MODE SHOULD BE MANUAL
-                        loadOn = LoadOn.COMMERCIALPOWER;
                         break;
                     case false:
                         degStatus = DegStatus.GENERATING;
-                        degMode = DegMode.GENERATING;
-                        loadOn = LoadOn.GENERATOR;
                         break;
                 }
                 break;
-            case "AC_POWER_FAILURE_P":
+            case "AC_POWER_FAILURE":
                 switch (parameter.value) {
                     case true:
                         commercialPower = CommercialPower.OFF;
-                        degStatus = DegStatus.GENERATING;
-                        degMode = DegMode.GENERATING;
-                        loadOn = LoadOn.GENERATOR;
-                    case false:
-                        commercialPower = CommercialPower.ON;
-                        degStatus = DegStatus.STANDBY;
-                        degMode = DegMode.AUTO;
-                        loadOn = LoadOn.COMMERCIALPOWER;
-                }
-                break;
-            case "AC_POWER_RECEIVING":
-                switch (parameter.value) {
-                    case true:
-                        commercialPower = CommercialPower.ON;
-                        commercialPowerDC = CommercialPower.ON;
-                        degStatus = DegStatus.STANDBY;
-                        degMode = DegMode.AUTO;
-                        loadOn = LoadOn.COMMERCIALPOWER;
-                        powerSupply = PowerSupply.OPERATING;
                         break;
                     case false:
-                        commercialPower = CommercialPower.OFF;
+                        commercialPower = CommercialPower.ON;
+                        break;
+                }
+                break;
+            case "AC_POWER_FAILURE_DC":
+                switch (parameter.value) {
+                    case true:
                         commercialPowerDC = CommercialPower.OFF;
-                        // powerSupply = PowerSupply.ALARM;
-                        degStatus = DegStatus.GENERATING;
-                        degMode = DegMode.GENERATING;
-                        loadOn = LoadOn.GENERATOR;
+                        break;
+                    case false:
+                        commercialPowerDC = CommercialPower.ON;
+
                         break;
                 }
                 break;
-            case "BATTERY_HIGH_TEMPERATURE":
+            case "AC_POWER_RECEIVING_DC":
+                switch (parameter.value) {
+                    case true:
+                        commercialPowerDC = CommercialPower.ON;
+                        break;
+                    case false:
+                        commercialPowerDC = CommercialPower.OFF;
+                        break;
+                }
+                break;
+            case "BATTERY_HIGH_TEMPERATURE_ALARM_DC":
                 switch (parameter.value) {
                     case true:
                         batteryTemp = BatteryTemp.HIGH;
@@ -330,9 +485,6 @@ export const getMappedStatus = (
                 switch (parameter.value) {
                     case true:
                         degMode = DegMode.MANUAL;
-                        degStatus = DegStatus.STANDBY;
-                        remoteOperation = RemoteOperation.STANDBY;
-                        powerSupply = PowerSupply.OPERATING;
                         break;
                     case false:
                         degMode = DegMode.AUTO;
@@ -343,42 +495,29 @@ export const getMappedStatus = (
                 switch (parameter.value) {
                     case true:
                         remoteOperation = RemoteOperation.ON;
-                        degStatus = DegStatus.STANDBY;
-                        degMode = DegMode.MANUAL;
-                        powerSupply = PowerSupply.OPERATING;
                         break;
                     case false:
                         remoteOperation = RemoteOperation.STANDBY;
                         break;
                 }
                 break;
-            case "RECTIFIER_ABNORMAL_ALARM":
+            case "RECTIFIER_ABNORMAL_ALARM_DC":
                 switch (parameter.value) {
                     case true:
                         powerSupply = PowerSupply.ALARM;
-                        degStatus = DegStatus.FAILED;
-                        remoteOperation = RemoteOperation.NA;
                         break;
                     case false:
                         powerSupply = PowerSupply.OPERATING;
-                        degStatus = DegStatus.GENERATING;
-                        // degStatus = DegStatus.GENERATING;
-                        // degStatus = DegStatus.STANDBY;
-                        remoteOperation = RemoteOperation.ON;
                         break;
-                    // degStatus = DegStatus.STANDBY;
                 }
                 break;
             case "UNDER_REMOTE_OPERATION":
                 switch (parameter.value) {
                     case true:
                         remoteOperation = RemoteOperation.ON;
-                        // remoteOperation = RemoteOperation.STANDBY;
-                        degStatus = DegStatus.GENERATING; //TO CLARIFY
                         break;
-                    // remoteOperation = RemoteOperation.STANDBY;
                     case false:
-                        remoteOperation = RemoteOperation.NA;
+                        remoteOperation = RemoteOperation.STANDBY;
                         break;
                 }
                 break;
@@ -412,12 +551,12 @@ export const getMappedStatusDigitalOutputs = (
                 switch (parameter.value) {
                     case true:
                         // remoteOperationStatus = RemoteOperationStatus.START;
-                        remoteOperationStatus = true
+                        remoteOperationStatus = true;
                         break;
                     // remoteOperation = RemoteOperation.STANDBY;
                     case false:
                         // remoteOperationStatus = RemoteOperationStatus.STOP;
-                        remoteOperationStatus = false
+                        remoteOperationStatus = false;
                         break;
                 }
                 break;
@@ -427,48 +566,47 @@ export const getMappedStatusDigitalOutputs = (
     return [remoteOperationStatus];
 };
 
-
 export const getStatusDEG = (status: boolean) => {
     switch (status) {
         case true:
-            return "STARTED"
+            return "STARTED";
         case false:
-            return "STOPPED"
+            return "STOPPED";
     }
-}
+};
 
 export const getStatusTypeDEG = (status: string) => {
     switch (status) {
         case DegMode.GENERATING:
-            return "success"
+            return "success";
         case DegMode.MANUAL:
-            return "warning"
+            return "warning";
         case DegMode.AUTO:
-            return "success"
+            return "success";
         case DegStatus.GENERATING:
-            return "success"
+            return "success";
         case DegStatus.STANDBY:
-            return "warning"
+            return "warning";
         case DegStatus.FAILED:
-            return "error"
+            return "error";
     }
-}
+};
 
 export const getStatusTypeRemoteOperationToFuelLevel = (status: string) => {
     switch (status) {
         case RemoteOperation.ON:
-            return "success"
+            return "success";
         case RemoteOperation.STANDBY:
-            return "warning"
+            return "warning";
         case RemoteOperation.NA:
-            return "error"
+            return "error";
         case LoadOn.COMMERCIALPOWER:
-            return "success"
+            return "success";
         case LoadOn.GENERATOR:
-            return "success"
+            return "success";
         case FuelLevel.LOW:
-            return "error"
+            return "error";
         case FuelLevel.HIGH:
-            return "success"
+            return "success";
     }
-} 
+};

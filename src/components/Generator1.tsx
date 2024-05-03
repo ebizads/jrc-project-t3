@@ -5,7 +5,7 @@ import StatusDayLog from "./StatusDayLog";
 import StatusDiagram from "./StatusDiagram";
 import RemoteOperation from "./RemoteOperation";
 import {
-    getMappedStatus,
+    getTestMappedStatus,
     getMappedStatusDigitalOutputs,
     getStatusDEG,
     getStatusTypeDEG,
@@ -23,17 +23,18 @@ const Generator1 = (generatorProps: TestGenerator) => {
     // MUTATE FUNCTION FOR LOGS TAKEN FROM GENERATOR ROUTER
     const { mutate } = api.generator.createLog.useMutation({
         onSuccess() {
-            refetchLogs()
+            refetchLogs();
         },
-    })
+    });
 
     // DATA OF ALL LOGS AND REFETCH FUNCTION FOR LOGS
-    const { data: statusLogs, refetch: refetchLogs } = api.generator.findAllLogs.useQuery({
-        filter: ({
-            generatorId: generatorProps.generatorId
-        }),
-        limit: 10
-    })
+    const { data: statusLogs, refetch: refetchLogs } =
+        api.generator.findAllLogs.useQuery({
+            filter: {
+                generatorId: generatorProps.generatorId,
+            },
+            limit: 10,
+        });
 
     const [
         commercialPower,
@@ -45,14 +46,15 @@ const Generator1 = (generatorProps: TestGenerator) => {
         powerSupply,
         commercialPowerDC,
         batteryTemp,
-    ] = getMappedStatus(generatorProps);
+    ] = getTestMappedStatus(generatorProps);
 
-    const [
-        remoteOperationStatus
-    ] = getMappedStatusDigitalOutputs(generatorProps)
+    const [remoteOperationStatus] =
+        getMappedStatusDigitalOutputs(generatorProps);
 
     // USEREF TO CHECK ().CURRENT OF REF AND COMPARE WITH MAPPED STATUS
-    const previousRemoteOperationStatus = useRef<boolean | undefined>(remoteOperationStatus);
+    const previousRemoteOperationStatus = useRef<boolean | undefined>(
+        remoteOperationStatus
+    );
     const previousCommercialPower = useRef<string | undefined>(commercialPower);
     const previousDEGMode = useRef<string | undefined>(degMode);
     const previousDEGStatus = useRef<string | undefined>(degStatus);
@@ -60,37 +62,42 @@ const Generator1 = (generatorProps: TestGenerator) => {
     const previousLoadOn = useRef<string | undefined>(loadOn);
     const previousFuelLevel = useRef<string | undefined>(fuelLevel);
     const previousPowerSupply = useRef<string | undefined>(powerSupply);
-    const previousCommercialPowerDC = useRef<string | undefined>(commercialPowerDC);
+    const previousCommercialPowerDC = useRef<string | undefined>(
+        commercialPowerDC
+    );
     const previousBatteryTemp = useRef<string | undefined>(batteryTemp);
 
-
-
     useEffect(() => {
-        console.log(statusLogs)
-        console.log('PREVIOUS REMOTE STATUS (REMORTEOPERATIONSTATUS)', remoteOperationStatus)
+        console.log(statusLogs);
+        console.log(
+            "PREVIOUS REMOTE STATUS (REMORTEOPERATIONSTATUS)",
+            remoteOperationStatus
+        );
         if (remoteOperationStatus != null) {
             if (previousRemoteOperationStatus.current == undefined) {
-                previousRemoteOperationStatus.current = remoteOperationStatus
-                previousCommercialPower.current = commercialPower
-                previousDEGMode.current = degMode
-                previousDEGStatus.current = degStatus
-                previousRemoteOperation.current = remoteOperation
-                previousLoadOn.current = loadOn
-                previousFuelLevel.current = fuelLevel
-                previousPowerSupply.current = powerSupply
-                previousCommercialPowerDC.current = commercialPowerDC
-                previousBatteryTemp.current = batteryTemp
+                previousRemoteOperationStatus.current = remoteOperationStatus;
+                previousCommercialPower.current = commercialPower;
+                previousDEGMode.current = degMode;
+                previousDEGStatus.current = degStatus;
+                previousRemoteOperation.current = remoteOperation;
+                previousLoadOn.current = loadOn;
+                previousFuelLevel.current = fuelLevel;
+                previousPowerSupply.current = powerSupply;
+                previousCommercialPowerDC.current = commercialPowerDC;
+                previousBatteryTemp.current = batteryTemp;
             }
 
             // CREATE STATUS LOG IF REMOTE OPERATION STARTS OR STOPS
-            if (previousRemoteOperationStatus.current != remoteOperationStatus) {
-                previousRemoteOperationStatus.current = remoteOperationStatus
+            if (
+                previousRemoteOperationStatus.current != remoteOperationStatus
+            ) {
+                previousRemoteOperationStatus.current = remoteOperationStatus;
                 mutate({
                     generatorId: generatorProps.generatorId ?? 0,
                     status: getStatusDEG(remoteOperationStatus),
                     status_type: "success",
-                    status_msg: "Diesel Generator remote operation"
-                })
+                    status_msg: "Diesel Generator remote operation",
+                });
             }
 
             // CREATE STATUS LOG IF COMMERCIAL POWER CHANGES
@@ -99,68 +106,82 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     generatorId: generatorProps.generatorId ?? 0,
                     status: commercialPower,
                     status_type: "info",
-                    status_msg: "Commercial Power is"
-                })
-                previousCommercialPower.current = commercialPower
+                    status_msg: "Commercial Power is",
+                });
+                previousCommercialPower.current = commercialPower;
             }
 
             // CREATE STATUS LOG IF DEG MODE CHANGES
             if (previousDEGMode.current != degMode) {
-                previousDEGMode.current = degMode
+                previousDEGMode.current = degMode;
                 mutate({
                     generatorId: generatorProps.generatorId ?? 0,
                     status: degMode,
-                    status_type: getStatusTypeDEG(degMode) ?? 'info',
-                    status_msg: "DEG Mode is"
-                })
+                    status_type: getStatusTypeDEG(degMode) ?? "info",
+                    status_msg: "DEG Mode is",
+                });
             }
 
             // CREATE STATUS LOG IF DEG STATUS CHANGES
             if (previousDEGStatus.current != degStatus) {
-                previousDEGStatus.current = degStatus
+                previousDEGStatus.current = degStatus;
                 mutate({
                     generatorId: generatorProps.generatorId ?? 0,
                     status: degStatus,
-                    status_type: getStatusTypeDEG(degStatus) ?? 'info',
-                    status_msg: "DEG Status is"
-                })
+                    status_type: getStatusTypeDEG(degStatus) ?? "info",
+                    status_msg: "DEG Status is",
+                });
             }
 
             // CREATE STATUS LOG IF REMOTE OPERATION CHANGES
             if (previousRemoteOperation.current != remoteOperation) {
-                previousRemoteOperation.current = remoteOperation
+                previousRemoteOperation.current = remoteOperation;
                 mutate({
                     generatorId: generatorProps.generatorId ?? 0,
                     status: remoteOperation,
-                    status_type: getStatusTypeRemoteOperationToFuelLevel(remoteOperation) ?? 'info',
-                    status_msg: "Remote Operation is "
-                })
+                    status_type:
+                        getStatusTypeRemoteOperationToFuelLevel(
+                            remoteOperation
+                        ) ?? "info",
+                    status_msg: "Remote Operation is ",
+                });
             }
 
             // CREATE STATUS LOG IF LOAD ON CHANGES
             if (previousLoadOn.current != loadOn) {
-                previousLoadOn.current = loadOn
+                previousLoadOn.current = loadOn;
                 mutate({
                     generatorId: generatorProps.generatorId ?? 0,
                     status: loadOn,
-                    status_type: getStatusTypeRemoteOperationToFuelLevel(loadOn) ?? 'info',
-                    status_msg: "Load On "
-                })
+                    status_type:
+                        getStatusTypeRemoteOperationToFuelLevel(loadOn) ??
+                        "info",
+                    status_msg: "Load On ",
+                });
             }
 
             // CREATE STATUS LOG IF LOAD ON CHANGES
             if (previousFuelLevel.current != fuelLevel) {
-                previousFuelLevel.current = fuelLevel
+                previousFuelLevel.current = fuelLevel;
                 mutate({
                     generatorId: generatorProps.generatorId ?? 0,
                     status: fuelLevel,
-                    status_type: getStatusTypeRemoteOperationToFuelLevel(fuelLevel) ?? 'info',
-                    status_msg: "Fuel Level is "
-                })
+                    status_type:
+                        getStatusTypeRemoteOperationToFuelLevel(fuelLevel) ??
+                        "info",
+                    status_msg: "Fuel Level is ",
+                });
             }
         }
-
-    }, [remoteOperationStatus, commercialPower, degMode, degStatus, remoteOperation, loadOn, fuelLevel,])
+    }, [
+        remoteOperationStatus,
+        commercialPower,
+        degMode,
+        degStatus,
+        remoteOperation,
+        loadOn,
+        fuelLevel,
+    ]);
 
     const globalDegStatus = degStatus;
     const globalLoadStatus = loadOn;
@@ -169,7 +190,6 @@ const Generator1 = (generatorProps: TestGenerator) => {
         <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
             <div className=" sticky top-0 z-40 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
                 {generatorProps.generatorName}
-
             </div>
             <h1>{previousFuelLevel.current + " "}</h1>
             <h1>{fuelLevel + " "}</h1>
@@ -278,25 +298,31 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     statusLogs
                 )} */}
 
-                {Object.entries(statusLogs?.groupedLogs ?? {}).map(([date, items]) => (
-                    <div key={date}>
-                        <StatusDayLog
-                            id={date}
-                            day={date}
-                            statusLogSet={
-                                items.map((item: StatusLogType) => (
-                                    {
+                {Object.entries(statusLogs?.groupedLogs ?? {}).map(
+                    ([date, items]) => (
+                        <div key={date}>
+                            <StatusDayLog
+                                id={date}
+                                day={date}
+                                statusLogSet={items.map(
+                                    (item: StatusLogType) => ({
                                         id: item.id,
-                                        time: item.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                                        time: item.createdAt.toLocaleTimeString(
+                                            [],
+                                            {
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            }
+                                        ),
                                         statusType: item.status_type,
                                         content: item.status_msg,
                                         statusName: item.status,
-                                    }
-                                ))
-                            }
-                        />
-                    </div>
-                ))}
+                                    })
+                                )}
+                            />
+                        </div>
+                    )
+                )}
                 {/* <StatusDayLog
                     id="start1"
                     day="MARCH 15, 2024"
@@ -344,7 +370,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     ]}
                 /> */}
             </div>
-        </div >
+        </div>
     );
 };
 

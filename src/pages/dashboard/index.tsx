@@ -17,13 +17,13 @@ import { Status, TestStatus } from "~/utils/types";
 import { useState } from "react";
 
 import Generator1 from "~/components/Generator1";
-import Generator2 from "~/components/Generator2";
-import Generator3 from "~/components/Generator3";
+
 import ModalVerification from "~/components/ModalVerification";
 import {
     getDataValueEquivalent,
     getDataValueEquivalentTest,
 } from "~/utils/functions";
+import ModalLoading from "~/components/ModalLoading";
 
 export default function Home() {
     // const hello = api.post.hello.useQuery({ text: "from tRPC" });
@@ -32,31 +32,42 @@ export default function Home() {
         useState<Array<TestStatus> | null>(null);
 
     const [testDataFinal, setTestDataFinal] = useState<Status[]>([]);
-    const { data, refetch } = api.generator.findAllGenerators.useQuery({})
+    const { data, refetch } = api.generator.findAllGenerators.useQuery({});
 
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const openModal = () => {
+        // setSelected(index);
+        setModalOpen(true);
+        document.body.style.overflow = "hidden";
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        document.body.style.overflow = "auto";
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/fetchDigitalInputs",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    });
+                const response = await fetch("/api/fetchDigitalInputs", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
                 const jsonData = (await response.json()) as TestStatus[];
 
-                const response1 = await fetch("/api/fetchDigitalOutputs",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    });
+                const response1 = await fetch("/api/fetchDigitalOutputs", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
                 const jsonData1 = (await response1.json()) as TestStatus[];
 
                 setTestData(jsonData);
-                setTestDigitlOutputs(jsonData1)
+                setTestDigitlOutputs(jsonData1);
             } catch (error) {
+                <Link href="/settings" />;
                 console.error("Error fetching data:", error);
             }
         };
@@ -114,7 +125,9 @@ export default function Home() {
                         <Generator1
                             generatorId={1}
                             // generatorName="CDORFFWC"
-                            generatorName={data?.generators[0]?.generatorName ?? ""}
+                            generatorName={
+                                data?.generators[0]?.generatorName ?? ""
+                            }
                             generatorData={testData ?? []}
                             generatorOutputData={testDigitalOutputs ?? []}
                             runningHours={3.49}
@@ -124,9 +137,10 @@ export default function Home() {
                         <Generator1
                             generatorId={2}
                             // generatorName="XR1 - LIBONA"
-                            generatorName={data?.generators[1]?.generatorName ?? ""}
+                            generatorName={
+                                data?.generators[1]?.generatorName ?? ""
+                            }
                             generatorData={testData ?? []}
-
                             runningHours={7.89}
                         />
 
@@ -134,7 +148,9 @@ export default function Home() {
                         <Generator1
                             generatorId={3}
                             // generatorName="XR2 - DAGUMBAAN"
-                            generatorName={data?.generators[2]?.generatorName ?? ""}
+                            generatorName={
+                                data?.generators[2]?.generatorName ?? ""
+                            }
                             generatorData={testData ?? []}
                             runningHours={17.36}
                         />

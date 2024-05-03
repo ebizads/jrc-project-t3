@@ -11,14 +11,14 @@ export type Status = {
 };
 
 export type StatusLogType = {
-    id: number,
-    status_type: String,
-    status_msg: String,
-    status: String,
-    createdAt: Date
-    deleted: boolean
-    deletedAt: Date
-}
+    id: number;
+    status_type: String;
+    status_msg: String;
+    status: String;
+    createdAt: Date;
+    deleted: boolean;
+    deletedAt: Date;
+};
 
 export type StatusCardType = {
     id: string;
@@ -48,7 +48,7 @@ export type statusList = {
 };
 
 export type RemoteOperationProps = {
-    remoteOperationStatus: boolean,
+    remoteOperationStatus: boolean;
     disabled: boolean;
 };
 
@@ -63,6 +63,12 @@ export type ModalVerificationProps = {
     closeModal: CloseModalFunction;
 };
 
+export type ModalLoadingProps = {
+    isModalOpen: boolean;
+    modalTitle: string;
+    modalStatus: string;
+};
+
 export type StatusDiagramProps = {
     loadStatus: string;
     degStatus: string;
@@ -71,10 +77,10 @@ export type StatusDiagramProps = {
 //================================== test types below ===================================
 //=========================== to be deleted before deployment ===========================
 export type TestGenerator = {
-    generatorId: number | undefined
+    generatorId: number | undefined;
     generatorName: string;
     generatorData: TestStatus[];
-    generatorOutputData?: TestStatus[]
+    generatorOutputData?: TestStatus[];
     runningHours: number;
 };
 

@@ -12,7 +12,7 @@ const ModalVerification = (props: ModalVerificationProps) => {
     const [success, setSuccess] = useState<string | null>(null);
 
     const statusColor = getStatusColor(props.modalStatus);
-    const [testDigitalOutputs, setTestDigitlOutputs] = useState<Array<TestStatus> | null>(null);
+    const [testDigitalOutputs, setTestDigitalOutputs] = useState<Array<TestStatus> | null>(null);
 
     // const [modalOpen, setModalOpen] = useState(false);
 
@@ -59,7 +59,8 @@ const ModalVerification = (props: ModalVerificationProps) => {
 
     const generatorRemoteOperation = async (status: boolean) => {
         try {
-            const response = await fetch("/api/setDigitalOutputValues",
+
+            const response = await fetch(props.apiRoute,
                 {
                     method: 'POST',
                     body: JSON.stringify(
@@ -73,9 +74,10 @@ const ModalVerification = (props: ModalVerificationProps) => {
             const jsonData = (await response.json()) as TestStatus[];
 
 
-            setTestDigitlOutputs(jsonData)
+            setTestDigitalOutputs(jsonData)
             // console.log(testData);
             // console.log("aaa")
+
         } catch (error) {
             console.error("Error fetching data:", error);
         }

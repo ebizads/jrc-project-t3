@@ -20,7 +20,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
     //     setModalOpen(true);
     //     document.body.style.overflow = "hidden";
     // };
-    useEffect(()=>{
+    useEffect(() => {
         setSelected(props.remoteOperationStatus)
     }, [props.remoteOperationStatus, setSelected])
 
@@ -45,6 +45,8 @@ const RemoteOperation = (props: RemoteOperationProps) => {
         <>
             {selected != true &&
                 <ModalVerification
+                    apiRoute={props.apiRoute}
+                    generatorId={props.generatorId}
                     isModalOpen={isModalOpen}
                     modalTitle="Start Generator?"
                     modalStatus="ON"
@@ -55,6 +57,8 @@ const RemoteOperation = (props: RemoteOperationProps) => {
 
             {selected != false &&
                 <ModalVerification
+                    apiRoute={props.apiRoute}
+                    generatorId={props.generatorId}
                     isModalOpen={isModalOpen}
                     modalTitle="Stop Generator?"
                     modalStatus="OFF"

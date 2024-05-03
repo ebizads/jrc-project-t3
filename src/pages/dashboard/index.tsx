@@ -24,11 +24,19 @@ import {
     getDataValueEquivalentTest,
 } from "~/utils/functions";
 import ModalLoading from "~/components/ModalLoading";
+import Generator2 from "~/components/Generator2";
 
 export default function Home() {
     // const hello = api.post.hello.useQuery({ text: "from tRPC" });
-    const [testData, setTestData] = useState<Array<TestStatus> | null>(null);
-    const [testDigitalOutputs, setTestDigitlOutputs] =
+    const [cdoData, setCDOData] = useState<Array<TestStatus> | null>(null);
+    const [xr1Data, setXR1Data] = useState<Array<TestStatus> | null>(null);
+    const [xr2Data, setXR2Data] = useState<Array<TestStatus> | null>(null);
+
+    const [cdoDigitalOutputs, setCDODigitalOutputs] =
+        useState<Array<TestStatus> | null>(null);
+    const [xr1DigitalOutputs, setXR1DigitalOutputs] =
+        useState<Array<TestStatus> | null>(null);
+    const [xr2DigitalOutputs, setXR2DigitalOutputs] =
         useState<Array<TestStatus> | null>(null);
 
     const [testDataFinal, setTestDataFinal] = useState<Status[]>([]);
@@ -50,22 +58,54 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("/api/fetchDigitalInputs", {
+                const responseCDO = await fetch("api/digitalInputs/fetchDigitalInputsCDO", {
                     // next: {
                     //     revalidate: 600
                     // }
                 });
-                const jsonData = (await response.json()) as TestStatus[];
-
-                const response1 = await fetch("/api/fetchDigitalOutputs", {
+                const responseXR1 = await fetch("api/digitalInputs/fetchDigitalInputsXR1", {
                     // next: {
                     //     revalidate: 600
                     // }
                 });
-                const jsonData1 = (await response1.json()) as TestStatus[];
+                const responseXR2 = await fetch("api/digitalInputs/fetchDigitalInputsXR2", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
+                const inputDataCDO = (await responseCDO.json()) as TestStatus[];
+                const inputDataXR1 = (await responseXR1.json()) as TestStatus[];
+                const inputDataXR2 = (await responseXR2.json()) as TestStatus[];
 
-                setTestData(jsonData);
-                setTestDigitlOutputs(jsonData1);
+
+                const responseOutputCDO = await fetch("api/digitalOutputs/fetchDigitalOutputsCDO", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
+                const responseOutputXR1 = await fetch("api/digitalOutputs/fetchDigitalOutputsXR1", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
+                const responseOutputXR2 = await fetch("api/digitalOutputs/fetchDigitalOutputsXR2", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
+                const outputDataCDO = (await responseOutputCDO.json()) as TestStatus[];
+                const outputDataXR1 = (await responseOutputXR1.json()) as TestStatus[];
+                const outputDataXR2 = (await responseOutputXR2.json()) as TestStatus[];
+
+
+                setCDOData(inputDataCDO);
+                setXR1Data(inputDataXR1);
+                setXR2Data(inputDataXR2);
+
+                setCDODigitalOutputs(outputDataCDO);
+                setXR1DigitalOutputs(outputDataXR1);
+                setXR2DigitalOutputs(outputDataXR2);
+
             } catch (error) {
                 <Link href="/settings" />;
                 console.error("Error fetching data:", error);
@@ -121,37 +161,41 @@ export default function Home() {
                     className={`flex min-h-screen w-full flex-col items-center justify-between px-12 pb-12 text-primary `}
                 >
                     <div className="flex h-full w-full flex-row ">
-                        {/* Generator Card 1 */}
+                        {/* Generator Card 1 CDO*/}
                         <Generator1
+                            apiPostRoute="api/setDigitalOutputs/setDigitalOutputValuesCDO"
                             generatorId={1}
                             // generatorName="CDORFFWC"
                             generatorName={
                                 data?.generators[0]?.generatorName ?? ""
                             }
-                            generatorData={testData ?? []}
-                            generatorOutputData={testDigitalOutputs ?? []}
+                            generatorData={cdoData ?? []}
+                            generatorOutputData={cdoDigitalOutputs ?? []}
                             runningHours={3.49}
                         />
 
-                        {/* Generator Card 2 */}
-                        <Generator1
+                        {/* Generator Card 2 XR1*/}
+                        <Generator2
                             generatorId={2}
                             // generatorName="XR1 - LIBONA"
                             generatorName={
                                 data?.generators[1]?.generatorName ?? ""
                             }
-                            generatorData={testData ?? []}
+                            generatorData={xr1Data ?? []}
+                            generatorOutputData={xr1DigitalOutputs ?? []}
                             runningHours={7.89}
                         />
 
-                        {/* Generator Card 3 */}
+                        {/* Generator Card 3  XR2*/}
                         <Generator1
+                            apiPostRoute="api/setDigitalOutputs/setDigitalOutputValuesXR2"
                             generatorId={3}
                             // generatorName="XR2 - DAGUMBAAN"
                             generatorName={
                                 data?.generators[2]?.generatorName ?? ""
                             }
-                            generatorData={testData ?? []}
+                            generatorData={xr2Data ?? []}
+                            generatorOutputData={xr2DigitalOutputs ?? []}
                             runningHours={17.36}
                         />
                     </div>

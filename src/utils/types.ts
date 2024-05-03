@@ -48,6 +48,8 @@ export type statusList = {
 };
 
 export type RemoteOperationProps = {
+    apiRoute: string;
+    generatorId: number;
     remoteOperationStatus: boolean;
     disabled: boolean;
 };
@@ -56,6 +58,8 @@ export type CloseModalFunction = () => void;
 type SubmitModalFunction = () => void;
 
 export type ModalVerificationProps = {
+    apiRoute: string;
+    generatorId: number;
     isModalOpen: boolean;
     modalTitle: string;
     modalStatus: string;
@@ -77,6 +81,7 @@ export type StatusDiagramProps = {
 //================================== test types below ===================================
 //=========================== to be deleted before deployment ===========================
 export type TestGenerator = {
+    apiPostRoute: string | undefined;
     generatorId: number | undefined;
     generatorName: string;
     generatorData: TestStatus[];

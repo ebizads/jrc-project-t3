@@ -434,9 +434,11 @@ export const getTestMappedStatus = (
                 switch (parameter.value) {
                     case true:
                         commercialPower = CommercialPower.OFF;
+                        loadOn= LoadOn.GENERATOR;
                         break;
                     case false:
                         commercialPower = CommercialPower.ON;
+                        loadOn= LoadOn.COMMERCIALPOWER;
                         break;
                 }
                 break;

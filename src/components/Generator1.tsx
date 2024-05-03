@@ -191,8 +191,8 @@ const Generator1 = (generatorProps: TestGenerator) => {
             <div className=" sticky top-0 z-40 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
                 {generatorProps.generatorName}
             </div>
-            <h1>{previousFuelLevel.current + " "}</h1>
-            <h1>{fuelLevel + " "}</h1>
+            {/* <h1>{previousFuelLevel.current + " "}</h1>
+            <h1>{fuelLevel + " "}</h1> */}
             {/* Generator Control Status */}
             <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
                 <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
@@ -247,6 +247,8 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     Remote Operation
                 </h1>
                 <RemoteOperation
+                    apiRoute={"api/setDigitalOutputs/setDigitalOutputValuesCDO"}
+                    generatorId={generatorProps.generatorId ?? 0}
                     remoteOperationStatus={remoteOperationStatus ?? true}
                     disabled={false}
                 />
@@ -281,6 +283,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     GRAPHICAL REPORT
                 </h1>
                 <LineChartExample
+                    apiPostRoute={generatorProps.apiPostRoute}
                     generatorId={generatorProps.generatorId}
                     generatorName={generatorProps.generatorName}
                     runningHours={generatorProps.runningHours}

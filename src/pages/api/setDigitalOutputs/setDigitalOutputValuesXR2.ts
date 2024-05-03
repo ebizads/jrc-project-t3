@@ -1,6 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 
-export const dynamic = "force-dynamic"; // defaults to auto
+// export const dynamic = "force-dynamic"; // defaults to auto
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
@@ -8,7 +8,7 @@ export default async function handler(
     try {
         const headers = new Headers();
         const username = "Supervisor";
-        const password = "Sup3rv!s0r";
+        const password = "5uperv150r";
         const basicAuth = "Basic " + btoa(username + ":" + password);
 
         headers.append(
@@ -20,12 +20,13 @@ export default async function handler(
 
         headers.append("Authorization", basicAuth);
 
-        console.log(req.body)
         const response = await fetch(
-            `http://10.190.12.26/api/v1/device/strategy/ios/digitalOutputs`,
+            `${process.env.GEN_ENDPOINT_3}/api/v1/device/strategy/ios/digitalOutputs/DIESEL_GENERATOR_START/state`,
             {
+                method: 'POST',
                 // next: { revalidate: 1800 },
                 headers: headers,
+                body: req.body as BodyInit
             },);
 
         // if (!response.ok) {
@@ -35,8 +36,8 @@ export default async function handler(
 
         // console.log(jsonData);
         // return jsonData
-        res.status(200).json(jsonData);
-        // void res.revalidate("/", { unstable_onlyGenerated: true })
+        void res.revalidate('/dashboard')
+        res.status(200).json({ revalidated: true, jsonData });
 
     } catch (error) {
         console.error("Error fetching data from external API:", error);

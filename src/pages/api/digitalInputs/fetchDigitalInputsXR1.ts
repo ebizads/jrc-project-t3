@@ -8,7 +8,7 @@ export default async function handler(
     try {
         const headers = new Headers();
         const username = "Supervisor";
-        const password = "Sup3rv!s0r";
+        const password = "5uperv150r";
         const basicAuth = "Basic " + btoa(username + ":" + password);
 
         headers.append(
@@ -21,12 +21,10 @@ export default async function handler(
         headers.append("Authorization", basicAuth);
 
         const response = await fetch(
-            `http://10.190.12.26/api/v1/device/strategy/ios/digitalOutputs/DIESEL_GENERATOR_START/state`,
+            `${process.env.GEN_ENDPOINT_2}/api/v1/device/strategy/ios/digitalInputs`,
             {
-                method: 'POST',
                 // next: { revalidate: 1800 },
                 headers: headers,
-                body: req.body as BodyInit
             },);
 
         // if (!response.ok) {
@@ -36,9 +34,8 @@ export default async function handler(
 
         // console.log(jsonData);
         // return jsonData
-        void res.revalidate('/dashboard')
-        res.status(200).json({ revalidated: true, jsonData });
-
+        res.status(200).json(jsonData);
+        // void res.revalidate("/", { unstable_onlyGenerated: true })
     } catch (error) {
         console.error("Error fetching data from external API:", error);
         res.status(500).json({

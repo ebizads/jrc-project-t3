@@ -21,7 +21,7 @@ import {
 } from "chart.js";
 // import 'chartjs-adapter-date-fns';
 import "chartjs-adapter-moment";
-import { getMappedStatus } from "~/utils/functions";
+import { getTestMappedStatus } from "~/utils/functions";
 import { type TestGenerator, TestStatus } from "~/utils/types";
 
 // import { fetchData } from "~/utils/dataApi";
@@ -75,7 +75,7 @@ const LineChartExample = (generatorData: TestGenerator) => {
         powerSupply,
         commercialPowerDC,
         batteryTemp,
-    ] = getMappedStatus(generatorData);
+    ] = getTestMappedStatus(generatorData);
 
     useEffect(() => {
         const ctx = chartRef.current?.canvas.getContext("2d");

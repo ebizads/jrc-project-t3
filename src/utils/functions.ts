@@ -604,7 +604,7 @@ export const getTestMappedStatusXR1 = (
                         break;
                 }
                 break;
-            case "BATTERY_HIGH_TEMPERATURE_ALARM_DC_XR1":
+            case "BATTERY_HIGH_TEMPERATURE_DC_XR1":
                 switch (parameter.value) {
                     case true:
                         batteryTemp = BatteryTemp.HIGH;
@@ -745,7 +745,7 @@ export const getTestMappedStatusXR2 = (
                         break;
                 }
                 break;
-            case "BATTERY_HIGH_TEMPERATURE_ALARM_DC_XR2":
+            case "BATTERY_HIGH_TEMPERATURE_DC_XR2":
                 switch (parameter.value) {
                     case true:
                         batteryTemp = BatteryTemp.HIGH;

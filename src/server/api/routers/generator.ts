@@ -10,20 +10,17 @@ export const generatorRouter = createTRPCRouter({
         }))
         .query(async ({ ctx, input }) => {
             const [generators, count] = await ctx.db.$transaction([
-                ctx.db.generator.findMany({
-                    orderBy: {
-                        id: "asc"
-                    },
-                    where: {
-                        NOT: {
-                            deleted: true,
+                ctx.db.generator
+                    .findMany({
+                        orderBy: {
+                            id: "asc"
                         },
-                    },
-                    // // skip: input?.page
-                    // //     ? (input.page - 1) * (input.limit ?? 10)
-                    // //     : undefined,
-                    // take: input?.limit ?? undefined,
-                }),
+                        where: {
+                            NOT: {
+                                deleted: true,
+                            },
+                        },
+                    }),
                 ctx.db.generator.count({
                     where: {
                         NOT: {
@@ -33,25 +30,23 @@ export const generatorRouter = createTRPCRouter({
                 }),
             ])
 
-            let obj: { [key: string]: any } = {};
-
-
             // const groupedLogs = groupByDate(logs)
             return {
                 generators,
                 count
             }
         }),
-
     findAllLogs: protectedProcedure
         .input(z.object({
             filter: z.object({
                 generatorId: z.number().optional()
             }).optional(),
+            page: z.number().optional(),
             limit: z.number().optional()
         }))
         .query(async ({ ctx, input }) => {
-            const [logs, count] = await ctx.db.$transaction([
+            const [logs, dashboardLogs, count] = await ctx.db.$transaction([
+                //FIND MANY QUERY FOR LOG TABLE
                 ctx.db.statusLogs.findMany({
                     orderBy: {
                         createdAt: "desc",
@@ -59,9 +54,19 @@ export const generatorRouter = createTRPCRouter({
                     where: {
                         generatorId: input.filter?.generatorId
                     },
-                    // skip: input?.page
-                    //     ? (input.page - 1) * (input.limit ?? 10)
-                    //     : undefined,
+                    skip: input?.page
+                        ? (input.page - 1) * (input.limit ?? 10)
+                        : undefined,
+                    take: input?.limit ?? undefined,
+                }),
+                //FIND MANY QUERY FOR DASHBOARD LOGS 
+                ctx.db.statusLogs.findMany({
+                    orderBy: {
+                        createdAt: "desc",
+                    },
+                    where: {
+                        generatorId: input.filter?.generatorId
+                    },
                     take: input?.limit ?? undefined,
                 }),
                 ctx.db.statusLogs.count({
@@ -75,7 +80,7 @@ export const generatorRouter = createTRPCRouter({
 
             let obj: { [key: string]: any } = {};
 
-            const groupedLogs: { [key: string]: any } = logs.reduce((acc, log) => {
+            const groupedLogs: { [key: string]: any } = dashboardLogs.reduce((acc, log) => {
                 const key = log.createdAt.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                 // If the key doesn't exist in the accumulator, initialize it
                 if (!acc[key]) {
@@ -87,9 +92,9 @@ export const generatorRouter = createTRPCRouter({
                 return acc;
             }, obj); // Start with an empty object
 
-            console.log(groupedLogs)
             // const groupedLogs = groupByDate(logs)
             return {
+                logs,
                 groupedLogs,
                 count
             }
@@ -121,10 +126,7 @@ export const generatorRouter = createTRPCRouter({
                         })
                     ]
                 )
-
-
                 // return updates
-
                 // return "Generator names successfully updated"
             } catch (error) {
                 throw new TRPCError({
@@ -151,7 +153,6 @@ export const generatorRouter = createTRPCRouter({
                     }
                 })
 
-                console.log(updates)
                 // return updates
                 await ctx.db.$transaction(async () => updates)
 
@@ -177,5 +178,38 @@ export const generatorRouter = createTRPCRouter({
             } catch (error) {
                 throw error
             }
-        })
+        }),
+    editGeneratorRunningTime: protectedProcedure
+        .input(z.object({
+            generatorId: z.number(),
+            runningTime: z.number(),
+        }))
+        .mutation(async ({ ctx, input }) => {
+            try {
+                const [editRunningTime] = await ctx.db.$transaction(
+                    [
+                        // change Dashboard Title
+                        ctx.db.generator.update({
+                            where: {
+                                id: input.generatorId
+                            },
+                            data: {
+                                runningTime: input.runningTime
+                            },
+                        }),
+                    ]
+                )
+
+                // console.log(updates)
+                // return updates
+
+                return "Generator Running Time successfully updated"
+            } catch (error) {
+                throw new TRPCError({
+                    code: "BAD_REQUEST",
+                    message: JSON.stringify(error),
+                })
+            }
+        }),
+
 })

@@ -21,9 +21,12 @@ const redGlow =
 //     "flex h-full w-full flex-col rounded-full p-3 text-center font-normal tracking-widest text-[#7E7E7E]";
 
 const GeneratorControlStatus = (props: {
-    id: string;
+    id: number;
     runningHours: number;
     statusSet: Status[];
+    refetch: any;
+    refetchLogs: any;
+    degStatus: string;
 }) => {
     return (
         <>
@@ -39,7 +42,12 @@ const GeneratorControlStatus = (props: {
                     />
                 ))}
 
-                <EditHoursButton runningHours={props.runningHours} />
+                <EditHoursButton
+                    refetch={props.refetch}
+                    refetchLogs={props.refetchLogs}
+                    degStatus={props.degStatus}
+                    id={props.id}
+                    runningHours={props.runningHours} />
             </div>
         </>
     );

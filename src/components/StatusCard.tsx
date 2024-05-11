@@ -32,13 +32,13 @@ const StatusCard = (statusCard: StatusCardType) => {
                         .
                     </div>
                 </div>
-                <i className={iconDynamic} />
+                <i className={"text-4xl " + iconDynamic} />
             </div>
         </>
     );
 };
 
-function getStatusType(itemType: string): [string, string, string] {
+export function getStatusType(itemType: string): [string, string, string] {
     let textColor: string;
     let borderColor: string;
     let icon: string;
@@ -47,27 +47,27 @@ function getStatusType(itemType: string): [string, string, string] {
         case "success":
             textColor = "text-success";
             borderColor = "border-l-success";
-            icon = "fa-solid fa-circle-check text-4xl text-success";
+            icon = "fa-solid fa-circle-check text-success";
             break;
         case "warning":
             textColor = "text-warning";
             borderColor = "border-l-warning";
-            icon = "fa-solid fa-hourglass-half text-4xl text-warning";
+            icon = "fa-solid fa-hourglass-half text-warning";
             break;
         case "error":
             textColor = "text-error";
             borderColor = "border-l-error";
-            icon = "fa-solid fa-triangle-exclamation text-4xl text-error";
+            icon = "fa-solid fa-triangle-exclamation text-error";
             break;
         case "info":
             textColor = "text-info";
             borderColor = "border-l-info";
-            icon = "fa-solid fa-circle-info text-4xl text-info";
+            icon = "fa-solid fa-circle-info text-info";
             break;
         default:
             textColor = "text-info";
             borderColor = "border-l-info";
-            icon = "fa-solid fa-circle-info text-4xl text-info";
+            icon = "fa-solid fa-circle-info text-info";
     }
 
     return [textColor, borderColor, icon];

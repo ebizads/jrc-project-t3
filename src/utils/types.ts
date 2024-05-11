@@ -79,7 +79,8 @@ export type StatusDiagramProps = {
 //================================== test types below ===================================
 //=========================== to be deleted before deployment ===========================
 export type TestGenerator = {
-    generatorId: number | undefined;
+    refetch: any;
+    generatorId: number;
     generatorName: string;
     generatorData: TestStatus[];
     generatorOutputData?: TestStatus[];

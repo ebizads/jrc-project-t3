@@ -69,7 +69,7 @@ const LoginForm = () => {
                             />
                         </div>
 
-                        <div className="gap-2 text-center">
+                        <div className="gap-2 text-center text-white">
                             <h1 className="text-2xl font-semibold uppercase tracking-[0.2em]">
                                 Admin Dashboard Login
                             </h1>
@@ -80,7 +80,7 @@ const LoginForm = () => {
 
                         <form
                             onSubmit={handleSubmit(onSubmit)}
-                            className=" flex w-full flex-col gap-5"
+                            className=" flex w-full flex-col gap-5 text-white"
                         >
                             {/* USERNAME */}
                             <label className="input flex items-center gap-4 rounded-none bg-secondary pr-0">

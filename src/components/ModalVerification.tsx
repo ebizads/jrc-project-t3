@@ -106,7 +106,7 @@ const ModalVerification = (props: ModalVerificationProps) => {
         <>
             {props.isModalOpen && (
                 <div className="fixed inset-0 z-50 overflow-y-auto">
-                    <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+                    <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:p-0">
                         <div
                             className="fixed inset-0 transition-opacity"
                             aria-hidden="true"

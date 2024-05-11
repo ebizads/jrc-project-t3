@@ -67,7 +67,7 @@ model VerificationToken {
 model Generator {
   id            Int          @id @default(autoincrement())
   generatorName String?      @unique
-  runningTime   Float?
+  runningTime   Int?  
   updatedAt     DateTime?    @updatedAt
   createdAt     DateTime     @default(now())
   deleted       Boolean      @default(false)

@@ -12,7 +12,7 @@ const StatusDayLog = (statusDayLog: StatusDayLogType) => {
                 <StatusCard
                     key={idx}
                     id={stat.id}
-                    time={stat.time as Date}
+                    time={stat.time}
                     statusType={stat.statusType}
                     content={stat.content}
                     statusName={stat.statusName}

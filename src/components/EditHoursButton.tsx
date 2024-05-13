@@ -18,7 +18,9 @@ const EditHoursButton = (props: {
     id: number,
     runningHours: number,
     degStatus: string,
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
     refetch: any,
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
     refetchLogs: any,
 }) => {
     const [openEdit, setOpenEdit] = useState(false);
@@ -36,6 +38,7 @@ const EditHoursButton = (props: {
 
     const { mutate: mutateLog } = api.generator.createLog.useMutation({
         onSuccess() {
+            /* eslint-disable-next-line  @typescript-eslint/no-unsafe-call */
             props.refetchLogs();
         },
     });
@@ -43,6 +46,7 @@ const EditHoursButton = (props: {
     const { mutate: mutateRunningTime } = api.generator.editGeneratorRunningTime.useMutation({
         onSuccess() {
             setOpenEdit(false)
+            /* eslint-disable-next-line  @typescript-eslint/no-unsafe-call */
             props.refetch()
 
         }
@@ -104,7 +108,7 @@ const EditHoursButton = (props: {
     }
 
     // converts time running data from database to hours
-    function msToHour(duration: Number) {
+    function msToHour(duration: number) {
         const hours = Number(duration) / 3600000
 
         return hours.toFixed(4);

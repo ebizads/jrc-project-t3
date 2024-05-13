@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { ChangeDashboardSettings, ChangeGeneratorSettings, CreateStatusLog } from "~/server/schemas/generator";
+import { StatusLogType } from "~/utils/types";
 
 export const generatorRouter = createTRPCRouter({
     findAllGenerators: protectedProcedure
@@ -71,6 +72,7 @@ export const generatorRouter = createTRPCRouter({
                 }),
                 ctx.db.statusLogs.count({
                     where: {
+                        generatorId: input.filter?.generatorId,
                         NOT: {
                             deleted: true,
                         },
@@ -78,16 +80,20 @@ export const generatorRouter = createTRPCRouter({
                 }),
             ])
 
-            let obj: { [key: string]: any } = {};
+            type MyRecord = Record<string, Array<
+               StatusLogType
+            >>;
 
-            const groupedLogs: { [key: string]: any } = dashboardLogs.reduce((acc, log) => {
+            const obj: MyRecord = {}
+
+            const groupedLogs: MyRecord = dashboardLogs.reduce((acc, log) => {
                 const key = log.createdAt.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                 // If the key doesn't exist in the accumulator, initialize it
                 if (!acc[key]) {
                     acc[key] = [];
                 }
                 // Push the current object into the corresponding array
-                acc[key].push(log);
+                acc[key]?.push(log as StatusLogType);
 
                 return acc;
             }, obj); // Start with an empty object
@@ -154,7 +160,7 @@ export const generatorRouter = createTRPCRouter({
                 })
 
                 // return updates
-                await ctx.db.$transaction(async () => updates)
+                await ctx.db.$transaction(async () => void updates)
 
                 // return "Generator names successfully updated"
             } catch (error) {

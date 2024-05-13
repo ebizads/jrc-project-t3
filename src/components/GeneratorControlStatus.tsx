@@ -24,7 +24,9 @@ const GeneratorControlStatus = (props: {
     id: number;
     runningHours: number;
     statusSet: Status[];
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
     refetch: any;
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
     refetchLogs: any;
     degStatus: string;
 }) => {
@@ -43,7 +45,9 @@ const GeneratorControlStatus = (props: {
                 ))}
 
                 <EditHoursButton
+                    /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
                     refetch={props.refetch}
+                    /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
                     refetchLogs={props.refetchLogs}
                     degStatus={props.degStatus}
                     id={props.id}

@@ -23,10 +23,12 @@ const Generator1 = (generatorProps: TestGenerator) => {
     const { genStart, setGenStart } = useDieselGenStart();
     const [page, setPage] = useState(1)
     const [openLogsModal, setOpenLogsModal] = useState<boolean>(false)
+    const [showMoreIsVisible, setShowMoreIsVisible] = useState<boolean>(false)
+
     // MUTATE FUNCTION FOR LOGS TAKEN FROM GENERATOR ROUTER
     const { mutate } = api.generator.createLog.useMutation({
-        onSuccess() {
-            refetchLogs();
+        async onSuccess() {
+            await refetchLogs();
         },
     });
 
@@ -80,12 +82,12 @@ const Generator1 = (generatorProps: TestGenerator) => {
         // );
         // if (remoteOperationStatus != null) {
         if (
-            // remoteOperationStatus != null &&
-            // commercialPower != null &&
-            // degMode != null &&
-            // degStatus != null &&
-            // remoteOperation != null &&
-            // loadOn != null &&
+            remoteOperationStatus != null &&
+            commercialPower != null &&
+            degMode != null &&
+            degStatus != null &&
+            remoteOperation != null &&
+            loadOn != null &&
             fuelLevel != null
         ) {
             if (dataLoaded == false) {
@@ -111,7 +113,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     previousRemoteOperationStatus.current = remoteOperationStatus;
                     mutate({
                         generatorId: generatorProps.generatorId ?? 0,
-                        status: getStatusDEG(remoteOperationStatus),
+                        status: getStatusDEG(remoteOperationStatus ?? false),
                         status_type: "success",
                         status_msg: "Diesel Generator remote operation",
                     });
@@ -212,6 +214,15 @@ const Generator1 = (generatorProps: TestGenerator) => {
         }
     }, [openLogsModal])
 
+    useEffect(() => {
+        if (statusLogs)
+            if (statusLogs?.count > 10) {
+                setShowMoreIsVisible(true)
+            } else {
+                setShowMoreIsVisible(false)
+            }
+    }, [statusLogs?.count])
+
     return (
         <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
             <div className=" sticky top-0 z-40 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
@@ -223,6 +234,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     Generator Control Status
                 </h1>
                 <GeneratorControlStatus
+                    /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
                     refetch={generatorProps.refetch}
                     refetchLogs={refetchLogs}
                     id={generatorProps.generatorId}
@@ -309,6 +321,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     GRAPHICAL REPORT
                 </h1>
                 <LineChartExample
+                    /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
                     refetch={generatorProps.refetch}
                     generatorId={generatorProps.generatorId}
                     generatorName={generatorProps.generatorName}
@@ -335,14 +348,8 @@ const Generator1 = (generatorProps: TestGenerator) => {
                                 day={date}
                                 statusLogSet={items.map(
                                     (item: StatusLogType) => ({
-                                        id: item.id,
-                                        time: item.createdAt.toLocaleTimeString(
-                                            [],
-                                            {
-                                                hour: "2-digit",
-                                                minute: "2-digit",
-                                            }
-                                        ),
+                                        id: String(item.id),
+                                        time: item.createdAt,
                                         statusType: item.status_type,
                                         content: item.status_msg,
                                         statusName: item.status,
@@ -353,11 +360,12 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     )
                 )}
 
-                <button
-                    className="border border-info rounded text-info mx-auto px-5 py-2"
-                    onClick={() => setOpenLogsModal(true)}
-                >SHOW MORE</button>
-
+                {showMoreIsVisible &&
+                    <button
+                        className="border border-info rounded text-info mx-auto px-5 py-2"
+                        onClick={() => setOpenLogsModal(true)}
+                    >SHOW MORE</button>
+                }
             </div>
 
             {openLogsModal &&
@@ -401,7 +409,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                                                     </thead>
                                                     <tbody>
                                                         {statusLogs?.logs.map((item, index) => (
-                                                            <tr>
+                                                            <tr key={index}>
                                                                 <td className={"font-normal bg-secondary rounded-tl-lg rounded-bl-lg p-4 border-l-[8px] " + getStatusType(item.status_type ?? "")[1]}>
                                                                     <div>
                                                                         {String(item.createdAt.toLocaleString())}
@@ -433,7 +441,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                                                 color="gray"
                                                 onChange={(event) => {
                                                     setPage(event)
-                                                    refetchLogs()
+                                                    // refetchLogs()
                                                 }}
                                             ></Pagination>
                                         </div>

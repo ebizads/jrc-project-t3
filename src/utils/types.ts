@@ -12,9 +12,9 @@ export type Status = {
 
 export type StatusLogType = {
     id: number;
-    status_type: String;
-    status_msg: String;
-    status: String;
+    status_type: string;
+    status_msg: string;
+    status: string;
     createdAt: Date;
     deleted: boolean;
     deletedAt: Date;
@@ -79,10 +79,11 @@ export type StatusDiagramProps = {
 //================================== test types below ===================================
 //=========================== to be deleted before deployment ===========================
 export type TestGenerator = {
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
     refetch: any;
     generatorId: number;
     generatorName: string;
-    generatorData: TestStatus[];
+    generatorData: Array<TestStatus>;
     generatorOutputData?: TestStatus[];
     runningHours: number;
 };
@@ -91,6 +92,8 @@ export type TestStatus = {
     name: string;
     value: boolean;
 };
+
+
 
 export type TestStatusFloat = {
     name: string;

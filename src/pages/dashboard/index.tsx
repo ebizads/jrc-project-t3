@@ -65,51 +65,51 @@ export default function Home() {
                     //     revalidate: 600
                     // }
                 });
-                // const responseXR1 = await fetch("api/digitalInputs/fetchDigitalInputsXR1", {
-                //     // next: {
-                //     //     revalidate: 600
-                //     // }
-                // });
-                // const responseXR2 = await fetch("api/digitalInputs/fetchDigitalInputsXR2", {
-                //     // next: {
-                //     //     revalidate: 600
-                //     // }
-                // });
+                const responseXR1 = await fetch("api/digitalInputs/fetchDigitalInputsXR1", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
+                const responseXR2 = await fetch("api/digitalInputs/fetchDigitalInputsXR2", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
                 const inputDataCDO = (await responseCDO.json()) as TestStatus[];
-                // const inputDataXR1 = (await responseXR1.json()) as TestStatus[];
-                // const inputDataXR2 = (await responseXR2.json()) as TestStatus[];
+                const inputDataXR1 = (await responseXR1.json()) as TestStatus[];
+                const inputDataXR2 = (await responseXR2.json()) as TestStatus[];
 
 
-                // const responseOutputCDO = await fetch("api/digitalOutputs/fetchDigitalOutputsCDO", {
-                //     // next: {
-                //     //     revalidate: 600
-                //     // }
-                // });
-                // const responseOutputXR1 = await fetch("api/digitalOutputs/fetchDigitalOutputsXR1", {
-                //     // next: {
-                //     //     revalidate: 600
-                //     // }
-                // });
-                // const responseOutputXR2 = await fetch("api/digitalOutputs/fetchDigitalOutputsXR2", {
-                //     // next: {
-                //     //     revalidate: 600
-                //     // }
-                // });
-                // const outputDataCDO = (await responseOutputCDO.json()) as TestStatus[];
-                // const outputDataXR1 = (await responseOutputXR1.json()) as TestStatus[];
-                // const outputDataXR2 = (await responseOutputXR2.json()) as TestStatus[];
+                const responseOutputCDO = await fetch("api/digitalOutputs/fetchDigitalOutputsCDO", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
+                const responseOutputXR1 = await fetch("api/digitalOutputs/fetchDigitalOutputsXR1", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
+                const responseOutputXR2 = await fetch("api/digitalOutputs/fetchDigitalOutputsXR2", {
+                    // next: {
+                    //     revalidate: 600
+                    // }
+                });
+                const outputDataCDO = (await responseOutputCDO.json()) as TestStatus[];
+                const outputDataXR1 = (await responseOutputXR1.json()) as TestStatus[];
+                const outputDataXR2 = (await responseOutputXR2.json()) as TestStatus[];
 
                 // console.log(inputDataCDO)
                 // console.log(inputDataXR1)
                 // console.log(inputDataXR2)
 
                 setCDOData(inputDataCDO);
-                // setXR1Data(inputDataXR1);
-                // setXR2Data(inputDataXR2);
+                setXR1Data(inputDataXR1);
+                setXR2Data(inputDataXR2);
 
-                // setCDODigitalOutputs(outputDataCDO);
-                // setXR1DigitalOutputs(outputDataXR1);
-                // setXR2DigitalOutputs(outputDataXR2);
+                setCDODigitalOutputs(outputDataCDO);
+                setXR1DigitalOutputs(outputDataXR1);
+                setXR2DigitalOutputs(outputDataXR2);
 
             } catch (error) {
                 <Link href="/settings" />;
@@ -181,7 +181,8 @@ export default function Home() {
                         />
 
                         {/* Generator Card 2 XR1*/}
-                        {/* <Generator2
+                        <Generator2
+                            refetch={refetch}
                             generatorId={2}
                             // generatorName="XR1 - LIBONA"
                             generatorName={
@@ -190,10 +191,11 @@ export default function Home() {
                             generatorData={xr1Data ?? []}
                             generatorOutputData={xr1DigitalOutputs ?? []}
                             runningHours={7.89}
-                        /> */}
+                        />
 
                         {/* Generator Card 3  XR2*/}
-                        {/* <Generator3
+                        <Generator3
+                            refetch={refetch}
                             generatorId={3}
                             // generatorName="XR2 - DAGUMBAAN"
                             generatorName={
@@ -202,7 +204,7 @@ export default function Home() {
                             generatorData={xr2Data ?? []}
                             generatorOutputData={xr2DigitalOutputs ?? []}
                             runningHours={17.36}
-                        /> */}
+                        />
                     </div>
                     {/* main */}
                 </main>

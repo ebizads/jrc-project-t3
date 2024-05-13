@@ -21,7 +21,13 @@ const StatusCard = (statusCard: StatusCardType) => {
                     {/* Time */}
                     <div className="flex flex-row items-center space-x-2 text-xs tracking-widest text-[#8E8E8E]">
                         <i className="fa-regular fa-clock" />
-                        <div className="">{statusCard.time.toString()}</div>
+                        <div className="">{statusCard.time.toLocaleTimeString(
+                                            [],
+                                            {
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            }
+                                        )}</div>
                     </div>
                     {/* Content */}
                     <div className="mr-4 text-sm font-normal">

@@ -18,16 +18,16 @@ export default function Settings() {
     const [success, setSuccess] = useState<string | null>(null);
 
     const { mutate } = api.generator.changeGeneratorSettings.useMutation({
-        onSuccess() {
-            refetch()
+        async onSuccess() {
+            await refetch()
             setSuccess("Successfully configured Generator Settings")
             setTimeout(() => setSuccess(null), 3000)
         }
     })
 
     const { mutate: mutateDashboard } = api.generator.changeDashboardTitle.useMutation({
-        onSuccess() {
-            refetch()
+        async onSuccess() {
+            await refetch()
             setSuccess("Successfully configured Dashboard Settings")
             setTimeout(() => setSuccess(null), 3000)
         }
@@ -117,7 +117,7 @@ export default function Settings() {
         mutate({
             ...data
         })
-        refetch()
+        await refetch()
     };
 
 
@@ -127,7 +127,7 @@ export default function Settings() {
         mutateDashboard({
             ...data
         })
-        refetch()
+        await refetch()
     };
 
     const isSubmittable = !!isDirty && !!isValid;
@@ -242,7 +242,7 @@ export default function Settings() {
                                     {/* Generator 1 Title */}
                                     <div className="flex w-full flex-col space-y-7 bg-base-100 p-7">
                                         {fields.map((field, index) => (
-                                            <div className="flex flex-col space-y-2">
+                                            <div key={index} className="flex flex-col space-y-2">
                                                 <h2 className=" text-sm font-normal uppercase tracking-widest text-[#CCCCCC]">
                                                     Generator No. {index + 1} Title
                                                 </h2>

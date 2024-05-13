@@ -11,6 +11,28 @@ import {
     RemoteOperationStatus,
 } from "./enums";
 
+export const generateCertificate = () => {
+    let result = ""
+    const characters =
+        // "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{};:'\",.<>/?\\|"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+    const charactersLength = characters.length
+    for (let i = 0; i < 30; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return result
+}
+
+export const addHoursToDate = (date: Date, hours: number) => {
+    const dateCopy = new Date(date.getTime())
+    const hoursToAdd = hours * 60 * 60 * 1000
+    dateCopy.setTime(date.getTime() + hoursToAdd)
+    console.log(dateCopy)
+  
+    return dateCopy
+  }
+
 export const getDataValueEquivalent = (statusName: string, value: boolean) => {
     switch (statusName) {
         case "COMMERCIAL POWER":

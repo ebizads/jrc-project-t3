@@ -7,6 +7,8 @@ import {
 } from "~/server/api/trpc";
 import { ChangeUserPass } from "~/server/schemas/user";
 import bcrypt from "bcrypt";
+import { addHoursToDate, generateCertificate } from "~/utils/functions";
+import { sendEmail } from "~/pages/api/sendEmail";
 
 export const accountRouter = createTRPCRouter({
     findOne: protectedProcedure
@@ -140,6 +142,69 @@ export const accountRouter = createTRPCRouter({
                 });
             } catch (error) {
                 throw error;
+            }
+        }),
+
+    createForgotPassToken: publicProcedure
+        .input(z.string())
+        .mutation(async ({ input, ctx }) => {
+            try {
+                const account = await ctx.db.account.findFirst({
+                    where: {
+                        OR: [
+                            {
+                                username: input,
+                            },
+                            {
+                                user: {
+                                    email: input
+                                }
+                            }
+                        ]
+                        // password: await bcrypt.hash(input.password, 10)
+                    },
+                    include: {
+                        user: true,
+                    },
+                });
+
+                console.log(account)
+
+                const currentDate = new Date()
+                let forgetPassToken
+                let token
+
+                if (!account) {
+                    throw new TRPCError({
+                        code: "BAD_REQUEST",
+                        message: "The email provided is not an existing user!",
+                    })
+                } else if (account.reset_token && (account.reset_until != null && currentDate < account.reset_until)) {
+                    throw new TRPCError({
+                        code: "BAD_REQUEST",
+                        message: `Forgot Password link already sent. Please check your e-mail inbox.`,
+                    })
+                } else {
+                    token = generateCertificate()
+                    forgetPassToken = await ctx.db.account.update({
+                        where: {
+                            username: account.username,
+                        },
+                        data: {
+                            reset_token: token,
+                            reset_until: addHoursToDate(new Date(), 24),
+                        },
+                    })
+
+                    sendEmail({
+                        sendTo: [account.user.email ?? ""],
+                        // cc: null,
+                        resetToken: token
+                    })
+                    return forgetPassToken
+                }
+            } catch (error) {
+                throw error
             }
         }),
 });

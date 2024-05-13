@@ -71,10 +71,22 @@ export type ModalLoadingProps = {
     modalStatus: string;
 };
 
+export type ModalForgotPassProps = {
+    isModalOpen: boolean;
+    closeModal: CloseModalFunction
+};
+
+
 export type StatusDiagramProps = {
     loadStatus: string;
     degStatus: string;
 };
+
+export type EmailData = {
+    sendTo: string[],
+    cc?: string,
+    resetToken: string,
+}
 
 //================================== test types below ===================================
 //=========================== to be deleted before deployment ===========================

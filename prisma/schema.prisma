@@ -19,9 +19,11 @@ model Post {
 }
 
 model Account {
-  userId        String   @unique
+  userId        String    @unique
   type          String
   refresh_token String?
+  reset_token   String?
+  reset_until   DateTime?
   access_token  String?
   expires_at    Int?
   token_type    String?
@@ -29,10 +31,10 @@ model Account {
   id_token      String?
   session_state String?
   password      String
-  username      String   @unique
-  id            Int      @id @default(autoincrement())
+  username      String    @unique
+  id            Int       @id @default(autoincrement())
   oldPassword   String[]
-  user          User     @relation(fields: [userId], references: [uid], onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [uid], onDelete: Cascade)
 }
 
 model Session {
@@ -67,7 +69,7 @@ model VerificationToken {
 model Generator {
   id            Int          @id @default(autoincrement())
   generatorName String?      @unique
-  runningTime   Int?  
+  runningTime   Int?
   updatedAt     DateTime?    @updatedAt
   createdAt     DateTime     @default(now())
   deleted       Boolean      @default(false)
@@ -76,15 +78,15 @@ model Generator {
 }
 
 model StatusLogs {
-  id            Int       @id @default(autoincrement())
-  status_type   String?
-  status_msg    String?
-  status        String?
-  createdAt     DateTime  @default(now())
-  deleted       Boolean   @default(false)
-  deletedAt     DateTime?
-  generatorId   Int      
-  generator     Generator @relation(fields: [generatorId], references: [id])
-  uid           String?
-  user          User?     @relation(fields: [uid], references: [uid], onDelete: Cascade)
+  id          Int       @id @default(autoincrement())
+  status_type String?
+  status_msg  String?
+  status      String?
+  createdAt   DateTime  @default(now())
+  deleted     Boolean   @default(false)
+  deletedAt   DateTime?
+  generatorId Int
+  generator   Generator @relation(fields: [generatorId], references: [id])
+  uid         String?
+  user        User?     @relation(fields: [uid], references: [uid], onDelete: Cascade)
 }

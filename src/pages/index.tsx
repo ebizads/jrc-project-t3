@@ -5,6 +5,8 @@ import { useState } from "react";
 import type { z } from "zod";
 import { useForm } from "react-hook-form";
 import type { loginSchema } from "~/server/schemas/user";
+import ModalForgotPass from "~/components/ModalForgotPass";
+import { api } from "~/utils/api";
 
 // Infer the TS type according to the zod schema.
 type User = z.infer<typeof loginSchema>;
@@ -144,6 +146,14 @@ const LoginForm = () => {
                                 </a>
                             </div>
                         </form>
+
+                        {openForgetPass &&
+                            <ModalForgotPass
+                                isModalOpen={openForgetPass}
+                                closeModal={() => {
+                                    setOpenForgetPass(false)
+                                }}
+                            ></ModalForgotPass>}
                         {error && (
                             <div className="toast toast-end toast-bottom">
                                 <div role="alert" className="alert alert-error">

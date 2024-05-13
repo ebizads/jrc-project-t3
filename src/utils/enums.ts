@@ -47,3 +47,8 @@ export enum RemoteOperationStatus {
     START = "START",
     STOP = "STOP",
 }
+
+export enum ModalStatus {
+    LOADING = "LOADING",
+    ERROR = "ERROR",
+}

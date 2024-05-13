@@ -65,9 +65,9 @@ export type ModalVerificationProps = {
     closeModal: CloseModalFunction;
 };
 
-export type ModalLoadingProps = {
+export type ModalDashboardStatusProps = {
     isModalOpen: boolean;
-    modalTitle: string;
+    // modalTitle: string;
     modalStatus: string;
 };
 
@@ -92,8 +92,6 @@ export type TestStatus = {
     name: string;
     value: boolean;
 };
-
-
 
 export type TestStatusFloat = {
     name: string;

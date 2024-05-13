@@ -23,10 +23,11 @@ import {
     getDataValueEquivalent,
     getDataValueEquivalentTest,
 } from "~/utils/functions";
-import ModalLoading from "~/components/ModalLoading";
 import Generator2 from "~/components/Generator2";
 import Generator3 from "~/components/Generator3";
 import { Image } from "@mantine/core";
+import ModalDashboardStatus from "~/components/ModalDashboardStatus";
+import { ModalStatus } from "~/utils/enums";
 
 export default function Home() {
     // const hello = api.post.hello.useQuery({ text: "from tRPC" });
@@ -46,58 +47,67 @@ export default function Home() {
 
     const [modalOpen, setModalOpen] = useState(false);
 
-    const openModal = () => {
-        // setSelected(index);
-        setModalOpen(true);
-        document.body.style.overflow = "hidden";
-    };
-
-    const closeModal = () => {
-        setModalOpen(false);
-        document.body.style.overflow = "auto";
-    };
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const responseCDO = await fetch("api/digitalInputs/fetchDigitalInputsCDO", {
-                    // next: {
-                    //     revalidate: 600
-                    // }
-                });
-                const responseXR1 = await fetch("api/digitalInputs/fetchDigitalInputsXR1", {
-                    // next: {
-                    //     revalidate: 600
-                    // }
-                });
-                const responseXR2 = await fetch("api/digitalInputs/fetchDigitalInputsXR2", {
-                    // next: {
-                    //     revalidate: 600
-                    // }
-                });
+                const responseCDO = await fetch(
+                    "api/digitalInputs/fetchDigitalInputsCDO",
+                    {
+                        // next: {
+                        //     revalidate: 600
+                        // }
+                    }
+                );
+                const responseXR1 = await fetch(
+                    "api/digitalInputs/fetchDigitalInputsXR1",
+                    {
+                        // next: {
+                        //     revalidate: 600
+                        // }
+                    }
+                );
+                const responseXR2 = await fetch(
+                    "api/digitalInputs/fetchDigitalInputsXR2",
+                    {
+                        // next: {
+                        //     revalidate: 600
+                        // }
+                    }
+                );
                 const inputDataCDO = (await responseCDO.json()) as TestStatus[];
                 const inputDataXR1 = (await responseXR1.json()) as TestStatus[];
                 const inputDataXR2 = (await responseXR2.json()) as TestStatus[];
 
-
-                const responseOutputCDO = await fetch("api/digitalOutputs/fetchDigitalOutputsCDO", {
-                    // next: {
-                    //     revalidate: 600
-                    // }
-                });
-                const responseOutputXR1 = await fetch("api/digitalOutputs/fetchDigitalOutputsXR1", {
-                    // next: {
-                    //     revalidate: 600
-                    // }
-                });
-                const responseOutputXR2 = await fetch("api/digitalOutputs/fetchDigitalOutputsXR2", {
-                    // next: {
-                    //     revalidate: 600
-                    // }
-                });
-                const outputDataCDO = (await responseOutputCDO.json()) as TestStatus[];
-                const outputDataXR1 = (await responseOutputXR1.json()) as TestStatus[];
-                const outputDataXR2 = (await responseOutputXR2.json()) as TestStatus[];
+                const responseOutputCDO = await fetch(
+                    "api/digitalOutputs/fetchDigitalOutputsCDO",
+                    {
+                        // next: {
+                        //     revalidate: 600
+                        // }
+                    }
+                );
+                const responseOutputXR1 = await fetch(
+                    "api/digitalOutputs/fetchDigitalOutputsXR1",
+                    {
+                        // next: {
+                        //     revalidate: 600
+                        // }
+                    }
+                );
+                const responseOutputXR2 = await fetch(
+                    "api/digitalOutputs/fetchDigitalOutputsXR2",
+                    {
+                        // next: {
+                        //     revalidate: 600
+                        // }
+                    }
+                );
+                const outputDataCDO =
+                    (await responseOutputCDO.json()) as TestStatus[];
+                const outputDataXR1 =
+                    (await responseOutputXR1.json()) as TestStatus[];
+                const outputDataXR2 =
+                    (await responseOutputXR2.json()) as TestStatus[];
 
                 // console.log(inputDataCDO)
                 // console.log(inputDataXR1)
@@ -110,12 +120,20 @@ export default function Home() {
                 setCDODigitalOutputs(outputDataCDO);
                 setXR1DigitalOutputs(outputDataXR1);
                 setXR2DigitalOutputs(outputDataXR2);
-
             } catch (error) {
                 <Link href="/settings" />;
                 console.error("Error fetching data:", error);
             }
         };
+
+        // Ensure that the page is already rendered before calling loading/error modal
+        if (document && document.body) {
+            if (!modalOpen) {
+                document.body.style.overflow = "auto";
+            } else {
+                document.body.style.overflow = "hidden";
+            }
+        }
 
         const interval = setInterval(() => {
             void fetchData();
@@ -151,7 +169,7 @@ export default function Home() {
                     />
                     <div className="absolute h-full w-full z-10 bg-gradient-to-b from-transparent to-base-100"></div>
                 </div> */}
-                <div className=" absolute z-5 min-h-[130vh] w-full bg-[url('/dashboardBG.jpg')] bg-slate-600 bg-cover bg-no-repeat opacity-25 blur-sm ">
+                <div className=" z-5 absolute min-h-[130vh] w-full bg-slate-600 bg-[url('/dashboardBG.jpg')] bg-cover bg-no-repeat opacity-25 blur-sm ">
                     <div className="absolute h-full w-full bg-gradient-to-b from-transparent to-base-100"></div>
                 </div>
 
@@ -174,7 +192,13 @@ export default function Home() {
                 <main
                     className={`flex min-h-screen w-full flex-col items-center justify-between px-12 pb-12 text-primary `}
                 >
-                    <div className="flex h-full w-full flex-row z-10">
+                    <ModalDashboardStatus
+                        isModalOpen={modalOpen}
+                        // modalTitle="Loading Dashboard Data"
+                        modalStatus={ModalStatus.LOADING}
+                    />
+
+                    <div className="z-10 flex h-full w-full flex-row">
                         {/* Generator Card 1 CDO*/}
                         <Generator1
                             refetch={refetch}

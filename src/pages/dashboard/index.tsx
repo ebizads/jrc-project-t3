@@ -26,7 +26,7 @@ import {
 import ModalLoading from "~/components/ModalLoading";
 import Generator2 from "~/components/Generator2";
 import Generator3 from "~/components/Generator3";
-import { Pagination } from "@mantine/core";
+import { Image } from "@mantine/core";
 
 export default function Home() {
     // const hello = api.post.hello.useQuery({ text: "from tRPC" });
@@ -143,9 +143,17 @@ export default function Home() {
                     <link rel="icon" href="/jrc-icon.svg" />
                 </Head>
 
-                <div className=" absolute z-5 min-h-[130vh] w-full bg-[url('https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg')] bg-slate-600 bg-cover bg-no-repeat opacity-25 blur-sm ">
-                    <div className="absolute h-full w-full bg-gradient-to-b from-transparent to-base-100"></div>
+                <div className="absolute min-h-[130vh] w-full ">
+                    <Image
+                        src="https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg"
+                        alt="aaa"
+                        className="absolute min-h-full w-full z-1 bg-slate-600 bg-cover bg-no-repeat opacity-25 blur-sm "
+                    />
+                    <div className="absolute h-full w-full z-10 bg-gradient-to-b from-transparent to-base-100"></div>
                 </div>
+                {/* <div className=" absolute z-5 min-h-[130vh] w-full bg-[url('https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg')] bg-slate-600 bg-cover bg-no-repeat opacity-25 blur-sm ">
+                    <div className="absolute h-full w-full bg-gradient-to-b from-transparent to-base-100"></div>
+                </div> */}
 
                 <div className=" hero min-h-[40vh] opacity-100">
                     {/* <div className="hero-overlay bg-opacity-60"></div> */}

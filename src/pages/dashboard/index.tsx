@@ -143,17 +143,17 @@ export default function Home() {
                     <link rel="icon" href="/jrc-icon.svg" />
                 </Head>
 
-                <div className="absolute min-h-[130vh] w-full ">
+                {/* <div className="absolute min-h-[130vh] w-full ">
                     <Image
-                        src="https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg"
+                        src="/dashboardBG.jpg"
                         alt="aaa"
                         className="absolute min-h-full w-full z-1 bg-slate-600 bg-cover bg-no-repeat opacity-25 blur-sm "
                     />
                     <div className="absolute h-full w-full z-10 bg-gradient-to-b from-transparent to-base-100"></div>
-                </div>
-                {/* <div className=" absolute z-5 min-h-[130vh] w-full bg-[url('https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg')] bg-slate-600 bg-cover bg-no-repeat opacity-25 blur-sm ">
-                    <div className="absolute h-full w-full bg-gradient-to-b from-transparent to-base-100"></div>
                 </div> */}
+                <div className=" absolute z-5 min-h-[130vh] w-full bg-[url('/dashboardBG.jpg')] bg-slate-600 bg-cover bg-no-repeat opacity-25 blur-sm ">
+                    <div className="absolute h-full w-full bg-gradient-to-b from-transparent to-base-100"></div>
+                </div>
 
                 <div className=" hero min-h-[40vh] opacity-100">
                     {/* <div className="hero-overlay bg-opacity-60"></div> */}

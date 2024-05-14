@@ -289,6 +289,7 @@ const NewPassword = () => {
                     {/* DISCARD BTN */}
                     <button
                         type="button"
+                        onClick={() => reset()}
                         // onClick={props.closeModal}
                         className="h-[3rem] border-[1px] border-[#CCCCCC] px-[1.5rem] text-center text-xs font-normal uppercase tracking-[0.2em] duration-200 hover:bg-[#424242] focus:bg-secondary"
                     // disabled={isSubmitting}

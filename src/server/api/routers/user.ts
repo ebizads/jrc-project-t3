@@ -5,7 +5,7 @@ import {
     protectedProcedure,
     publicProcedure,
 } from "~/server/api/trpc";
-import { ChangeUserPass } from "~/server/schemas/user";
+import { ChangeUserPass, ResetForgotPass } from "~/server/schemas/user";
 import bcrypt from "bcrypt";
 import { addHoursToDate, generateCertificate } from "~/utils/functions";
 import { sendEmail } from "~/pages/api/sendEmail";
@@ -25,6 +25,33 @@ export const accountRouter = createTRPCRouter({
 
             return account;
         }),
+    findOneEmailOrToken: publicProcedure
+        .input(
+            z.object({
+                email: z.string().optional(),
+                token: z.string().optional(),
+            })
+        )
+        .query(async ({ input, ctx }) => {
+            const account = await ctx.db.account.findFirst({
+                where: {
+                    user: {
+                        email: input.email,
+
+                    },
+                    // reset_token: input.token,
+
+                    // OR: [
+                    //     {
+                    //         reset_token: input.token,
+                    //     },
+                    // ],
+                },
+            })
+
+            return account
+        }),
+
 
     findOneWithUsernamePassword: protectedProcedure
         .input(
@@ -203,6 +230,49 @@ export const accountRouter = createTRPCRouter({
                     })
                     return forgetPassToken
                 }
+            } catch (error) {
+                throw error
+            }
+        }),
+    resetForgotPass: publicProcedure
+        .input(ResetForgotPass)
+        .mutation(async ({ input, ctx }) => {
+            try {
+                const { password, id, oldPassword, ...rest } = input
+
+                const encryptedPassword = await bcrypt.hash(password, 10)
+
+                const sample: string[] = [...oldPassword]
+
+                // eslint-disable-next-line @typescript-eslint/prefer-for-of
+                for (let i = 0; i < sample.length; i++) {
+                    const match = await bcrypt.compare(password, `${sample[i]}`)
+                    if (match) {
+                        throw new TRPCError({
+                            code: "BAD_REQUEST",
+                            message: "This password has already been used, try another.",
+                        })
+                    }
+                }
+
+                if (sample.length >= 12) {
+                    sample.pop()
+                }
+
+                return await ctx.db.account.update({
+                    where: {
+                        id,
+                    },
+                    data: {
+                        oldPassword: {
+                            set: [encryptedPassword, ...sample],
+                        },
+                        password: encryptedPassword,
+                        reset_token: null,
+                        reset_until: null,
+                        // verified: input.verified,
+                    },
+                })
             } catch (error) {
                 throw error
             }

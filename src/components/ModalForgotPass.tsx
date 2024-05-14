@@ -14,7 +14,7 @@ const ModalForgotPass = (props: ModalForgotPassProps) => {
         onSuccess: () => {
             props.closeModal()
 
-            setSuccess("Successfully Started/Stopped Generator")
+            setSuccess("A reset link has now been sent to the user's email.")
             setTimeout(() => setSuccess(null), 3000)
         },
 
@@ -67,8 +67,7 @@ const ModalForgotPass = (props: ModalForgotPassProps) => {
                                         <p className="pb-8 text-sm font-normal tracking-normal">
                                             Enter the User&apos;s Email or Username.
                                         </p>
-                                        <form
-                                            // onSubmit={handleSubmit(onSubmit)}
+                                        <div
                                             className=" flex w-full flex-col gap-5"
                                         >
                                             {/* USERNAME */}
@@ -98,7 +97,6 @@ const ModalForgotPass = (props: ModalForgotPassProps) => {
                                             {/* SUBMIT BTN */}
 
                                             <button
-                                                type="submit"
                                                 className="  h-[3rem] w-full bg-[#AD3339] px-[1rem] text-center text-xs tracking-[0.2em] duration-200 hover:bg-[#b34f54] focus:bg-[#84282d]"
                                                 // disabled={isSubmitting}
                                                 onClick={async () => {
@@ -109,14 +107,12 @@ const ModalForgotPass = (props: ModalForgotPassProps) => {
                                                 {/* {isSubmitting ? "LOADING..." : "LOGIN"} */}
                                             </button>
 
-                                        </form>
+                                        </div>
                                         <div className=" bg-base-100 px-4 sm:flex sm:flex-row-reverse sm:px-6">
                                             <button
                                                 type="button"
                                                 onClick={props.closeModal}
                                                 className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
-
-
                                             >
                                                 {/* unicode for X button */}
                                                 &#10005;
@@ -147,28 +143,30 @@ const ModalForgotPass = (props: ModalForgotPassProps) => {
                             </div>
                         )}
 
-                        {success && (
-                            <div className="toast toast-end toast-bottom">
-                                <div
-                                    role="alert"
-                                    className="alert alert-success"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="stroke-current shrink-0 h-6 w-6"
-                                        fill="none"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>{success}</span>
-                                </div>
-                            </div>
-                        )}
+
                     </div>
+
+                    {success && (
+                        <div className="toast toast-end toast-bottom">
+                            <div
+                                role="alert"
+                                className="alert alert-success"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="stroke-current shrink-0 h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>{success}</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
         </>

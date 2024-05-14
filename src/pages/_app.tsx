@@ -29,7 +29,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
     const router = useRouter();
 
-    const renderComponent = router.pathname !== "/";
+    const renderComponent = !["/","/forgotPassword","/forgotPassword/error", "/forgotPassword/check"].includes(router.pathname);
+
     return (
         <SessionProvider session={session}>
             <MantineProvider theme={theme}  defaultColorScheme="dark">

@@ -128,6 +128,7 @@ export const accountRouter = createTRPCRouter({
                     currentPassword ?? "",
                     `${sample[0]}`
                 );
+                console.log(oldPassword)
                 if (!match) {
                     throw new TRPCError({
                         code: "NOT_FOUND",

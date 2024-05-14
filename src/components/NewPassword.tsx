@@ -55,8 +55,13 @@ const NewPassword = () => {
         },
     });
 
+    useEffect(()=>{
+        console.log(session?.user?.id)
+
+    })
+
     useEffect(() => {
-        setUserId(session?.account?.id ?? 0);
+        setUserId(session?.user?.id ?? 0);
     }, [session]);
 
     useEffect(() => {
@@ -72,7 +77,9 @@ const NewPassword = () => {
     // });
 
     async function onSubmit(user: ChangePass) {
-        console.log(user);
+        console.log(userId)
+
+        console.log(userData.data?.oldPassword);
         mutate({
             ...user,
             id: userId,

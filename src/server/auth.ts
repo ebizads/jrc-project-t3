@@ -23,15 +23,15 @@ import { DefaultJWT } from "next-auth/jwt";
  */
 declare module "next-auth" {
     interface Session extends DefaultSession {
-        account: DefaultSession["user"] & {
+        user: DefaultSession["user"] & {
             id: number;
             // ...other properties
             // role: UserRole;
-            username: string;
-            type: string;
-
+            username: string,
+            type: string
         };
     }
+
 
     interface Account {
         id: number;
@@ -46,8 +46,6 @@ declare module "next-auth" {
         username: string;
         type: string;
     }
-
-
 }
 
 declare module "next-auth/jwt" {
@@ -63,27 +61,25 @@ declare module "next-auth/jwt" {
  */
 export const authOptions: NextAuthOptions = {
     callbacks: {
-        jwt: async ({ token, account }) => {
-            if (account) {
-                token.id = account.id;
-                token.username = account.username;
-                token.type = account.type
+        jwt: async ({ token, user }) => {
+            if (user) {
+                token.id = user.id;
+                token.type= user.type
+                token.email = user.email;
             }
 
             return token;
         },
         session({ session, token }) {
-            if (session.account) {
-                session.account.id = Number(token.sub);
-                session.account.username = token.username
-                session.account.type = token.type
-
+            if (session.user) {
+                session.user.id = Number(token.sub);
+                session.user.type= session.user.type
             }
             return session;
         },
     },
     pages: {
-        signIn: "/",
+        signIn: "/user/login",
     },
     session: { strategy: "jwt" },
     adapter: PrismaAdapter(db) as Adapter,

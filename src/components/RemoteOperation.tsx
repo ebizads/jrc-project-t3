@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { RemoteOperationProps, TestStatus } from "~/utils/types";
 import ModalVerification from "./ModalVerification";
 import { api } from "~/utils/api";
-import { Familjen_Grotesk } from "next/font/google";
 import { useSession } from "next-auth/react";
 
 const greenGlow =
@@ -15,20 +14,20 @@ const optionUnselected =
 const RemoteOperation = (props: RemoteOperationProps) => {
     const [selected, setSelected] = useState(props.remoteOperationStatus);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { data: session } = useSession()
+    const { data: session } = useSession();
     // const openModal = () => {
     //     setModalOpen(true);
     //     document.body.style.overflow = "hidden";
     // };
     useEffect(() => {
-        setSelected(props.remoteOperationStatus)
-    }, [props.remoteOperationStatus, setSelected])
+        setSelected(props.remoteOperationStatus);
+    }, [props.remoteOperationStatus, setSelected]);
 
     const openModal = () => {
         if (!props.disabled) {
             // setSelected(index);
-            setIsModalOpen(true); document.body.style.overflow = "hidden";
-
+            setIsModalOpen(true);
+            document.body.style.overflow = "hidden";
         }
     };
 
@@ -37,45 +36,60 @@ const RemoteOperation = (props: RemoteOperationProps) => {
             // setSelected(1);
             setIsModalOpen(false);
             document.body.style.overflow = "auto";
-
         }
     };
 
     return (
         <>
-            {selected != true &&
+            {selected != true && (
                 <ModalVerification
                     generatorId={props.generatorId}
                     isModalOpen={isModalOpen}
                     modalTitle="Start Generator?"
                     modalStatus="ON"
-                    submitModal={() => { setSelected(true); setIsModalOpen(false); document.body.style.overflow = "auto"; }}
-                    closeModal={() => { setIsModalOpen(false); document.body.style.overflow = "auto"; }}
+                    submitModal={() => {
+                        setSelected(true);
+                        setIsModalOpen(false);
+                        document.body.style.overflow = "auto";
+                    }}
+                    closeModal={() => {
+                        setIsModalOpen(false);
+                        document.body.style.overflow = "auto";
+                    }}
                 />
-            }
+            )}
 
-            {selected != false &&
+            {selected != false && (
                 <ModalVerification
                     generatorId={props.generatorId}
                     isModalOpen={isModalOpen}
                     modalTitle="Stop Generator?"
                     modalStatus="OFF"
-                    submitModal={() => { setSelected(false); setIsModalOpen(false); document.body.style.overflow = "auto"; }}
-                    closeModal={() => { setIsModalOpen(false); document.body.style.overflow = "auto"; }}
+                    submitModal={() => {
+                        setSelected(false);
+                        setIsModalOpen(false);
+                        document.body.style.overflow = "auto";
+                    }}
+                    closeModal={() => {
+                        setIsModalOpen(false);
+                        document.body.style.overflow = "auto";
+                    }}
                 />
-            }
-            <div className={`flex w-full select-none flex-row items-center justify-center space-x-4 p-1 text-xs tracking-wider ${session?.user?.type == "Viewer" && ('pointer-events-none')}`}>
+            )}
+            <div
+                className={`flex w-full select-none flex-row items-center justify-center space-x-4 p-1 text-xs tracking-wider ${session?.user?.type == "Viewer" && "pointer-events-none"}`}
+            >
                 {/* Handle Click for STOP button */}
                 <button
                     disabled={props.remoteOperationStatus == false}
                     // onClick={() => handleClick(0)}
                     onClick={() => {
-                        openModal()
+                        openModal();
                     }}
                     className={
                         !props.disabled
-                            // ? selected === 0
-                            ? props.remoteOperationStatus == false
+                            ? // ? selected === 0
+                              props.remoteOperationStatus == false
                                 ? redGlow
                                 : `${optionUnselected} cursor-pointer transition-all ease-in hover:bg-[#4B4B4B]`
                             : `${optionUnselected} cursor-not-allowed`
@@ -90,12 +104,12 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                     disabled={props.remoteOperationStatus == true}
                     // onClick={() => handleClick(1)}
                     onClick={() => {
-                        openModal()
+                        openModal();
                     }}
                     className={
                         !props.disabled
-                            // ? selected === 1
-                            ? props.remoteOperationStatus == true
+                            ? // ? selected === 1
+                              props.remoteOperationStatus == true
                                 ? greenGlow
                                 : `${optionUnselected} cursor-pointer transition-all ease-in hover:bg-[#4B4B4B]`
                             : `${optionUnselected} cursor-not-allowed`

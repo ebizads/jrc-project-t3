@@ -10,6 +10,8 @@ import {
     getStatusDEG,
     getStatusTypeDEG,
     getStatusTypeRemoteOperationToFuelLevel,
+    getTestMappedStatusXR2,
+    getMappedStatusDigitalOutputsXR2,
 } from "~/utils/functions";
 import LineChartExample from "./LineChart";
 import { useEffect, useRef, useState } from "react";
@@ -17,6 +19,8 @@ import { useDieselGenStart } from "~/utils/useStore";
 import { api } from "~/utils/api";
 import { getStatusType } from "./StatusCard";
 import { Pagination } from "@mantine/core";
+import { DegStatus } from "~/utils/enums";
+import ModalDashboardStatus from "./ModalDashboardStatus";
 
 const Generator3 = (generatorProps: TestGenerator) => {
     // const [testDataFloat, setTestDataFloat] = useState<Array<TestStatusFloat> | null>(null);
@@ -24,6 +28,7 @@ const Generator3 = (generatorProps: TestGenerator) => {
     const [page, setPage] = useState(1)
     const [openLogsModal, setOpenLogsModal] = useState<boolean>(false)
     const [showMoreIsVisible, setShowMoreIsVisible] = useState<boolean>(false)
+    const [modalDashboardStatusOpen, setModalDashboardStatusOpen] = useState<boolean>(false)
 
     // MUTATE FUNCTION FOR LOGS TAKEN FROM GENERATOR ROUTER
     const { mutate } = api.generator.createLog.useMutation({
@@ -52,10 +57,10 @@ const Generator3 = (generatorProps: TestGenerator) => {
         powerSupply,
         commercialPowerDC,
         batteryTemp,
-    ] = getTestMappedStatus(generatorProps);
+    ] = getTestMappedStatusXR2(generatorProps);
 
     const [remoteOperationStatus] =
-        getMappedStatusDigitalOutputs(generatorProps);
+        getMappedStatusDigitalOutputsXR2(generatorProps);
 
     // USEREF TO CHECK ().CURRENT OF REF AND COMPARE WITH MAPPED STATUS
     const previousRemoteOperationStatus = useRef<boolean | undefined>(
@@ -73,6 +78,12 @@ const Generator3 = (generatorProps: TestGenerator) => {
     );
     const previousBatteryTemp = useRef<string | undefined>(batteryTemp);
     const [dataLoaded, setDataLoaded] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (degStatus == "FAILED") {
+            setModalDashboardStatusOpen(true)
+        }
+    }, [degStatus])
 
     useEffect(() => {
         // console.log(statusLogs);
@@ -367,6 +378,15 @@ const Generator3 = (generatorProps: TestGenerator) => {
                     >SHOW MORE</button>
                 }
             </div>
+
+            {degStatus == "FAILED" &&
+                <ModalDashboardStatus
+                    isModalOpen={degStatus == "FAILED"}
+                    closeModal={() =>
+                        setModalDashboardStatusOpen(false)
+                    }
+                    modalStatus="FAILED"
+                ></ModalDashboardStatus>}
 
             {openLogsModal &&
                 (

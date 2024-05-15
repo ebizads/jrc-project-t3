@@ -41,7 +41,18 @@ const ModalDashboardStatus = (props: ModalDashboardStatusProps) => {
                                             {modalTitle}
                                         </h1>
                                         {promptText}
+                                        <div className=" bg-base-100 px-4 sm:flex sm:flex-row-reverse sm:px-6">
+                                            <button
+                                                type="button"
+                                                // onClick={props.closeModal}
+                                                className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
+                                            >
+                                                {/* unicode for X button */}
+                                                &#10005;
+                                            </button>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -100,11 +111,23 @@ function getModalStatusType(
                 <i className="fa-solid fa-triangle-exclamation pb-3 text-9xl text-error" />
             );
             break;
+        case "FAILED":
+            textColor = "text-error";
+            modalTitle = "Generator Failure";
+            promptText = (
+                <p className="text-sm font-normal tracking-normal">
+                    Please check generator set to confirm the problem.
+                </p>
+            );
+            modalIcon = (
+                <i className="fa-solid fa-triangle-exclamation pb-3 text-9xl text-error" />
+            );
+            break;
         default:
             textColor = "text-info";
             modalTitle = " ";
             promptText = (
-                <p className="text-sm font-normal tracking-normal">" "</p>
+                <p className="text-sm font-normal tracking-normal">&quot; &quot;</p>
             );
             modalIcon = (
                 <i className="fa-solid fa-circle-question pb-3 text-9xl text-info" />

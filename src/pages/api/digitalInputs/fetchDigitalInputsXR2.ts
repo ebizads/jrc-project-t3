@@ -18,10 +18,12 @@ export default async function handler(
         headers.append("Access-Control-Allow-Origin", "*");
         headers.append("Access-Control-Allow-Credentials", "true");
 
-        headers.append("Authorization", basicAuth);
+        // headers.append("Authorization", basicAuth);
 
         const response = await fetch(
-            `${process.env.GEN_ENDPOINT_3}/api/v1/device/strategy/ios/digitalInputs`,
+            // `${process.env.GEN_ENDPOINT_3}/api/v1/device/strategy/ios/digitalInputs`,
+            'https://66291ec154afcabd07384106.mockapi.io/api/v1/strategy',
+
             {
                 // next: { revalidate: 1800 },
                 headers: headers,

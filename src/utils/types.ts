@@ -68,6 +68,7 @@ export type ModalVerificationProps = {
 export type ModalDashboardStatusProps = {
     isModalOpen: boolean;
     // modalTitle: string;
+    closeModal?: CloseModalFunction
     modalStatus: string;
 };
 

@@ -127,7 +127,7 @@ export default function Home() {
         };
 
         // Ensure that the page is already rendered before calling loading/error modal
-        if (document && document.body) {
+        if (document?.body) {
             if (!modalOpen) {
                 document.body.style.overflow = "auto";
             } else {
@@ -195,6 +195,7 @@ export default function Home() {
                     <ModalDashboardStatus
                         isModalOpen={modalOpen}
                         // modalTitle="Loading Dashboard Data"
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
                         modalStatus={ModalStatus.LOADING}
                     />
 
@@ -208,7 +209,7 @@ export default function Home() {
                                 data?.generators[0]?.generatorName ?? ""
                             }
                             generatorData={cdoData ?? []}
-                            // generatorOutputData={cdoDigitalOutputs ?? []}
+                            generatorOutputData={cdoDigitalOutputs ?? []}
                             runningHours={data?.generators[0]?.runningTime ?? 0}
                         />
 
@@ -222,7 +223,7 @@ export default function Home() {
                             }
                             generatorData={xr1Data ?? []}
                             generatorOutputData={xr1DigitalOutputs ?? []}
-                            runningHours={7.89}
+                            runningHours={data?.generators[1]?.runningTime ?? 0}
                         />
 
                         {/* Generator Card 3  XR2*/}
@@ -235,7 +236,7 @@ export default function Home() {
                             }
                             generatorData={xr2Data ?? []}
                             generatorOutputData={xr2DigitalOutputs ?? []}
-                            runningHours={17.36}
+                            runningHours={data?.generators[2]?.runningTime ?? 0 }
                         />
                     </div>
                     {/* main */}

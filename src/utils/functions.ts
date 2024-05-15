@@ -478,7 +478,7 @@ export const getTestMappedStatus = (
                 case "AC_Input_FFWC":
                     switch (parameter.value) {
                         case true:
-                            commercialPowerDC = CommercialPower.ON;
+                            commercialPowerDC = CommercialPower.OFF;
                             break;
                         case false:
                             commercialPowerDC = CommercialPower.ON;
@@ -642,7 +642,7 @@ export const getTestMappedStatusXR1 = (
                 case "AC_Input_XR1":
                     switch (parameter.value) {
                         case true:
-                            commercialPowerDC = CommercialPower.ON;
+                            commercialPowerDC = CommercialPower.OFF;
                             break;
                         case false:
                             commercialPowerDC = CommercialPower.ON;
@@ -806,7 +806,7 @@ export const getTestMappedStatusXR2 = (
                 case "AC_Input_XR2":
                     switch (parameter.value) {
                         case true:
-                            commercialPowerDC = CommercialPower.ON;
+                            commercialPowerDC = CommercialPower.OFF;
                             break;
                         case false:
                             commercialPowerDC = CommercialPower.ON;

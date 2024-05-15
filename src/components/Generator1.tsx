@@ -17,6 +17,8 @@ import { useDieselGenStart } from "~/utils/useStore";
 import { api } from "~/utils/api";
 import { getStatusType } from "./StatusCard";
 import { Pagination } from "@mantine/core";
+import { DegStatus } from "~/utils/enums";
+import ModalDashboardStatus from "./ModalDashboardStatus";
 
 const Generator1 = (generatorProps: TestGenerator) => {
     // const [testDataFloat, setTestDataFloat] = useState<Array<TestStatusFloat> | null>(null);
@@ -24,6 +26,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
     const [page, setPage] = useState(1)
     const [openLogsModal, setOpenLogsModal] = useState<boolean>(false)
     const [showMoreIsVisible, setShowMoreIsVisible] = useState<boolean>(false)
+    const [modalDashboardStatusOpen, setModalDashboardStatusOpen] = useState<boolean>(false)
 
     // MUTATE FUNCTION FOR LOGS TAKEN FROM GENERATOR ROUTER
     const { mutate } = api.generator.createLog.useMutation({
@@ -73,6 +76,12 @@ const Generator1 = (generatorProps: TestGenerator) => {
     );
     const previousBatteryTemp = useRef<string | undefined>(batteryTemp);
     const [dataLoaded, setDataLoaded] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (degStatus == "FAILED") {
+            setModalDashboardStatusOpen(true)
+        }
+    }, [degStatus])
 
     useEffect(() => {
         // console.log(statusLogs);
@@ -367,6 +376,15 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     >SHOW MORE</button>
                 }
             </div>
+
+            {degStatus == "FAILED" &&
+                <ModalDashboardStatus
+                    isModalOpen={degStatus == "FAILED"}
+                    closeModal={() =>
+                        setModalDashboardStatusOpen(false)
+                    }
+                    modalStatus="FAILED"
+                ></ModalDashboardStatus>}
 
             {openLogsModal &&
                 (

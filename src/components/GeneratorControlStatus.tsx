@@ -51,7 +51,8 @@ const GeneratorControlStatus = (props: {
                     refetchLogs={props.refetchLogs}
                     degStatus={props.degStatus}
                     id={props.id}
-                    runningHours={props.runningHours} />
+                    runningHours={props.runningHours}
+                />
             </div>
         </>
     );
@@ -78,16 +79,11 @@ const getStatusList = (statusName: string) => {
             return [
                 {
                     key: "status1",
-                    option: DegMode.GENERATING,
-                    color: greenGlow,
-                },
-                {
-                    key: "status2",
                     option: DegMode.MANUAL,
                     color: yellowGlow,
                 },
                 {
-                    key: "status3",
+                    key: "status2",
                     option: DegMode.AUTO,
                     color: greenGlow,
                 },

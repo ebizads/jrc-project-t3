@@ -440,12 +440,14 @@ export const getTestMappedStatus = (
     let commercialPowerDC = "";
     let batteryTemp = "";
 
-    // Dependent cases (FLAGS)
-    let degStatusStandby = true;
-
     // DASHBOARD STATUS MAPPINGS
     if (sensorParameters && sensorParameters.length > 0) {
+        // Dependent cases (FLAGS)
+        let degStatusStandby = true;
+
         sensorParameters.forEach((parameter: TestStatus) => {
+
+
             switch (parameter.name) {
                 case "Failure_FFWC":
                     switch (parameter.value) {
@@ -478,10 +480,10 @@ export const getTestMappedStatus = (
                 case "AC_Input_FFWC":
                     switch (parameter.value) {
                         case true:
-                            commercialPowerDC = CommercialPower.OFF;
+                            commercialPowerDC = CommercialPower.ON;
                             break;
                         case false:
-                            commercialPowerDC = CommercialPower.ON;
+                            commercialPowerDC = CommercialPower.OFF;
                             break;
                     }
                     break;
@@ -565,12 +567,14 @@ export const getTestMappedStatus = (
                     }
                     break;
             }
-        });
-    }
 
-    // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
-    if (degStatusStandby) {
-        degStatus = DegStatus.STANDBY;
+            // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
+
+        });
+
+        if (degStatusStandby) {
+            degStatus = DegStatus.STANDBY;
+        }
     }
 
     return [
@@ -604,11 +608,13 @@ export const getTestMappedStatusXR1 = (
     let commercialPowerDC = "";
     let batteryTemp = "";
 
-    // Dependent cases (FLAGS)
-    let degStatusStandby = true;
 
     // DASHBOARD STATUS MAPPINGS
     if (sensorParameters && sensorParameters.length > 0) {
+
+        // Dependent cases (FLAGS)
+        let degStatusStandby = true;
+
         sensorParameters.forEach((parameter: TestStatus) => {
             switch (parameter.name) {
                 case "Failure_XR1":
@@ -730,12 +736,14 @@ export const getTestMappedStatusXR1 = (
                     break;
             }
         });
+
+        // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
+        if (degStatusStandby) {
+            degStatus = DegStatus.STANDBY;
+        }
+
     }
 
-    // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
-    if (degStatusStandby) {
-        degStatus = DegStatus.STANDBY;
-    }
 
     return [
         commercialPower,
@@ -768,11 +776,12 @@ export const getTestMappedStatusXR2 = (
     let commercialPowerDC = "";
     let batteryTemp = "";
 
-    // Dependent cases (FLAGS)
-    let degStatusStandby = true;
+
 
     // DASHBOARD STATUS MAPPINGS
     if (sensorParameters && sensorParameters.length > 0) {
+        // Dependent cases (FLAGS)
+        let degStatusStandby = true;
         sensorParameters.forEach((parameter: TestStatus) => {
             switch (parameter.name) {
                 case "Failure_XR2":
@@ -893,12 +902,16 @@ export const getTestMappedStatusXR2 = (
                     }
                     break;
             }
-        });
-    }
 
-    // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
-    if (degStatusStandby) {
-        degStatus = DegStatus.STANDBY;
+            // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
+            if (degStatusStandby) {
+                degStatus = DegStatus.STANDBY;
+            }
+
+        });
+
+
+
     }
 
     return [

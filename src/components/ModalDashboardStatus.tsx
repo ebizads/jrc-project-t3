@@ -41,16 +41,16 @@ const ModalDashboardStatus = (props: ModalDashboardStatusProps) => {
                                             {modalTitle}
                                         </h1>
                                         {promptText}
-                                        <div className=" bg-base-100 px-4 sm:flex sm:flex-row-reverse sm:px-6">
+                                        {/* <div className=" bg-base-100 px-4 sm:flex sm:flex-row-reverse sm:px-6">
                                             <button
                                                 type="button"
                                                 // onClick={props.closeModal}
                                                 className="btn btn-circle btn-ghost btn-sm absolute right-2 top-2"
-                                            >
+                                            > */}
                                                 {/* unicode for X button */}
-                                                &#10005;
-                                            </button>
-                                        </div>
+                                                {/* &#10005; */}
+                                            {/* </button>
+                                        </div> */}
                                     </div>
 
                                 </div>

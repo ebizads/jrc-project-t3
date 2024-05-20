@@ -78,36 +78,36 @@ export default function Home() {
                 const inputDataXR1 = (await responseXR1.json()) as TestStatus[];
                 const inputDataXR2 = (await responseXR2.json()) as TestStatus[];
 
-                const responseOutputCDO = await fetch(
-                    "api/digitalOutputs/fetchDigitalOutputsCDO",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const responseOutputXR1 = await fetch(
-                    "api/digitalOutputs/fetchDigitalOutputsXR1",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const responseOutputXR2 = await fetch(
-                    "api/digitalOutputs/fetchDigitalOutputsXR2",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const outputDataCDO =
-                    (await responseOutputCDO.json()) as TestStatus[];
-                const outputDataXR1 =
-                    (await responseOutputXR1.json()) as TestStatus[];
-                const outputDataXR2 =
-                    (await responseOutputXR2.json()) as TestStatus[];
+                // const responseOutputCDO = await fetch(
+                //     "api/digitalOutputs/fetchDigitalOutputsCDO",
+                //     {
+                //         // next: {
+                //         //     revalidate: 600
+                //         // }
+                //     }
+                // );
+                // const responseOutputXR1 = await fetch(
+                //     "api/digitalOutputs/fetchDigitalOutputsXR1",
+                //     {
+                //         // next: {
+                //         //     revalidate: 600
+                //         // }
+                //     }
+                // );
+                // const responseOutputXR2 = await fetch(
+                //     "api/digitalOutputs/fetchDigitalOutputsXR2",
+                //     {
+                //         // next: {
+                //         //     revalidate: 600
+                //         // }
+                //     }
+                // );
+                // const outputDataCDO =
+                //     (await responseOutputCDO.json()) as TestStatus[];
+                // const outputDataXR1 =
+                //     (await responseOutputXR1.json()) as TestStatus[];
+                // const outputDataXR2 =
+                //     (await responseOutputXR2.json()) as TestStatus[];
 
                 // console.log(inputDataCDO)
                 // console.log(inputDataXR1)
@@ -117,9 +117,9 @@ export default function Home() {
                 setXR1Data(inputDataXR1);
                 setXR2Data(inputDataXR2);
 
-                setCDODigitalOutputs(outputDataCDO);
-                setXR1DigitalOutputs(outputDataXR1);
-                setXR2DigitalOutputs(outputDataXR2);
+                // setCDODigitalOutputs(outputDataCDO);
+                // setXR1DigitalOutputs(outputDataXR1);
+                // setXR2DigitalOutputs(outputDataXR2);
             } catch (error) {
                 <Link href="/settings" />;
                 console.error("Error fetching data:", error);
@@ -209,7 +209,7 @@ export default function Home() {
                                 data?.generators[0]?.generatorName ?? ""
                             }
                             generatorData={cdoData ?? []}
-                            generatorOutputData={cdoDigitalOutputs ?? []}
+                            // generatorOutputData={cdoDigitalOutputs ?? []}
                             runningHours={data?.generators[0]?.runningTime ?? 0}
                         />
 
@@ -222,7 +222,7 @@ export default function Home() {
                                 data?.generators[1]?.generatorName ?? ""
                             }
                             generatorData={xr1Data ?? []}
-                            generatorOutputData={xr1DigitalOutputs ?? []}
+                            // generatorOutputData={xr1DigitalOutputs ?? []}
                             runningHours={data?.generators[1]?.runningTime ?? 0}
                         />
 
@@ -235,7 +235,7 @@ export default function Home() {
                                 data?.generators[2]?.generatorName ?? ""
                             }
                             generatorData={xr2Data ?? []}
-                            generatorOutputData={xr2DigitalOutputs ?? []}
+                            // generatorOutputData={xr2DigitalOutputs ?? []}
                             runningHours={data?.generators[2]?.runningTime ?? 0 }
                         />
                     </div>

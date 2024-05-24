@@ -17,7 +17,7 @@ export default async function handler(
         );
         headers.append("Access-Control-Allow-Origin", "*");
         headers.append("Access-Control-Allow-Credentials", "true");
-
+        headers.append("Content-Type", "application/json")
         // headers.append("Authorization", basicAuth);
 
         const response = await fetch(

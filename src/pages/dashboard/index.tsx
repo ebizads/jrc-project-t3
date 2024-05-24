@@ -29,6 +29,24 @@ import { Image } from "@mantine/core";
 import ModalDashboardStatus from "~/components/ModalDashboardStatus";
 import { ModalStatus } from "~/utils/enums";
 
+import useSWR from 'swr'
+
+const fetcher = async (url: string | URL | Request) => {
+    const res = await fetch(url)
+
+    // If the status code is not in the range 200-299,
+    // we still try to parse and throw it.
+    if (!res.ok) {
+        const error = new Error('An error occurred while fetching the data.')
+        // Attach extra info to the error object.
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        error.message= await res.json()
+        error.name= String(res.status)
+        throw error
+    }
+
+    return res.json()
+}
 export default function Home() {
     // const hello = api.post.hello.useQuery({ text: "from tRPC" });
     const [cdoData, setCDOData] = useState<Array<TestStatus> | null>(null);
@@ -47,103 +65,110 @@ export default function Home() {
 
     const [modalOpen, setModalOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const responseCDO = await fetch(
-                    "api/digitalInputs/fetchDigitalInputsCDO",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const responseXR1 = await fetch(
-                    "api/digitalInputs/fetchDigitalInputsXR1",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const responseXR2 = await fetch(
-                    "api/digitalInputs/fetchDigitalInputsXR2",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const inputDataCDO = (await responseCDO.json()) as TestStatus[];
-                const inputDataXR1 = (await responseXR1.json()) as TestStatus[];
-                const inputDataXR2 = (await responseXR2.json()) as TestStatus[];
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { data: dataCDO, error: errorCDO, isLoading: isLoadingCDO, isValidating } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsCDO", fetcher, { refreshInterval: 1000 })
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { data: dataXR1, error: errorXR1, isLoading: isLoadingXR1 } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsXR1", fetcher, { refreshInterval: 1000 })
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { data: dataXR2, error: errorXR2, isLoading: isLoadingXR2 } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsXR2", fetcher, { refreshInterval: 1000 })
 
-                // const responseOutputCDO = await fetch(
-                //     "api/digitalOutputs/fetchDigitalOutputsCDO",
-                //     {
-                //         // next: {
-                //         //     revalidate: 600
-                //         // }
-                //     }
-                // );
-                // const responseOutputXR1 = await fetch(
-                //     "api/digitalOutputs/fetchDigitalOutputsXR1",
-                //     {
-                //         // next: {
-                //         //     revalidate: 600
-                //         // }
-                //     }
-                // );
-                // const responseOutputXR2 = await fetch(
-                //     "api/digitalOutputs/fetchDigitalOutputsXR2",
-                //     {
-                //         // next: {
-                //         //     revalidate: 600
-                //         // }
-                //     }
-                // );
-                // const outputDataCDO =
-                //     (await responseOutputCDO.json()) as TestStatus[];
-                // const outputDataXR1 =
-                //     (await responseOutputXR1.json()) as TestStatus[];
-                // const outputDataXR2 =
-                //     (await responseOutputXR2.json()) as TestStatus[];
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const responseCDO = await fetch(
+    //                 "api/digitalInputs/fetchDigitalInputsCDO",
+    //                 {
+    //                     // next: {
+    //                     //     revalidate: 600
+    //                     // }
+    //                 }
+    //             );
+    //             const responseXR1 = await fetch(
+    //                 "api/digitalInputs/fetchDigitalInputsXR1",
+    //                 {
+    //                     // next: {
+    //                     //     revalidate: 600
+    //                     // }
+    //                 }
+    //             );
+    //             const responseXR2 = await fetch(
+    //                 "api/digitalInputs/fetchDigitalInputsXR2",
+    //                 {
+    //                     // next: {
+    //                     //     revalidate: 600
+    //                     // }
+    //                 }
+    //             );
+    //             const inputDataCDO = (await responseCDO.json()) as TestStatus[];
+    //             const inputDataXR1 = (await responseXR1.json()) as TestStatus[];
+    //             const inputDataXR2 = (await responseXR2.json()) as TestStatus[];
 
-                // console.log(inputDataCDO)
-                // console.log(inputDataXR1)
-                // console.log(inputDataXR2)
+    //             // const responseOutputCDO = await fetch(
+    //             //     "api/digitalOutputs/fetchDigitalOutputsCDO",
+    //             //     {
+    //             //         // next: {
+    //             //         //     revalidate: 600
+    //             //         // }
+    //             //     }
+    //             // );
+    //             // const responseOutputXR1 = await fetch(
+    //             //     "api/digitalOutputs/fetchDigitalOutputsXR1",
+    //             //     {
+    //             //         // next: {
+    //             //         //     revalidate: 600
+    //             //         // }
+    //             //     }
+    //             // );
+    //             // const responseOutputXR2 = await fetch(
+    //             //     "api/digitalOutputs/fetchDigitalOutputsXR2",
+    //             //     {
+    //             //         // next: {
+    //             //         //     revalidate: 600
+    //             //         // }
+    //             //     }
+    //             // );
+    //             // const outputDataCDO =
+    //             //     (await responseOutputCDO.json()) as TestStatus[];
+    //             // const outputDataXR1 =
+    //             //     (await responseOutputXR1.json()) as TestStatus[];
+    //             // const outputDataXR2 =
+    //             //     (await responseOutputXR2.json()) as TestStatus[];
 
-                setCDOData(inputDataCDO);
-                setXR1Data(inputDataXR1);
-                setXR2Data(inputDataXR2);
+    //             // console.log(inputDataCDO)
+    //             // console.log(inputDataXR1)
+    //             // console.log(inputDataXR2)
 
-                // setCDODigitalOutputs(outputDataCDO);
-                // setXR1DigitalOutputs(outputDataXR1);
-                // setXR2DigitalOutputs(outputDataXR2);
-            } catch (error) {
-                <Link href="/settings" />;
-                console.error("Error fetching data:", error);
-            }
-        };
+    //             setCDOData(inputDataCDO);
+    //             setXR1Data(inputDataXR1);
+    //             setXR2Data(inputDataXR2);
 
-        // Ensure that the page is already rendered before calling loading/error modal
-        if (document?.body) {
-            if (!modalOpen) {
-                document.body.style.overflow = "auto";
-            } else {
-                document.body.style.overflow = "hidden";
-            }
-        }
+    //             // setCDODigitalOutputs(outputDataCDO);
+    //             // setXR1DigitalOutputs(outputDataXR1);
+    //             // setXR2DigitalOutputs(outputDataXR2);
+    //         } catch (error) {
+    //             <Link href="/settings" />;
+    //             console.error("Error fetching data:", error);
+    //         }
+    //     };
 
-        const interval = setInterval(() => {
-            void fetchData();
-        }, 1000);
+    //     // Ensure that the page is already rendered before calling loading/error modal
+    //     if (document?.body) {
+    //         if (!modalOpen) {
+    //             document.body.style.overflow = "auto";
+    //         } else {
+    //             document.body.style.overflow = "hidden";
+    //         }
+    //     }
 
-        // setInterval(, 1000);
-        // void fetchData()
-        return () => clearInterval(interval);
-        // console.log("test data", testData);
-    }, []);
+    //     const interval = setInterval(() => {
+    //         void fetchData();
+    //     }, 1000);
+
+    //     // setInterval(, 1000);
+    //     // void fetchData()
+    //     return () => clearInterval(interval);
+    //     // console.log("test data", testData);
+    // }, []);
 
     return (
         <>
@@ -192,12 +217,13 @@ export default function Home() {
                 <main
                     className={`flex min-h-screen w-full flex-col items-center justify-between px-12 pb-12 text-primary `}
                 >
-                    <ModalDashboardStatus
-                        isModalOpen={modalOpen}
+                    {/* <>isLoadingCDO: {errorCDO}</> */}
+                    {errorCDO ? < ModalDashboardStatus
+                        isModalOpen={true}
                         // modalTitle="Loading Dashboard Data"
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
                         modalStatus={ModalStatus.LOADING}
-                    />
+                    /> : <></>}
 
                     <div className="z-10 flex h-full w-full flex-row">
                         {/* Generator Card 1 CDO*/}
@@ -208,7 +234,9 @@ export default function Home() {
                             generatorName={
                                 data?.generators[0]?.generatorName ?? ""
                             }
-                            generatorData={cdoData ?? []}
+                            // generatorData={cdoData ?? []}
+                            generatorData={dataCDO ?? []}
+
                             // generatorOutputData={cdoDigitalOutputs ?? []}
                             runningHours={data?.generators[0]?.runningTime ?? 0}
                         />
@@ -221,7 +249,9 @@ export default function Home() {
                             generatorName={
                                 data?.generators[1]?.generatorName ?? ""
                             }
-                            generatorData={xr1Data ?? []}
+                            // generatorData={xr1Data ?? []}
+                            generatorData={dataXR1 ?? []}
+
                             // generatorOutputData={xr1DigitalOutputs ?? []}
                             runningHours={data?.generators[1]?.runningTime ?? 0}
                         />
@@ -234,9 +264,11 @@ export default function Home() {
                             generatorName={
                                 data?.generators[2]?.generatorName ?? ""
                             }
-                            generatorData={xr2Data ?? []}
+                            // generatorData={xr2Data ?? []}
+                            generatorData={dataXR2 ?? []}
+
                             // generatorOutputData={xr2DigitalOutputs ?? []}
-                            runningHours={data?.generators[2]?.runningTime ?? 0 }
+                            runningHours={data?.generators[2]?.runningTime ?? 0}
                         />
                     </div>
                     {/* main */}

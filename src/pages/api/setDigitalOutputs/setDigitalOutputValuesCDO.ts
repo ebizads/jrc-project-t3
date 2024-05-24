@@ -18,10 +18,12 @@ export default async function handler(
         headers.append("Access-Control-Allow-Origin", "*");
         headers.append("Access-Control-Allow-Credentials", "true");
 
-        headers.append("Authorization", basicAuth);
+        headers.append("Content-Type", "application/json",)
+        // headers.append("Authorization", basicAuth);
 
         const response = await fetch(
-            `${process.env.GEN_ENDPOINT_1}/api/v1/device/strategy/ios/digitalOutputs/DIESEL_GENERATOR_START/state`,
+            // `${process.env.GEN_ENDPOINT_1}/api/v1/device/strategy/ios/digitalOutputs/DIESEL_GENERATOR_START/state`,
+            "https://66291ec154afcabd07384106.mockapi.io/api/v1/digitalOutputs",
             {
                 method: 'POST',
                 // next: { revalidate: 1800 },
@@ -36,7 +38,7 @@ export default async function handler(
 
         // console.log(jsonData);
         // return jsonData
-        void res.revalidate('/dashboard')
+        // void res.revalidate('/dashboard')
         res.status(200).json({ revalidated: true, jsonData });
 
     } catch (error) {

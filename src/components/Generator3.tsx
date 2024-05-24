@@ -94,7 +94,7 @@ const Generator3 = (generatorProps: TestGenerator) => {
         // );
         // if (remoteOperationStatus != null) {
         if (
-            remoteOperationStatus != null &&
+            // remoteOperationStatus != null &&
             commercialPower != null &&
             degMode != null &&
             degStatus != null &&
@@ -310,8 +310,9 @@ const Generator3 = (generatorProps: TestGenerator) => {
                     </h1>
                     <RemoteOperation
                         generatorId={generatorProps.generatorId ?? 0}
-                        remoteOperationStatus={remoteOperationStatus ?? true}
-                        disabled={false}
+                        remoteOperationStatus={degStatus == "GENERATING"}
+                        standby={commercialPower == "OFF" || degMode == "MANUAL" ? true : false}
+                        disabled={remoteOperation == "NA" || degMode == "MANUAL" || degStatus == "FAILED"}
                     />
                 </div>
 
@@ -454,7 +455,7 @@ const Generator3 = (generatorProps: TestGenerator) => {
                                                                             "rounded-bl-lg rounded-tl-lg border-l-[8px] bg-secondary p-4 font-normal " +
                                                                             getStatusType(
                                                                                 item.status_type ??
-                                                                                    ""
+                                                                                ""
                                                                             )[1]
                                                                         }
                                                                     >
@@ -473,7 +474,7 @@ const Generator3 = (generatorProps: TestGenerator) => {
                                                                                     "font-semibold " +
                                                                                     getStatusType(
                                                                                         item.status_type ??
-                                                                                            ""
+                                                                                        ""
                                                                                     )[0]
                                                                                 }
                                                                             >

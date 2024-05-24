@@ -51,6 +51,7 @@ export type RemoteOperationProps = {
     generatorId: number;
     remoteOperationStatus: boolean;
     disabled: boolean;
+    standby: boolean;
 };
 
 export type CloseModalFunction = () => void;

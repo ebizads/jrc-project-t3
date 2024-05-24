@@ -71,24 +71,46 @@ const ModalVerification = (props: ModalVerificationProps) => {
                     apiRoute = "api/setDigitalOutputs/setDigitalOutputValuesXR2"
                     break;
             }
-            const response = await fetch( apiRoute,
+            const response = await fetch(apiRoute,
                 {
                     method: 'POST',
                     body: JSON.stringify(
                         {
+                            id: 7,
+                            name: 'Start_FFWC-TO-TRUE',
                             value: status
-                        }),
+                        }
+                    ),
                     next: {
                         revalidate: 600
                     }
                 });
-            const jsonData = (await response.json()) as TestStatus[];
+            if (response.status == 200) {
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                setTimeout(async () => {
+                    await fetch(apiRoute,
+                        {
+                            method: 'POST',
+                            body: JSON.stringify(
+                                {
+                                    id: 8,
+                                    name: 'Start_FFWC-TO-FALSE',
+                                    value: !status
+                                }
+                            ),
+                            next: {
+                                revalidate: 600
+                            }
+                        });
+                }, 760)
+            }
+            // const jsonData = (await response.json()) as TestStatus[];
 
 
-            setTestDigitalOutputs(jsonData)
+            // setTestDigitalOutputs(jsonData)
             // console.log(testData);
             // console.log("aaa")
-            
+
         } catch (error) {
             console.error("Error fetching data:", error);
         }

@@ -92,8 +92,8 @@ const Generator1 = (generatorProps: TestGenerator) => {
         // );
         // if (remoteOperationStatus != null) {
         if (
-            remoteOperationStatus != null &&
-            commercialPower != null &&
+            // remoteOperationStatus != null &&
+            (commercialPower != null || commercialPower != "") &&
             degMode != null &&
             degStatus != null &&
             remoteOperation != null &&
@@ -306,9 +306,11 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     </h1>
                     <RemoteOperation
                         generatorId={generatorProps.generatorId ?? 0}
-                        remoteOperationStatus={remoteOperationStatus ?? true}
-                        disabled={false}
+                        remoteOperationStatus={degStatus == "GENERATING"}
+                        standby={commercialPower == "OFF" || degMode == "MANUAL" ? true : false}
+                        disabled={remoteOperation == "NA" || degMode == "MANUAL" || degStatus == "FAILED"}
                     />
+
                 </div>
                 {/* Power Supply Status */}
                 <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
@@ -351,6 +353,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
                         Status Logs
                     </h1>
+
 
                     {/* {statusLogs && (
                     statusLogs
@@ -438,7 +441,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                                                                             "rounded-bl-lg rounded-tl-lg border-l-[8px] bg-secondary p-4 font-normal " +
                                                                             getStatusType(
                                                                                 item.status_type ??
-                                                                                    ""
+                                                                                ""
                                                                             )[1]
                                                                         }
                                                                     >
@@ -457,7 +460,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                                                                                     "font-semibold " +
                                                                                     getStatusType(
                                                                                         item.status_type ??
-                                                                                            ""
+                                                                                        ""
                                                                                     )[0]
                                                                                 }
                                                                             >

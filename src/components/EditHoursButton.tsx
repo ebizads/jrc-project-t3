@@ -122,6 +122,10 @@ const EditHoursButton = (props: {
         return milliseconds;
     }
 
+    useEffect(()=>{
+        isPausedRef.current = false
+    },[])
+
     useEffect(() => {
         setInputRunningTime(msToHour(previousRunningTime.current))
 
@@ -144,7 +148,7 @@ const EditHoursButton = (props: {
         return () => clearInterval(interval)
 
 
-    }, [props.degStatus])
+    }, [ props.degStatus])
 
     return (
         <div

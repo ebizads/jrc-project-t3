@@ -1,34 +1,47 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+// import GeneratorControlStatus from "~/components/GeneratorControlStatus";
+// import LineChartExample from "~/components/LineChart";
+// import PowerSupplyStatus from "~/components/PowerSupplyStatus";
+// import RemoteOperation from "~/components/RemoteOperation";
+// import StatusCard from "~/components/StatusCard";
+// import StatusDayLog from "~/components/StatusDayLog";
+// import StatusDiagram from "~/components/StatusDiagram";
+// import TestSwitch from "~/components/TestSwitch";
+// import { signIn, signOut, useSession } from "next-auth/react";
+// import { fetchData } from "~/utils/dataApi";
+// import ModalVerification from "~/components/ModalVerification";
+// import {
+//     getDataValueEquivalent,
+//     getDataValueEquivalentTest,
+// } from "~/utils/functions";
 import Head from "next/head";
 import Link from "next/link";
 import { useEffect } from "react";
-import GeneratorControlStatus from "~/components/GeneratorControlStatus";
-import LineChartExample from "~/components/LineChart";
-import PowerSupplyStatus from "~/components/PowerSupplyStatus";
-import RemoteOperation from "~/components/RemoteOperation";
-import StatusCard from "~/components/StatusCard";
-import StatusDayLog from "~/components/StatusDayLog";
-import StatusDiagram from "~/components/StatusDiagram";
-import TestSwitch from "~/components/TestSwitch";
-
 import { api } from "~/utils/api";
 import { Status, TestStatus } from "~/utils/types";
-// import { fetchData } from "~/utils/dataApi";
 import { useState } from "react";
-
 import Generator1 from "~/components/Generator1";
-
-import ModalVerification from "~/components/ModalVerification";
-import {
-    getDataValueEquivalent,
-    getDataValueEquivalentTest,
-} from "~/utils/functions";
 import Generator2 from "~/components/Generator2";
 import Generator3 from "~/components/Generator3";
-import { Image } from "@mantine/core";
 import ModalDashboardStatus from "~/components/ModalDashboardStatus";
 import { ModalStatus } from "~/utils/enums";
+import useSWR from 'swr'
 
+const fetcher = async (url: string | URL | Request) => {
+    const res = await fetch(url)
+
+    // If the status code is not in the range 200-299,
+    // we still try to parse and throw it.
+    if (!res.ok) {
+        const error = new Error('An error occurred while fetching the data.')
+        // Attach extra info to the error object.
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        error.message = await res.json()
+        error.name = String(res.status)
+        throw error
+    }
+
+    return res.json()
+}
 export default function Home() {
     // const hello = api.post.hello.useQuery({ text: "from tRPC" });
     const [cdoData, setCDOData] = useState<Array<TestStatus> | null>(null);
@@ -47,103 +60,14 @@ export default function Home() {
 
     const [modalOpen, setModalOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const responseCDO = await fetch(
-                    "api/digitalInputs/fetchDigitalInputsCDO",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const responseXR1 = await fetch(
-                    "api/digitalInputs/fetchDigitalInputsXR1",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const responseXR2 = await fetch(
-                    "api/digitalInputs/fetchDigitalInputsXR2",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const inputDataCDO = (await responseCDO.json()) as TestStatus[];
-                const inputDataXR1 = (await responseXR1.json()) as TestStatus[];
-                const inputDataXR2 = (await responseXR2.json()) as TestStatus[];
+    // SWR IMPLEMENTATION FOR FETCHING
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { data: dataCDO, error: errorCDO, isLoading: isLoadingCDO, isValidating } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsCDO", fetcher, { refreshInterval: 1000 })
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { data: dataXR1, error: errorXR1, isLoading: isLoadingXR1 } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsXR1", fetcher, { refreshInterval: 1000 })
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { data: dataXR2, error: errorXR2, isLoading: isLoadingXR2 } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsXR2", fetcher, { refreshInterval: 1000 })
 
-                const responseOutputCDO = await fetch(
-                    "api/digitalOutputs/fetchDigitalOutputsCDO",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const responseOutputXR1 = await fetch(
-                    "api/digitalOutputs/fetchDigitalOutputsXR1",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const responseOutputXR2 = await fetch(
-                    "api/digitalOutputs/fetchDigitalOutputsXR2",
-                    {
-                        // next: {
-                        //     revalidate: 600
-                        // }
-                    }
-                );
-                const outputDataCDO =
-                    (await responseOutputCDO.json()) as TestStatus[];
-                const outputDataXR1 =
-                    (await responseOutputXR1.json()) as TestStatus[];
-                const outputDataXR2 =
-                    (await responseOutputXR2.json()) as TestStatus[];
-
-                // console.log(inputDataCDO)
-                // console.log(inputDataXR1)
-                // console.log(inputDataXR2)
-
-                setCDOData(inputDataCDO);
-                setXR1Data(inputDataXR1);
-                setXR2Data(inputDataXR2);
-
-                setCDODigitalOutputs(outputDataCDO);
-                setXR1DigitalOutputs(outputDataXR1);
-                setXR2DigitalOutputs(outputDataXR2);
-            } catch (error) {
-                <Link href="/settings" />;
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        // Ensure that the page is already rendered before calling loading/error modal
-        if (document && document.body) {
-            if (!modalOpen) {
-                document.body.style.overflow = "auto";
-            } else {
-                document.body.style.overflow = "hidden";
-            }
-        }
-
-        const interval = setInterval(() => {
-            void fetchData();
-        }, 1000);
-
-        // setInterval(, 1000);
-        // void fetchData()
-        return () => clearInterval(interval);
-        // console.log("test data", testData);
-    }, []);
 
     return (
         <>
@@ -173,14 +97,14 @@ export default function Home() {
                     <div className="absolute h-full w-full bg-gradient-to-b from-transparent to-base-100"></div>
                 </div>
 
-                <div className=" hero min-h-[40vh] opacity-100">
+                <div className="hero min-h-[15vh] opacity-100">
                     {/* <div className="hero-overlay bg-opacity-60"></div> */}
                     <div className="hero-content text-center text-neutral-content">
                         <div className="max-w-3xl">
                             <h1 className="mb-2 text-3xl font-bold">
                                 {data?.generators[3]?.generatorName}
                             </h1>
-                            <p className="mb-5 text-base font-semibold uppercase tracking-[0.15em]">
+                            <p className="text-base font-semibold uppercase tracking-[0.15em]">
                                 {data?.generators[4]?.generatorName}
                             </p>
                         </div>
@@ -207,8 +131,10 @@ export default function Home() {
                             generatorName={
                                 data?.generators[0]?.generatorName ?? ""
                             }
-                            generatorData={cdoData ?? []}
-                            // generatorOutputData={cdoDigitalOutputs ?? []}
+                            // generatorData={cdoData ?? []}
+                            generatorData={dataCDO ?? []}
+
+                            generatorOutputData={cdoDigitalOutputs ?? []}
                             runningHours={data?.generators[0]?.runningTime ?? 0}
                         />
 
@@ -220,9 +146,11 @@ export default function Home() {
                             generatorName={
                                 data?.generators[1]?.generatorName ?? ""
                             }
-                            generatorData={xr1Data ?? []}
+                            // generatorData={xr1Data ?? []}
+                            generatorData={dataXR1 ?? []}
+
                             generatorOutputData={xr1DigitalOutputs ?? []}
-                            runningHours={7.89}
+                            runningHours={data?.generators[1]?.runningTime ?? 0}
                         />
 
                         {/* Generator Card 3  XR2*/}
@@ -233,9 +161,11 @@ export default function Home() {
                             generatorName={
                                 data?.generators[2]?.generatorName ?? ""
                             }
-                            generatorData={xr2Data ?? []}
+                            // generatorData={xr2Data ?? []}
+                            generatorData={dataXR2 ?? []}
+
                             generatorOutputData={xr2DigitalOutputs ?? []}
-                            runningHours={17.36}
+                            runningHours={data?.generators[2]?.runningTime ?? 0}
                         />
                     </div>
                     {/* main */}
@@ -244,3 +174,104 @@ export default function Home() {
         </>
     );
 }
+
+// USEEFFECT FETCHING FALLBACK IN CASE PROBLEM WITH SWR OCCURS
+// useEffect(() => {
+//     const fetchData = async () => {
+//         try {
+//             const responseCDO = await fetch(
+//                 "api/digitalInputs/fetchDigitalInputsCDO",
+//                 {
+//                     // next: {
+//                     //     revalidate: 600
+//                     // }
+//                 }
+//             );
+//             const responseXR1 = await fetch(
+//                 "api/digitalInputs/fetchDigitalInputsXR1",
+//                 {
+//                     // next: {
+//                     //     revalidate: 600
+//                     // }
+//                 }
+//             );
+//             const responseXR2 = await fetch(
+//                 "api/digitalInputs/fetchDigitalInputsXR2",
+//                 {
+//                     // next: {
+//                     //     revalidate: 600
+//                     // }
+//                 }
+//             );
+//             const inputDataCDO = (await responseCDO.json()) as TestStatus[];
+//             const inputDataXR1 = (await responseXR1.json()) as TestStatus[];
+//             const inputDataXR2 = (await responseXR2.json()) as TestStatus[];
+
+//             const responseOutputCDO = await fetch(
+//                 "api/digitalOutputs/fetchDigitalOutputsCDO",
+//                 {
+//                     // next: {
+//                     //     revalidate: 600
+//                     // }
+//                 }
+//             );
+//             const responseOutputXR1 = await fetch(
+//                 "api/digitalOutputs/fetchDigitalOutputsXR1",
+//                 {
+//                     // next: {
+//                     //     revalidate: 600
+//                     // }
+//                 }
+//             );
+//             const responseOutputXR2 = await fetch(
+//                 "api/digitalOutputs/fetchDigitalOutputsXR2",
+//                 {
+//                     // next: {
+//                     //     revalidate: 600
+//                     // }
+//                 }
+//             );
+//             const outputDataCDO =
+//                 (await responseOutputCDO.json()) as TestStatus[];
+//             const outputDataXR1 =
+//                 (await responseOutputXR1.json()) as TestStatus[];
+//             const outputDataXR2 =
+//                 (await responseOutputXR2.json()) as TestStatus[];
+
+//             // console.log(inputDataCDO)
+//             // console.log(inputDataXR1)
+//             // console.log(inputDataXR2)
+
+//             setCDOData(inputDataCDO);
+//             setXR1Data(inputDataXR1);
+//             setXR2Data(inputDataXR2);
+
+//             setCDODigitalOutputs(outputDataCDO);
+//             setXR1DigitalOutputs(outputDataXR1);
+//             setXR2DigitalOutputs(outputDataXR2);
+//         } catch (error) {
+//             <Link href="/settings" />;
+//             console.error("Error fetching data:", error);
+//         }
+//     };
+
+//     // Ensure that the page is already rendered before calling loading/error modal
+//     if (document) {
+//         if (document.body) {
+//             if (!modalOpen) {
+//                 document.body.style.overflow = "auto";
+//             } else {
+//                 document.body.style.overflow = "hidden";
+//             }
+//         }
+//     }
+
+//     const interval = setInterval(() => {
+//         void fetchData();
+//     }, 1000);
+
+//     // setInterval(, 1000);
+//     // void fetchData()
+//     return () => clearInterval(interval);
+//     // console.log("test data", testData);
+// }, []);

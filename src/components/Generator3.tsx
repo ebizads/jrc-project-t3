@@ -10,6 +10,8 @@ import {
     getStatusDEG,
     getStatusTypeDEG,
     getStatusTypeRemoteOperationToFuelLevel,
+    getTestMappedStatusXR2,
+    getMappedStatusDigitalOutputsXR2,
 } from "~/utils/functions";
 import LineChartExample from "./LineChart";
 import { useEffect, useRef, useState } from "react";
@@ -17,6 +19,8 @@ import { useDieselGenStart } from "~/utils/useStore";
 import { api } from "~/utils/api";
 import { getStatusType } from "./StatusCard";
 import { Pagination } from "@mantine/core";
+import { DegStatus } from "~/utils/enums";
+import ModalDashboardStatus from "./ModalDashboardStatus";
 
 const Generator3 = (generatorProps: TestGenerator) => {
     // const [testDataFloat, setTestDataFloat] = useState<Array<TestStatusFloat> | null>(null);
@@ -24,6 +28,7 @@ const Generator3 = (generatorProps: TestGenerator) => {
     const [page, setPage] = useState(1)
     const [openLogsModal, setOpenLogsModal] = useState<boolean>(false)
     const [showMoreIsVisible, setShowMoreIsVisible] = useState<boolean>(false)
+    const [modalDashboardStatusOpen, setModalDashboardStatusOpen] = useState<boolean>(false)
 
     // MUTATE FUNCTION FOR LOGS TAKEN FROM GENERATOR ROUTER
     const { mutate } = api.generator.createLog.useMutation({
@@ -52,10 +57,10 @@ const Generator3 = (generatorProps: TestGenerator) => {
         powerSupply,
         commercialPowerDC,
         batteryTemp,
-    ] = getTestMappedStatus(generatorProps);
+    ] = getTestMappedStatusXR2(generatorProps);
 
     const [remoteOperationStatus] =
-        getMappedStatusDigitalOutputs(generatorProps);
+        getMappedStatusDigitalOutputsXR2(generatorProps);
 
     // USEREF TO CHECK ().CURRENT OF REF AND COMPARE WITH MAPPED STATUS
     const previousRemoteOperationStatus = useRef<boolean | undefined>(
@@ -75,6 +80,12 @@ const Generator3 = (generatorProps: TestGenerator) => {
     const [dataLoaded, setDataLoaded] = useState<boolean>(false);
 
     useEffect(() => {
+        if (degStatus == "FAILED") {
+            setModalDashboardStatusOpen(true)
+        }
+    }, [degStatus])
+
+    useEffect(() => {
         // console.log(statusLogs);
         // console.log(
         //     "PREVIOUS REMOTE STATUS (REMORTEOPERATIONSTATUS)",
@@ -83,7 +94,7 @@ const Generator3 = (generatorProps: TestGenerator) => {
         // if (remoteOperationStatus != null) {
         if (
             remoteOperationStatus != null &&
-            commercialPower != null &&
+            (commercialPower != null || commercialPower != "") &&
             degMode != null &&
             degStatus != null &&
             remoteOperation != null &&
@@ -225,246 +236,257 @@ const Generator3 = (generatorProps: TestGenerator) => {
 
     return (
         <div className=" m-3 flex h-full w-1/3 flex-col overflow-clip rounded-2xl border-2 border-[#575757] bg-[#3E3E3E] pb-5 text-sm font-bold tracking-widest">
-            <div className=" sticky top-0 z-40 mb-7 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
+            <div className=" sticky top-0 z-40 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
                 {generatorProps.generatorName}
             </div>
-            {/* Generator Control Status */}
-            <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
-                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
-                    Generator Control Status
-                </h1>
-                <GeneratorControlStatus
-                    /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
-                    refetch={generatorProps.refetch}
-                    refetchLogs={refetchLogs}
-                    id={generatorProps.generatorId}
-                    runningHours={generatorProps.runningHours}
-                    degStatus={degStatus}
-                    statusSet={[
-                        {
-                            name: "COMMERCIAL POWER",
-                            value: commercialPower,
-                        },
-                        {
-                            name: "DEG MODE",
-                            value: degMode,
-                        },
-                        {
-                            name: "DEG STATUS",
-                            value: `${globalDegStatus}`,
-                        },
-                        {
-                            name: "REMOTE OPERATION",
-                            value: remoteOperation,
-                        },
-                        {
-                            name: "LOAD ON",
-                            value: `${globalLoadStatus}`,
-                        },
-                        {
-                            name: "FUEL LEVEL",
-                            value: fuelLevel,
-                        },
-                    ]}
-                />
-            </div>
 
-            {/* Generator Power Diagram */}
-            <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
-                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
-                    Generator Power Diagram
-                </h1>
-                <StatusDiagram
-                    loadStatus={globalLoadStatus}
-                    degStatus={globalDegStatus}
-                />
-            </div>
+            <div className="mt-7">
+                {degStatus == "FAILED" &&
+                <ModalDashboardStatus
+                    isModalOpen={degStatus == "FAILED"}
+                    closeModal={() =>
+                        setModalDashboardStatusOpen(false)
+                    }
+                    modalStatus="FAILED"
+                ></ModalDashboardStatus>}
 
-            {/* Remote Operation */}
-            <div className="text-md m-5 flex flex-col rounded-xl bg-base-100 p-5">
-                <h1 className="mb-6 text-sm font-semibold uppercase tracking-[0.2em]">
-                    Remote Operation
-                </h1>
-                <RemoteOperation
-                    generatorId={generatorProps.generatorId ?? 0}
-                    remoteOperationStatus={remoteOperationStatus ?? true}
-                    disabled={false}
-                />
-            </div>
+                {/* Generator Control Status */}
+                <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
+                    <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                        Generator Control Status
+                    </h1>
+                    <GeneratorControlStatus
+                        /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
+                        refetch={generatorProps.refetch}
+                        refetchLogs={refetchLogs}
+                        id={generatorProps.generatorId}
+                        runningHours={generatorProps.runningHours}
+                        degStatus={degStatus}
+                        statusSet={[
+                            {
+                                name: "COMMERCIAL POWER",
+                                value: commercialPower,
+                            },
+                            {
+                                name: "DEG MODE",
+                                value: degMode,
+                            },
+                            {
+                                name: "DEG STATUS",
+                                value: `${globalDegStatus}`,
+                            },
+                            {
+                                name: "REMOTE OPERATION",
+                                value: remoteOperation,
+                            },
+                            {
+                                name: "LOAD ON",
+                                value: `${globalLoadStatus}`,
+                            },
+                            {
+                                name: "FUEL LEVEL",
+                                value: fuelLevel,
+                            },
+                        ]}
+                    />
+                </div>
 
-            {/* Power Supply Status */}
-            <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
-                <h1 className="text-sm font-semibold tracking-[0.2em]">
-                    DC 48V POWER SUPPLY STATUS
-                </h1>
-                <PowerSupplyStatus
-                    id="CDORFFWC"
-                    statusSet={[
-                        {
-                            name: "DC POWER SUPPLY STATUS",
-                            value: powerSupply,
-                        },
-                        {
-                            name: "COMMERCIAL POWER",
-                            value: commercialPowerDC,
-                        },
-                        {
-                            name: "BATTERY TEMPERATURE",
-                            value: batteryTemp,
-                        },
-                    ]}
-                />
-            </div>
+                {/* Generator Power Diagram */}
+                <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
+                    <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                        Generator Power Diagram
+                    </h1>
+                    <StatusDiagram
+                        loadStatus={globalLoadStatus}
+                        degStatus={globalDegStatus}
+                    />
+                </div>
 
-            <div className="text-md m-5 flex h-fit flex-col space-y-5 rounded-xl bg-base-100 p-3 tracking-normal">
-                <h1 className="text-sm font-semibold tracking-[0.2em]">
-                    GRAPHICAL REPORT
-                </h1>
-                <LineChartExample
-                    /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
-                    refetch={generatorProps.refetch}
-                    generatorId={generatorProps.generatorId}
-                    generatorName={generatorProps.generatorName}
-                    runningHours={generatorProps.runningHours}
-                    generatorData={generatorProps.generatorData}
-                />
-            </div>
+                {/* Remote Operation */}
+                <div className="text-md m-5 flex flex-col rounded-xl bg-base-100 p-5">
+                    <h1 className="mb-6 text-sm font-semibold uppercase tracking-[0.2em]">
+                        Remote Operation
+                    </h1>
+                    <RemoteOperation
+                        generatorId={generatorProps.generatorId ?? 0}
+                        remoteOperationStatus={degStatus == "GENERATING"}
+                        standby={commercialPower == "OFF" || degMode == "MANUAL" ? true : false}
+                        disabled={remoteOperation == "NA" || degMode == "MANUAL" || degStatus == "FAILED"}
+                    />
+                </div>
 
-            {/* Status Logs */}
-            <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
-                <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
-                    Status Logs
-                </h1>
+                {/* Power Supply Status */}
+                <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
+                    <h1 className="text-sm font-semibold tracking-[0.2em]">
+                        DC 48V POWER SUPPLY STATUS
+                    </h1>
+                    <PowerSupplyStatus
+                        id="CDORFFWC"
+                        statusSet={[
+                            {
+                                name: "DC POWER SUPPLY STATUS",
+                                value: powerSupply,
+                            },
+                            {
+                                name: "COMMERCIAL POWER",
+                                value: commercialPowerDC,
+                            },
+                            {
+                                name: "BATTERY TEMPERATURE",
+                                value: batteryTemp,
+                            },
+                        ]}
+                    />
+                </div>
 
-                {/* {statusLogs && (
+                <div className="text-md m-5 flex h-fit flex-col space-y-5 rounded-xl bg-base-100 p-3 tracking-normal">
+                    <h1 className="text-sm font-semibold tracking-[0.2em]">
+                        GRAPHICAL REPORT
+                    </h1>
+                    <LineChartExample
+                        /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
+                        refetch={generatorProps.refetch}
+                        generatorId={generatorProps.generatorId}
+                        generatorName={generatorProps.generatorName}
+                        runningHours={generatorProps.runningHours}
+                        generatorData={generatorProps.generatorData}
+                    />
+                </div>
+
+                {/* Status Logs */}
+                <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
+                    <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                        Status Logs
+                    </h1>
+
+                    {/* {statusLogs && (
                     statusLogs
                 )} */}
 
-                {Object.entries(statusLogs?.groupedLogs ?? {}).map(
-                    ([date, items]) => (
-                        <div key={date}>
-                            <StatusDayLog
-                                id={date}
-                                day={date}
-                                statusLogSet={items.map(
-                                    (item: StatusLogType) => ({
-                                        id: String(item.id),
-                                        time: item.createdAt,
-                                        statusType: item.status_type,
-                                        content: item.status_msg,
-                                        statusName: item.status,
-                                    })
-                                )}
-                            />
-                        </div>
-                    )
-                )}
-
-                {showMoreIsVisible &&
-                    <button
-                        className="border border-info rounded text-info mx-auto px-5 py-2"
-                        onClick={() => setOpenLogsModal(true)}
-                    >SHOW MORE</button>
-                }
-            </div>
-
-            {openLogsModal &&
-                (
-                    <div className="fixed inset-0 z-50 overflow-y-auto">
-                        <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
-                            <div
-                                className="fixed inset-0 transition-opacity"
-                                aria-hidden="true"
-                            >
-                                <div className="absolute inset-0 bg-black opacity-75"></div>
+                    {Object.entries(statusLogs?.groupedLogs ?? {}).map(
+                        ([date, items]) => (
+                            <div key={date}>
+                                <StatusDayLog
+                                    id={date}
+                                    day={date}
+                                    statusLogSet={items.map(
+                                        (item: StatusLogType) => ({
+                                            id: String(item.id),
+                                            time: item.createdAt,
+                                            statusType: item.status_type,
+                                            content: item.status_msg,
+                                            statusName: item.status,
+                                        })
+                                    )}
+                                />
                             </div>
-                            <span
-                                className="hidden sm:inline-block sm:h-screen sm:align-middle"
-                                aria-hidden="true"
-                            >
-                                &#8203;
-                            </span>
-                            {/* header and affects upper header colors */}
-                            <div
-                                className="h-fit inline-block md:w-[80%] transform overflow-hidden rounded-lg bg-base-100 px-8 align-middle shadow-xl transition-all sm:my-8"
-                                role="dialog"
-                                aria-modal="true"
-                                aria-labelledby="modal-headline"
-                            >
-                                <div className="bg-base-100 px-3 py-7 h-[90vh] overflow-y-auto">
-                                    <div className="flex flex-col h-full ">
-                                        <h1 className="text-left text-2xl">{generatorProps.generatorName}</h1>
-                                        <h2 className="text-left font-normal">STATUS LOGS</h2>
+                        )
+                    )}
 
-                                        <div className=" w-full text-center sm:mt-0 h-fit overflow-auto">
-                                            <div
-                                                className="flex w-full flex-col gap-5"
-                                            >
-                                                <table className="border-separate border-spacing-x-0 border-spacing-y-3 ">
-                                                    <thead>
-                                                        <tr className=" bg-[#616161] sticky top-0">
-                                                            <th className="p-3 rounded-tl-lg rounded-bl-lg font-semibold text-lg">DATE / TIME</th>
-                                                            <th className="p-3 rounded-tr-lg rounded-br-lg font-semibold text-lg text-left">STATUS MESSAGE</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {statusLogs?.logs.map((item, index) => (
-                                                            <tr key={index}>
-                                                                <td className={"font-normal bg-secondary rounded-tl-lg rounded-bl-lg p-4 border-l-[8px] " + getStatusType(item.status_type ?? "")[1]}>
-                                                                    <div>
-                                                                        {String(item.createdAt.toLocaleString())}
-                                                                    </div>
-                                                                </td>
-                                                                <td className="bg-secondary rounded-tr-lg rounded-br-lg p-4 text-left">
-                                                                    <div className="mr-4 text-sm font-normal">
-                                                                        {item.status_msg + " "}
-                                                                        <span className={"font-semibold " + getStatusType(item.status_type ?? "")[0]}>
-                                                                            {item.status}
-                                                                        </span>
-                                                                        .
-                                                                    </div>
-                                                                </td>
+                    {showMoreIsVisible &&
+                        <button
+                            className="border border-info rounded text-info mx-auto px-5 py-2"
+                            onClick={() => setOpenLogsModal(true)}
+                        >SHOW MORE</button>
+                    }
+                </div>
+
+                {openLogsModal &&
+                    (
+                        <div className="fixed inset-0 z-50 overflow-y-auto">
+                            <div className="flex min-h-screen items-center justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+                                <div
+                                    className="fixed inset-0 transition-opacity"
+                                    aria-hidden="true"
+                                >
+                                    <div className="absolute inset-0 bg-black opacity-75"></div>
+                                </div>
+                                <span
+                                    className="hidden sm:inline-block sm:h-screen sm:align-middle"
+                                    aria-hidden="true"
+                                >
+                                    &#8203;
+                                </span>
+                                {/* header and affects upper header colors */}
+                                <div
+                                    className="h-fit inline-block md:w-[80%] transform overflow-hidden rounded-lg bg-base-100 px-8 align-middle shadow-xl transition-all sm:my-8"
+                                    role="dialog"
+                                    aria-modal="true"
+                                    aria-labelledby="modal-headline"
+                                >
+                                    <div className="bg-base-100 px-3 py-7 h-[90vh] overflow-y-auto">
+                                        <div className="flex flex-col h-full ">
+                                            <h1 className="text-left text-2xl">{generatorProps.generatorName}</h1>
+                                            <h2 className="text-left font-normal">STATUS LOGS</h2>
+
+                                            <div className=" w-full text-center sm:mt-0 h-fit overflow-auto">
+                                                <div
+                                                    className="flex w-full flex-col gap-5"
+                                                >
+                                                    <table className="border-separate border-spacing-x-0 border-spacing-y-3 ">
+                                                        <thead>
+                                                            <tr className=" bg-[#616161] sticky top-0">
+                                                                <th className="p-3 rounded-tl-lg rounded-bl-lg font-semibold text-lg">DATE / TIME</th>
+                                                                <th className="p-3 rounded-tr-lg rounded-br-lg font-semibold text-lg text-left">STATUS MESSAGE</th>
                                                             </tr>
-                                                        ))}
+                                                        </thead>
+                                                        <tbody>
+                                                            {statusLogs?.logs.map((item, index) => (
+                                                                <tr key={index}>
+                                                                    <td className={"font-normal bg-secondary rounded-tl-lg rounded-bl-lg p-4 border-l-[8px] " + getStatusType(item.status_type ?? "")[1]}>
+                                                                        <div>
+                                                                            {String(item.createdAt.toLocaleString())}
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="bg-secondary rounded-tr-lg rounded-br-lg p-4 text-left">
+                                                                        <div className="mr-4 text-sm font-normal">
+                                                                            {item.status_msg + " "}
+                                                                            <span className={"font-semibold " + getStatusType(item.status_type ?? "")[0]}>
+                                                                                {item.status}
+                                                                            </span>
+                                                                            .
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
 
-                                                    </tbody>
-                                                </table>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between mt-2">
+                                                <>
+                                                    Showing 10 of {statusLogs?.count}
+                                                </>
+                                                <Pagination
+                                                    value={page}
+                                                    total={Math.ceil(Number(statusLogs?.count ?? 0) / 10)}
+                                                    color="gray"
+                                                    onChange={(event) => {
+                                                        setPage(event)
+                                                        // refetchLogs()
+                                                    }}
+                                                ></Pagination>
                                             </div>
                                         </div>
-                                        <div className="flex justify-between mt-2">
-                                            <>
-                                                Showing 10 of {statusLogs?.count}
-                                            </>
-                                            <Pagination
-                                                value={page}
-                                                total={Math.ceil(Number(statusLogs?.count ?? 0) / 10)}
-                                                color="gray"
-                                                onChange={(event) => {
-                                                    setPage(event)
-                                                    // refetchLogs()
-                                                }}
-                                            ></Pagination>
-                                        </div>
+                                    </div>
+                                    <div className=" bg-base-100 px-4 sm:flex sm:flex-row-reverse sm:px-6">
+                                        <button
+                                            type="button"
+                                            onClick={() => setOpenLogsModal(false)}
+                                            className="btn btn-circle btn-ghost btn-sm absolute right-10 top-7 text-2xl"
+                                        >
+                                            {/* unicode for X button */}
+                                            &#10005;
+                                        </button>
                                     </div>
                                 </div>
-                                <div className=" bg-base-100 px-4 sm:flex sm:flex-row-reverse sm:px-6">
-                                    <button
-                                        type="button"
-                                        onClick={() => setOpenLogsModal(false)}
-                                        className="btn btn-circle btn-ghost btn-sm absolute right-10 top-7 text-2xl"
-                                    >
-                                        {/* unicode for X button */}
-                                        &#10005;
-                                    </button>
-                                </div>
                             </div>
+
                         </div>
-
-                    </div>
-                )
-            }
-
-
+                    )
+                }
+            </div>
         </div >
     );
 };

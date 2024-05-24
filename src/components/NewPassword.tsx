@@ -55,7 +55,7 @@ const NewPassword = () => {
         },
     });
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(session?.user?.id)
 
     })
@@ -119,7 +119,13 @@ const NewPassword = () => {
                                 className={`max-h-96 space-y-2 rounded-md border border-[#b97c7c] bg-[#362626] p-4 text-xs font-normal text-[#b97c7c]`}
                             >
                                 <p className={`flex items-center gap-2`}>
-                                    <i className={`fa-solid fa-xmark`} />
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        width="12"
+                                        height={"12"}
+                                        fill="#F08288"
+                                        viewBox="0 0 384 512">
+                                        <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                                    </svg>
                                     {errors.currentPassword.message}
                                 </p>
                             </div>
@@ -171,7 +177,13 @@ const NewPassword = () => {
                                     className={`max-h-96 space-y-2 overflow-hidden rounded-md border border-[#b97c7c] bg-[#362626] p-4 text-xs font-normal text-[#b97c7c]`}
                                 >
                                     <p className={`flex items-center gap-2`}>
-                                        <i className={`fa-solid fa-xmark`} />
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            width="12"
+                                            height={"12"}
+                                            fill="#F08288"
+                                            viewBox="0 0 384 512">
+                                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                                        </svg>
                                         {errors.password.message}
                                     </p>
                                 </div>
@@ -234,7 +246,13 @@ const NewPassword = () => {
                                     className={`max-h-96 space-y-2 rounded-md border border-[#b97c7c] bg-[#362626] p-4 text-xs font-normal text-[#b97c7c]`}
                                 >
                                     <p className={`flex items-center gap-2`}>
-                                        <i className={`fa-solid fa-xmark`} />
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            width="12"
+                                            height={"12"}
+                                            fill="#F08288"
+                                            viewBox="0 0 384 512">
+                                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                                        </svg>
                                         {errors.confirmPassword.message}
                                     </p>
                                 </div>
@@ -250,7 +268,13 @@ const NewPassword = () => {
                                     <p
                                         className={`flex items-center gap-2 text-[#7cb987]`}
                                     >
-                                        <i className={`fa-solid fa-check`} />
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            width="12"
+                                            height={"12"}
+                                            fill="#B4FFBC"
+                                            viewBox="0 0 448 512">
+                                            <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" />
+                                        </svg>
                                         Password matches
                                     </p>
                                 </div>
@@ -259,7 +283,13 @@ const NewPassword = () => {
                                     className={`space-y-2 overflow-hidden rounded-md border-[#b97c7c] bg-[#362626] text-xs font-normal text-[#b97c7c] ${confirmPassword.length === 0 ? "max-h-0" : "max-h-96 border p-4"}`}
                                 >
                                     <p className={`flex items-center gap-2`}>
-                                        <i className={`fa-solid fa-xmark`} />
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            width="12"
+                                            height={"12"}
+                                            fill="#F08288"
+                                            viewBox="0 0 384 512">
+                                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                                        </svg>
                                         Password does not match
                                     </p>
                                 </div>

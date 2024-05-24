@@ -1,0 +1,10 @@
+> Ready on http://localhost:\\.\pipe\aed59c4e-b445-4449-a6d9-6098438fea81
+$2b$12$0u39vY1QB8dYXaxpvqYBa.1plGKfuseirXEjgDFIhUOAjABJXCdxa
+User found: {
+  name: null,
+  email: null,
+  emailVerified: null,
+  image: null,
+  uid: 'clw7k5kqk0000gqf2sxdsap5l',
+  id: 1
+}

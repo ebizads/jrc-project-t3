@@ -1,0 +1,33 @@
+(node:22496) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ⚠ For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'npm i sharp', and Next.js will use it automatically for Image Optimization.
+Read more: https://nextjs.org/docs/messages/sharp-missing-in-production
+Invariant: failed to load static page {
+  "page": "/dashboard",
+  "url": "/dashboard",
+  "initUrl": "http://localhost:\\\\.\\pipe\\f7f3b97e-2946-4c8f-a335-33b7879204f9/dashboard",
+  "didRewrite": true,
+  "rewroteUrl": "/dashboard"
+}
+ ⨯ MissingStaticPage [Error]: Failed to load static file for page: /en/dashboard ENOENT: no such file or directory, open 'C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\.next\server\pages\en\dashboard.html'
+    at C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\require.js:102:19
+    at async loadComponentsImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\load-components.js:98:26)
+    at async NextNodeServer.findPageComponentsImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:710:36)
+    at async NextNodeServer.renderPageComponent (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:1910:24)
+    at async NextNodeServer.renderToResponseImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:1962:32)
+    at async NextNodeServer.pipeImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:272:17)
+    at async NextNodeServer.handleRequestImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:816:17)
+    at async invokeRender (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\lib\router-server.js:174:21)
+    at async handleRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\lib\router-server.js:353:24)
+ ⨯ MissingStaticPage [Error]: Failed to load static file for page: /en/500 ENOENT: no such file or directory, open 'C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\.next\server\pages\en\500.html'
+    at C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\require.js:102:19
+    at async loadComponentsImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\load-components.js:98:26)
+    at async NextNodeServer.findPageComponentsImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:710:36)
+    at async NextNodeServer.renderErrorToResponseImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:2118:30)
+    at async pipe.req.req (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:2056:30)
+    at async NextNodeServer.pipeImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:287:21)
+    at async NextNodeServer.handleRequestImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:816:17)
+    at async invokeRender (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\lib\router-server.js:174:21)
+    at async handleRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\lib\router-server.js:353:24)

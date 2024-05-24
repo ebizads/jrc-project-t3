@@ -8,7 +8,7 @@ export default async function handler(
     try {
         const headers = new Headers();
         const username = "Supervisor";
-        const password = "5uperv150r";
+        const password = "5up3rv150r";
         const basicAuth = "Basic " + btoa(username + ":" + password);
 
         headers.append(
@@ -21,7 +21,7 @@ export default async function handler(
         headers.append("Authorization", basicAuth);
 
         const response = await fetch(
-            `${process.env.GEN_ENDPOINT_3}/api/v1/device/strategy/ios/digitalOutputs/DIESEL_GENERATOR_START_XR2/state`,
+            `${process.env.GEN_ENDPOINT_3}/api/v1/device/strategy/ios/digitalOutputs/Start_XR2/state`,
             {
                 method: 'POST',
                 // next: { revalidate: 1800 },

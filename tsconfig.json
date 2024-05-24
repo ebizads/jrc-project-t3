@@ -29,6 +29,9 @@
             "~/*": ["./src/*"]
         }
     },
+    "ts-node": {
+        "esm": true
+    },
     "include": [
         ".eslintrc.cjs",
         "next-env.d.ts",
@@ -38,6 +41,6 @@
         "**/*.js",
         ".next/types/**/*.ts",
         "src/pages/settings/index.jsx"
-    ],
+, "server.mjs", "server.mjs"   ],
     "exclude": ["node_modules"]
 }

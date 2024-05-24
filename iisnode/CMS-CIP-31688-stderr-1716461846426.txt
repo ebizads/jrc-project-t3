@@ -1,0 +1,80 @@
+Error fetching data from external API: TypeError: fetch failed
+    at node:internal/deps/undici/undici:12618:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async s (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\.next\server\pages\api\digitalInputs\fetchDigitalInputsXR1.js:1:803)
+    at async K (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\compiled\next-server\pages-api.runtime.prod.js:20:16853)
+    at async U.render (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\compiled\next-server\pages-api.runtime.prod.js:20:17492)
+    at async NextNodeServer.runApi (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:600:9)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:269:37)
+    at async NextNodeServer.handleRequestImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:816:17)
+    at async invokeRender (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\lib\router-server.js:174:21)
+    at async handleRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\lib\router-server.js:353:24) {
+  cause: ConnectTimeoutError: Connect Timeout Error
+      at onConnectTimeout (node:internal/deps/undici/undici:7760:28)
+      at node:internal/deps/undici/undici:7716:50
+      at Immediate._onImmediate (node:internal/deps/undici/undici:7746:37)
+      at process.processImmediate (node:internal/timers:478:21)
+      at process.callbackTrampoline (node:internal/async_hooks:130:17) {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Error fetching data from external API: TypeError: fetch failed
+    at node:internal/deps/undici/undici:12618:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async s (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\.next\server\pages\api\digitalInputs\fetchDigitalInputsXR2.js:1:803)
+    at async K (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\compiled\next-server\pages-api.runtime.prod.js:20:16853)
+    at async U.render (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\compiled\next-server\pages-api.runtime.prod.js:20:17492)
+    at async NextNodeServer.runApi (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:600:9)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:269:37)
+    at async NextNodeServer.handleRequestImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:816:17)
+    at async invokeRender (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\lib\router-server.js:174:21)
+    at async handleRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\lib\router-server.js:353:24) {
+  cause: ConnectTimeoutError: Connect Timeout Error
+      at onConnectTimeout (node:internal/deps/undici/undici:7760:28)
+      at node:internal/deps/undici/undici:7716:50
+      at Immediate._onImmediate (node:internal/deps/undici/undici:7746:37)
+      at process.processImmediate (node:internal/timers:478:21)
+      at process.callbackTrampoline (node:internal/async_hooks:130:17) {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Error fetching data from external API: TypeError: fetch failed
+    at node:internal/deps/undici/undici:12618:11
+    at processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at runNextTicks (node:internal/process/task_queues:64:3)
+    at process.processImmediate (node:internal/timers:449:9)
+    at process.callbackTrampoline (node:internal/async_hooks:130:17)
+    at async s (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\.next\server\pages\api\digitalInputs\fetchDigitalInputsXR1.js:1:803)
+    at async K (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\compiled\next-server\pages-api.runtime.prod.js:20:16853)
+    at async U.render (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\compiled\next-server\pages-api.runtime.prod.js:20:17492)
+    at async NextNodeServer.runApi (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:600:9)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:269:37) {
+  cause: ConnectTimeoutError: Connect Timeout Error
+      at onConnectTimeout (node:internal/deps/undici/undici:7760:28)
+      at node:internal/deps/undici/undici:7716:50
+      at Immediate._onImmediate (node:internal/deps/undici/undici:7746:37)
+      at process.processImmediate (node:internal/timers:478:21)
+      at process.callbackTrampoline (node:internal/async_hooks:130:17) {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Error fetching data from external API: TypeError: fetch failed
+    at node:internal/deps/undici/undici:12618:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async s (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\.next\server\pages\api\digitalInputs\fetchDigitalInputsXR2.js:1:803)
+    at async K (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\compiled\next-server\pages-api.runtime.prod.js:20:16853)
+    at async U.render (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\compiled\next-server\pages-api.runtime.prod.js:20:17492)
+    at async NextNodeServer.runApi (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:600:9)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\next-server.js:269:37)
+    at async NextNodeServer.handleRequestImpl (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\base-server.js:816:17)
+    at async invokeRender (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\lib\router-server.js:174:21)
+    at async handleRequest (C:\Users\radar\Desktop\jrc-project-t3\jrc-project-t3\node_modules\next\dist\server\lib\router-server.js:353:24) {
+  cause: ConnectTimeoutError: Connect Timeout Error
+      at onConnectTimeout (node:internal/deps/undici/undici:7760:28)
+      at node:internal/deps/undici/undici:7716:50
+      at Immediate._onImmediate (node:internal/deps/undici/undici:7746:37)
+      at process.processImmediate (node:internal/timers:478:21)
+      at process.callbackTrampoline (node:internal/async_hooks:130:17) {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}

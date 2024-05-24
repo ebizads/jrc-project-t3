@@ -51,6 +51,7 @@ export type RemoteOperationProps = {
     generatorId: number;
     remoteOperationStatus: boolean;
     disabled: boolean;
+    standby: boolean;
 };
 
 export type CloseModalFunction = () => void;
@@ -61,6 +62,8 @@ export type ModalVerificationProps = {
     isModalOpen: boolean;
     modalTitle: string;
     modalStatus: string;
+    //link to api route
+    // apiStart: boolean;
     submitModal: SubmitModalFunction;
     closeModal: CloseModalFunction;
 };
@@ -68,6 +71,7 @@ export type ModalVerificationProps = {
 export type ModalDashboardStatusProps = {
     isModalOpen: boolean;
     // modalTitle: string;
+    closeModal?: CloseModalFunction
     modalStatus: string;
 };
 

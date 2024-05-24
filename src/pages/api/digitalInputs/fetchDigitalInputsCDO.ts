@@ -8,7 +8,7 @@ export default async function handler(
     try {
         const headers = new Headers();
         const username = "Supervisor";
-        const password = "5uperv150r";
+        const password = "5up3rv150r";
         const basicAuth = "Basic " + btoa(username + ":" + password);
 
         headers.append(

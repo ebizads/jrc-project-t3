@@ -135,7 +135,7 @@ const EditHoursButton = (props: {
                     runningTime: Number(previousRunningTime.current)
                 })
 
-                console.log(isPaused)
+                // console.log(isPaused)
             }
             // }, 60000);
         }, 60000);
@@ -174,7 +174,17 @@ const EditHoursButton = (props: {
                         }}
                     >
                         <h2>EDIT TIME</h2>
-                        <i className="fa-solid fa-pencil" />
+                        <svg width="12" height="12" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_1986_1332)">
+                                <path d="M20.0337 11.2817L20.5855 10.73L18.9302 9.07471L15.898 6.04248L14.2427 4.38721L13.691 4.93896L12.5875 6.04248L2.8609 15.769C2.35308 16.2769 1.98199 16.9067 1.77691 17.5952L0.0483971 23.4741C-0.0736732 23.8843 0.0386314 24.3286 0.346249 24.6313C0.653866 24.9341 1.09332 25.0464 1.50348 24.9292L7.3775 23.2007C8.06598 22.9956 8.69586 22.6245 9.20367 22.1167L18.9302 12.3901L20.0337 11.2817ZM7.81207 19.5044L7.36773 20.6128C7.17242 20.7642 6.95269 20.8765 6.71832 20.9497L2.89996 22.0728L4.02301 18.2593C4.09137 18.02 4.20855 17.8003 4.35992 17.6099L5.46832 17.1655V18.728C5.46832 19.1577 5.81988 19.5093 6.24957 19.5093H7.81207V19.5044ZM17.7095 0.915527L17.0064 1.62354L15.9029 2.72705L15.3462 3.27881L17.0015 4.93408L20.0337 7.96631L21.689 9.62158L22.2408 9.06982L23.3443 7.96631L24.0523 7.2583C25.273 6.0376 25.273 4.06006 24.0523 2.83936L22.1334 0.915527C20.9127 -0.305176 18.9351 -0.305176 17.7144 0.915527H17.7095ZM15.3951 9.11865L8.36383 16.1499C8.06109 16.4526 7.56305 16.4526 7.26031 16.1499C6.95758 15.8472 6.95758 15.3491 7.26031 15.0464L14.2916 8.01514C14.5943 7.7124 15.0923 7.7124 15.3951 8.01514C15.6978 8.31787 15.6978 8.81592 15.3951 9.11865Z" fill="#CCCCCC" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_1986_1332">
+                                    <rect width="25" height="25" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+
                     </button>
                 </div>
             )}
@@ -200,7 +210,7 @@ const EditHoursButton = (props: {
                         <h2>Hours</h2>
                     </label>
                     <button
-                        className="tooltip tooltip-error h-full w-1/6 items-center justify-center gap-2 rounded-full border border-[#FF9CA2] bg-[#462D2F] p-3 text-center font-normal tracking-widest text-[#F08288] transition-all duration-200 hover:bg-[#6f4d50]"
+                        className="flex tooltip tooltip-error h-full w-1/6 items-center justify-center gap-2 rounded-full border border-[#FF9CA2] bg-[#462D2F] p-3 text-center font-normal tracking-widest text-[#F08288] transition-all duration-200 hover:bg-[#6f4d50]"
                         data-tip="DISCARD CHANGES"
                         onClick={(e) => {
                             setOpenEdit(false)
@@ -209,18 +219,32 @@ const EditHoursButton = (props: {
                         }
                         }
                     >
-                        <i className="fa-solid fa-xmark" />
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height={"12"}
+                            fill="#F08288"
+                            preserveAspectRatio="xMinYMin"
+                            viewBox="0 0 384 512">
+                            <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" />
+                        </svg>
                     </button>
                     <button
                         type="submit"
-                        className="tooltip tooltip-success h-full w-1/6 items-center justify-center gap-2 rounded-full border border-[#9CFDA6] bg-[#38743e] p-3 text-center font-normal tracking-widest text-[#B4FFBC] transition-all duration-200 hover:bg-[#54a05c]"
+                        className="flex tooltip tooltip-success h-full w-1/6 items-center justify-center gap-2 rounded-full border border-[#9CFDA6] bg-[#38743e] p-3 text-center font-normal tracking-widest text-[#B4FFBC] transition-all duration-200 hover:bg-[#54a05c]"
                         data-tip="SAVE CHANGES"
                         onClick={() => {
                             setIsModalOpen(true)
 
                         }}
                     >
-                        <i className="fa-solid fa-check" />
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height={"12"}
+                            fill="#B4FFBC"
+                            preserveAspectRatio="xMinYMin"
+                            viewBox="0 0 384 512">
+                            <path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z" />
+                        </svg>
                     </button>
                 </div>
             )

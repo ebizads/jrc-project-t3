@@ -48,6 +48,8 @@ export type statusList = {
 };
 
 export type RemoteOperationProps = {
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
+    refetch?: any;
     generatorId: number;
     remoteOperationStatus: boolean;
     disabled: boolean;
@@ -58,6 +60,8 @@ export type CloseModalFunction = () => void;
 type SubmitModalFunction = () => void;
 
 export type ModalVerificationProps = {
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
+    refetch?: any;
     generatorId: number;
     isModalOpen: boolean;
     modalTitle: string;

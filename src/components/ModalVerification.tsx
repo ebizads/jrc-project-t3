@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { loginSchema } from "~/server/schemas/user";
 import { api } from "~/utils/api";
+import { getStatusDEG } from "~/utils/functions";
 import type { ModalVerificationProps, TestStatus } from "~/utils/types";
 
 type User = z.infer<typeof loginSchema>;
@@ -25,6 +26,11 @@ const ModalVerification = (props: ModalVerificationProps) => {
     //     setModalOpen(false);
     //     document.body.style.overflow = "auto";
     // };
+    const { mutate: mutateLogs } = api.generator.createLog.useMutation({
+        // async onSuccess() {
+        // },
+    });
+
     const { mutate } = api.account.findOneWithUsernamePassword.useMutation({
         onError(error) {
             setErrors(error.message)
@@ -35,8 +41,28 @@ const ModalVerification = (props: ModalVerificationProps) => {
             if (props.modalStatus == "ON") {
                 {/* turn generator ON */ }
                 void generatorRemoteOperation(true, props.generatorId, true)
+                // CREATE STATUS LOG WHEN STARTED
+                mutateLogs({
+                    generatorId: props.generatorId ?? 0,
+                    status: getStatusDEG(true),
+                    status_type: "success",
+                    status_msg: "Diesel Generator remote operation",
+                });
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                props.refetch();
+
             } else {
                 void generatorRemoteOperation(true, props.generatorId, false)
+                // CREATE STATUS LOG WHEN STOPPED
+                mutateLogs({
+                    generatorId: props.generatorId ?? 0,
+                    status: getStatusDEG(false),
+                    status_type: "success",
+                    status_msg: "Diesel Generator remote operation",
+                });
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                props.refetch();
+
             }
             setSuccess("Successfully Started/Stopped Generator")
             setTimeout(() => setSuccess(null), 3000)
@@ -122,9 +148,9 @@ const ModalVerification = (props: ModalVerificationProps) => {
                             }
                         });
 
-                }, 
-                //SET STATE TO FALSE AGAIN AFTER 760 ms
-                760)
+                },
+                    //SET STATE TO FALSE AGAIN AFTER 760 ms
+                    760)
             }
             const jsonData = (await response.json()) as TestStatus[];
 

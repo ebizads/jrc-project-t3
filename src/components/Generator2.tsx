@@ -12,6 +12,7 @@ import {
     getStatusTypeRemoteOperationToFuelLevel,
     getTestMappedStatusXR1,
     getMappedStatusDigitalOutputsXR1,
+    getStatusTypeDC48V,
 } from "~/utils/functions";
 import LineChartExample from "./LineChart";
 import { useEffect, useRef, useState } from "react";
@@ -94,14 +95,20 @@ const Generator2 = (generatorProps: TestGenerator) => {
         // if (remoteOperationStatus != null) {
         if (
             // remoteOperationStatus != null &&
-            (commercialPower != null || commercialPower != "") &&
-            degMode != null &&
-            degStatus != null &&
-            remoteOperation != null &&
-            loadOn != null &&
-            fuelLevel != null
+            // GENERATOR STATUS
+            (commercialPower != null && commercialPower != "") &&
+            (degMode != null && degMode != "") &&
+            (degStatus != null || degStatus != "") &&
+            (remoteOperation != null || remoteOperation != "") &&
+            (loadOn != null || loadOn != "") &&
+            (fuelLevel != null || fuelLevel != "") &&
+            // POWER SUPPLY STATUS
+            (powerSupply != null || powerSupply != "") &&
+            (commercialPowerDC != null || commercialPowerDC != "") &&
+            (batteryTemp != null || batteryTemp != "")
         ) {
             if (dataLoaded == false) {
+                // GENERATOR STATUS
                 previousRemoteOperationStatus.current = remoteOperationStatus;
                 previousCommercialPower.current = commercialPower;
                 previousDEGMode.current = degMode;
@@ -109,6 +116,7 @@ const Generator2 = (generatorProps: TestGenerator) => {
                 previousRemoteOperation.current = remoteOperation;
                 previousLoadOn.current = loadOn;
                 previousFuelLevel.current = fuelLevel;
+                // POWER SUPPLY STATUS
                 previousPowerSupply.current = powerSupply;
                 previousCommercialPowerDC.current = commercialPowerDC;
                 previousBatteryTemp.current = batteryTemp;
@@ -118,17 +126,17 @@ const Generator2 = (generatorProps: TestGenerator) => {
 
             else {
                 // CREATE STATUS LOG IF REMOTE OPERATION STARTS OR STOPS
-                if (
-                    previousRemoteOperationStatus.current != remoteOperationStatus
-                ) {
-                    previousRemoteOperationStatus.current = remoteOperationStatus;
-                    mutate({
-                        generatorId: generatorProps.generatorId ?? 0,
-                        status: getStatusDEG(remoteOperationStatus ?? false),
-                        status_type: "success",
-                        status_msg: "Diesel Generator remote operation",
-                    });
-                }
+                // if (
+                //     previousRemoteOperationStatus.current != remoteOperationStatus
+                // ) {
+                //     previousRemoteOperationStatus.current = remoteOperationStatus;
+                //     mutate({
+                //         generatorId: generatorProps.generatorId ?? 0,
+                //         status: getStatusDEG(remoteOperationStatus ?? false),
+                //         status_type: "success",
+                //         status_msg: "Diesel Generator remote operation",
+                //     });
+                // }
 
                 // CREATE STATUS LOG IF COMMERCIAL POWER CHANGES
                 if (previousCommercialPower.current != commercialPower) {
@@ -202,6 +210,40 @@ const Generator2 = (generatorProps: TestGenerator) => {
                         status_msg: "Fuel Level is ",
                     });
                 }
+
+                // STATUS LOGS FOR DC 48V
+                // CREATE STATUS LOG IF POWER SUPPLY STATUS CHANGES
+                if (previousPowerSupply.current != powerSupply) {
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: powerSupply,
+                        status_type: getStatusTypeDC48V(powerSupply) ?? "info",
+                        status_msg: "DC 48v Power Supply is",
+                    });
+                    previousPowerSupply.current = powerSupply;
+                }
+
+                // CREATE STATUS LOG IF COMMERCIAL POWER DC CHANGES
+                if (previousCommercialPowerDC.current != commercialPowerDC) {
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: commercialPowerDC,
+                        status_type: "info",
+                        status_msg: "DC 48v Commercial Power is",
+                    });
+                    previousCommercialPowerDC.current = commercialPowerDC;
+                }
+
+                // CREATE STATUS LOG IF BATTERY TEMPERATURE CHANGES
+                if (previousBatteryTemp.current != batteryTemp) {
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: batteryTemp,
+                        status_type: getStatusTypeDC48V(batteryTemp) ?? "info",
+                        status_msg: "DC 48v Battery Temperature is",
+                    });
+                    previousBatteryTemp.current = batteryTemp;
+                }
             }
         }
     }, [
@@ -212,6 +254,9 @@ const Generator2 = (generatorProps: TestGenerator) => {
         remoteOperation,
         loadOn,
         fuelLevel,
+        powerSupply,
+        commercialPowerDC,
+        batteryTemp
     ]);
 
     const globalDegStatus = degStatus;
@@ -242,13 +287,13 @@ const Generator2 = (generatorProps: TestGenerator) => {
 
             <div className="mt-7">
                 {degStatus == "FAILED" &&
-                <ModalDashboardStatus
-                    isModalOpen={degStatus == "FAILED"}
-                    closeModal={() =>
-                        setModalDashboardStatusOpen(false)
-                    }
-                    modalStatus="FAILED"
-                ></ModalDashboardStatus>}
+                    <ModalDashboardStatus
+                        isModalOpen={degStatus == "FAILED"}
+                        closeModal={() =>
+                            setModalDashboardStatusOpen(false)
+                        }
+                        modalStatus="FAILED"
+                    ></ModalDashboardStatus>}
 
                 {/* Generator Control Status */}
                 <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
@@ -308,6 +353,7 @@ const Generator2 = (generatorProps: TestGenerator) => {
                         Remote Operation
                     </h1>
                     <RemoteOperation
+                        refetch={refetchLogs}
                         generatorId={generatorProps.generatorId ?? 0}
                         remoteOperationStatus={degStatus == "GENERATING"}
                         standby={commercialPower == "OFF" || degMode == "MANUAL" ? true : false}

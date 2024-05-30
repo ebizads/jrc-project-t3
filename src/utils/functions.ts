@@ -444,6 +444,8 @@ export const getTestMappedStatus = (
     if (sensorParameters && sensorParameters.length > 0) {
         // Dependent cases (FLAGS)
         let degStatusStandby = true;
+        let remoteOperationStandby = true;
+        let remoteOperationNA = false;
         let degStatusGenerating = true;
 
         sensorParameters.forEach((parameter: TestStatus) => {
@@ -540,18 +542,22 @@ export const getTestMappedStatus = (
                 case "Manual_Mode_FFWC":
                     switch (parameter.value) {
                         case true:
-                            degStatusStandby = false;
+                            // degStatusStandby = false;
                             degMode = DegMode.MANUAL;
                             remoteOperation = RemoteOperation.NA;
+                            remoteOperationStandby = false
+                            remoteOperationNA = true
                             break;
                         case false:
                             degMode = DegMode.AUTO;
-                            if (degStatusGenerating) {
-                                remoteOperation = RemoteOperation.ON;
-                            } else {
-                                remoteOperation = RemoteOperation.STANDBY;
-
-                            }
+                            // remoteOperation = RemoteOperation.STANDBY;
+                            remoteOperationNA = false
+                            remoteOperationStandby = true
+                            // if (degStatusGenerating) {
+                            //     remoteOperation = RemoteOperation.ON;
+                            // } else {
+                            //     remoteOperation = RemoteOperation.STANDBY;
+                            // }
                             break;
                     }
                     break;
@@ -566,8 +572,13 @@ export const getTestMappedStatus = (
                 case "Remote_FFWC":
                     switch (parameter.value) {
                         case true:
+                            // remoteOperation= RemoteOperation.ON
+                            remoteOperation = RemoteOperation.ON
+                            remoteOperationStandby = false
                             break;
                         case false:
+                            // remoteOperation= RemoteOperation.STANDBY
+                            remoteOperationStandby = true
                             break;
                     }
                     break;
@@ -576,6 +587,12 @@ export const getTestMappedStatus = (
         // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
         if (degStatusStandby) {
             degStatus = DegStatus.STANDBY;
+        }
+        if (remoteOperationStandby && remoteOperationNA == false) {
+            remoteOperation = RemoteOperation.STANDBY
+        }
+        if (remoteOperationNA) {
+            remoteOperation = RemoteOperation.NA
         }
 
     }
@@ -616,6 +633,8 @@ export const getTestMappedStatusXR1 = (
         // Dependent cases (FLAGS)
         let degStatusStandby = true;
         let degStatusGenerating = true;
+        let remoteOperationStandby = true;
+        let remoteOperationNA = false;
 
         sensorParameters.forEach((parameter: TestStatus) => {
             switch (parameter.name) {
@@ -711,18 +730,22 @@ export const getTestMappedStatusXR1 = (
                 case "Manual_Mode_XR1":
                     switch (parameter.value) {
                         case true:
-                            degStatusStandby = false;
+                            // degStatusStandby = false;
                             degMode = DegMode.MANUAL;
                             remoteOperation = RemoteOperation.NA;
+                            remoteOperationStandby = false
+                            remoteOperationNA = true
                             break;
                         case false:
                             degMode = DegMode.AUTO;
-                            if (degStatusGenerating) {
-                                remoteOperation = RemoteOperation.ON;
-                            } else {
-                                remoteOperation = RemoteOperation.STANDBY;
+                            remoteOperationNA = false
+                            remoteOperationStandby = true
+                            // if (degStatusGenerating) {
+                            //     remoteOperation = RemoteOperation.ON;
+                            // } else {
+                            //     remoteOperation = RemoteOperation.STANDBY;
 
-                            }
+                            // }
                             break;
                     }
                     break;
@@ -737,8 +760,13 @@ export const getTestMappedStatusXR1 = (
                 case "Remote_XR1":
                     switch (parameter.value) {
                         case true:
+                            // remoteOperation= RemoteOperation.ON
+                            remoteOperation = RemoteOperation.ON
+                            remoteOperationStandby = false
                             break;
                         case false:
+                            // remoteOperation= RemoteOperation.STANDBY
+                            remoteOperationStandby = true
                             break;
                     }
                     break;
@@ -749,6 +777,13 @@ export const getTestMappedStatusXR1 = (
         if (degStatusStandby) {
             degStatus = DegStatus.STANDBY;
         }
+        if (remoteOperationStandby && remoteOperationNA == false) {
+            remoteOperation = RemoteOperation.STANDBY
+        }
+        if (remoteOperationNA) {
+            remoteOperation = RemoteOperation.NA
+        }
+
     }
 
     return [
@@ -787,6 +822,8 @@ export const getTestMappedStatusXR2 = (
         // Dependent cases (FLAGS)
         let degStatusStandby = true;
         let degStatusGenerating = true;
+        let remoteOperationStandby = true;
+        let remoteOperationNA = false;
 
         sensorParameters.forEach((parameter: TestStatus) => {
             switch (parameter.name) {
@@ -882,17 +919,22 @@ export const getTestMappedStatusXR2 = (
                 case "Manual_Mode_XR2":
                     switch (parameter.value) {
                         case true:
-                            degStatusStandby = false;
+                            // degStatusStandby = false;
                             degMode = DegMode.MANUAL;
                             remoteOperation = RemoteOperation.NA;
+                            remoteOperationStandby = false
+                            remoteOperationNA = true
                             break;
                         case false:
                             degMode = DegMode.AUTO;
-                            if (degStatusGenerating) {
-                                remoteOperation = RemoteOperation.ON;
-                            } else {
-                                remoteOperation = RemoteOperation.STANDBY;
-                            }
+                            remoteOperationNA = false
+                            remoteOperationStandby = true
+                            // if (degStatusGenerating) {
+                            //     remoteOperation = RemoteOperation.ON;
+                            // } else {
+                            //     remoteOperation = RemoteOperation.STANDBY;
+
+                            // }
                             break;
                     }
                     break;
@@ -907,8 +949,13 @@ export const getTestMappedStatusXR2 = (
                 case "Remote_XR2":
                     switch (parameter.value) {
                         case true:
+                            // remoteOperation= RemoteOperation.ON
+                            remoteOperation = RemoteOperation.ON
+                            remoteOperationStandby = false
                             break;
                         case false:
+                            // remoteOperation= RemoteOperation.STANDBY
+                            remoteOperationStandby = true
                             break;
                     }
                     break;
@@ -918,6 +965,12 @@ export const getTestMappedStatusXR2 = (
         // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
         if (degStatusStandby) {
             degStatus = DegStatus.STANDBY;
+        }
+        if (remoteOperationStandby && remoteOperationNA == false) {
+            remoteOperation = RemoteOperation.STANDBY
+        }
+        if (remoteOperationNA) {
+            remoteOperation = RemoteOperation.NA
         }
     }
 
@@ -1073,5 +1126,18 @@ export const getStatusTypeRemoteOperationToFuelLevel = (status: string) => {
             return "error";
         case "HIGH":
             return "success";
+    }
+};
+
+export const getStatusTypeDC48V = (status: string) => {
+    switch (status) {
+        case "OPERATING":
+            return "success";
+        case "ALARM":
+            return "error";
+        case "GOOD":
+            return "success";
+        case "HIGH":
+            return "error";
     }
 };

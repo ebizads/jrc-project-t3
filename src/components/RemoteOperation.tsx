@@ -53,6 +53,8 @@ const RemoteOperation = (props: RemoteOperationProps) => {
         <>
             {selected != true &&
                 <ModalVerification
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    refetch={props.refetch}
                     generatorId={props.generatorId}
                     isModalOpen={isModalOpen}
                     modalTitle="Start Generator?"
@@ -64,6 +66,8 @@ const RemoteOperation = (props: RemoteOperationProps) => {
 
             {selected != false &&
                 <ModalVerification
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    refetch={props.refetch}
                     generatorId={props.generatorId}
                     isModalOpen={isModalOpen}
                     modalTitle="Stop Generator?"
@@ -108,7 +112,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                 {/* Handle Click for START button */}
                 <button
                     // disabled={disableButtonsTimeout || props.remoteOperationStatus == true}
-                    disabled={ props.remoteOperationStatus == true}
+                    disabled={props.remoteOperationStatus == true}
                     // onClick={() => handleClick(1)}
                     onClick={() => {
                         openModal()

@@ -263,6 +263,7 @@ const Generator3 = (generatorProps: TestGenerator) => {
 
     const globalDegStatus = degStatus;
     const globalLoadStatus = loadOn;
+    const globalCommercialPower = commercialPower;
 
     useEffect(() => {
         if (openLogsModal) {
@@ -344,6 +345,7 @@ const Generator3 = (generatorProps: TestGenerator) => {
                         Generator Power Diagram
                     </h1>
                     <StatusDiagram
+                        commercialPower={globalCommercialPower}
                         loadStatus={globalLoadStatus}
                         degStatus={globalDegStatus}
                     />

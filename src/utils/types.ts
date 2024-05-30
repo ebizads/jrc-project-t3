@@ -86,6 +86,7 @@ export type ModalForgotPassProps = {
 
 
 export type StatusDiagramProps = {
+    commercialPower: string;
     loadStatus: string;
     degStatus: string;
 };

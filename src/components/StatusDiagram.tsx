@@ -1,4 +1,4 @@
-import { DegStatus, LoadOn } from "~/utils/enums";
+import { CommercialPower, DegStatus, LoadOn } from "~/utils/enums";
 import { StatusDiagramProps } from "~/utils/types";
 
 // Line Colors
@@ -37,7 +37,7 @@ const StatusDiagram = (statusDiagram: StatusDiagramProps) => {
         CP_innerLine,
         CP_dotColor,
         CP_isLoaded,
-    ] = getCPColor(statusDiagram.loadStatus);
+    ] = getCPColor(statusDiagram.loadStatus, statusDiagram.commercialPower);
 
     const [
         DEG_boxBorder,
@@ -167,7 +167,8 @@ const StatusDiagram = (statusDiagram: StatusDiagramProps) => {
 };
 
 function getCPColor(
-    loadType: string
+    loadType: string,
+    commercialPowerStatus: string
 ): [string, string, string, string, string, boolean] {
     let CP_boxBorder: string;
     let CP_boxInner: string;
@@ -177,13 +178,20 @@ function getCPColor(
     let CP_isLoaded: boolean;
 
     if (loadType === LoadOn.COMMERCIALPOWER.toString()) {
+        // POINT TO COMMERCIAL POWER
+        CP_isLoaded = true;
+    } else {
+        // POINT TO GENERATOR 
+        CP_isLoaded = false;
+    }
+
+    if (commercialPowerStatus === CommercialPower.ON.toString()) {
         // GREEN
         CP_boxBorder = greenParent;
         CP_boxInner = greenChild;
         CP_outerLine = greenLineGradient;
         CP_innerLine = greenLine;
         CP_dotColor = greenBorder;
-        CP_isLoaded = true;
     } else {
         // RED
         CP_boxBorder = redParent;
@@ -191,8 +199,8 @@ function getCPColor(
         CP_outerLine = redLineGradient;
         CP_innerLine = redLine;
         CP_dotColor = redBorder;
-        CP_isLoaded = false;
     }
+
     return [
         CP_boxBorder,
         CP_boxInner,

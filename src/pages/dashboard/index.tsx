@@ -39,14 +39,16 @@ const fetcher = async (url: string | URL | Request) => {
         error.name = String(res.status)
         throw error
     }
-
     return res.json()
 }
+// const fetcher = (...args) => fetch(...args).then(res => res.json())
 export default function Home() {
-    // const hello = api.post.hello.useQuery({ text: "from tRPC" });
-    const [cdoData, setCDOData] = useState<Array<TestStatus> | null>(null);
-    const [xr1Data, setXR1Data] = useState<Array<TestStatus> | null>(null);
-    const [xr2Data, setXR2Data] = useState<Array<TestStatus> | null>(null);
+    // MUTATE FUNCTION FOR LOGS TAKEN FROM GENERATOR ROUTER
+    const { mutate } = api.generator.createLog.useMutation({});
+
+    // const [cdoData, setCDOData] = useState<Array<TestStatus> | null>(null);
+    // const [xr1Data, setXR1Data] = useState<Array<TestStatus> | null>(null);
+    // const [xr2Data, setXR2Data] = useState<Array<TestStatus> | null>(null);
 
     const [cdoDigitalOutputs, setCDODigitalOutputs] =
         useState<Array<TestStatus> | null>(null);
@@ -57,16 +59,123 @@ export default function Home() {
 
     const [testDataFinal, setTestDataFinal] = useState<Status[]>([]);
     const { data, refetch } = api.generator.findAllGenerators.useQuery({});
-
     const [modalOpen, setModalOpen] = useState(false);
+
+    const [siteDownCDO, setSiteDownCDO] = useState(false);
+    const [siteDownXR1, setSiteDownXR1] = useState(false);
+    const [siteDownXR2, setSiteDownXR2] = useState(false);
+
+    // const [firstLoad, setFirstLoad] = useState<boolean>(true);
+    // const [firstLoad1, setFirstLoad1] = useState<boolean>(true);
+    // const [firstLoad2, setFirstLoad2] = useState<boolean>(true);
 
     // SWR IMPLEMENTATION FOR FETCHING
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { data: dataCDO, error: errorCDO, isLoading: isLoadingCDO, isValidating } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsCDO", fetcher, { refreshInterval: 1000 })
+    const { data: dataCDO, isLoading: isLoadingCDO } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsCDO", fetcher
+        // , { refreshInterval: 1000 }
+        , {
+            refreshInterval: 1000,
+            onSuccess: (data, key, config) => {
+                if (siteDownCDO) {
+                    mutate({
+                        generatorId: 1,
+                        status: "RUNNING",
+                        status_type: "success",
+                        status_msg: "Site CDOFFWC is currently",
+                    });
+                    setSiteDownCDO(false)
+                    // setFirstLoad(false)
+                } else {
+                    return
+                }
+
+            },
+            onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+                // Never retry on 404.
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                if (error.status === 404) return
+
+                // Only retry up to 10 times.
+                if (retryCount >= 3) {
+                    setSiteDownCDO(true)
+                    return
+                }
+
+                // Retry after 5 seconds.
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                setTimeout(() => revalidate({ retryCount }), 5000)
+            }
+        }
+    )
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { data: dataXR1, error: errorXR1, isLoading: isLoadingXR1 } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsXR1", fetcher, { refreshInterval: 1000 })
+    const { data: dataXR1, isLoading: isLoadingXR1 } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsXR1", fetcher,
+        {
+            refreshInterval: 1000,
+            onSuccess: (data, key, config) => {
+                if (siteDownXR1) {
+                    mutate({
+                        generatorId: 2,
+                        status: "RUNNING",
+                        status_type: "success",
+                        status_msg: "Site XR1 is currently",
+                    });
+                    // setFirstLoad1(false)
+                } else {
+                    return
+                }
+                setSiteDownXR1(false)
+            },
+            onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+                // Never retry on 404.
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                if (error.status === 404) return
+
+                // Only retry up to 10 times.
+                if (retryCount >= 3) {
+                    setSiteDownXR1(true)
+                    return
+                }
+
+                // Retry after 5 seconds.
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                setTimeout(() => revalidate({ retryCount }), 5000)
+            }
+        })
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { data: dataXR2, error: errorXR2, isLoading: isLoadingXR2 } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsXR2", fetcher, { refreshInterval: 1000 })
+    const { data: dataXR2, isLoading: isLoadingXR2 } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsXR2", fetcher,
+        {
+            refreshInterval: 1000,
+            onSuccess: (data, key, config) => {
+                if (siteDownXR2) {
+                    mutate({
+                        generatorId: 3,
+                        status: "RUNNING",
+                        status_type: "success",
+                        status_msg: "Site XR2 is currently",
+                    });
+                    // setFirstLoad2(false)
+                } else {
+                    return
+                }
+                setSiteDownXR2(false)
+            },
+            onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+                // Never retry on 404.
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                if (error.status === 404) return
+
+                // Only retry up to 10 times.
+                if (retryCount >= 3) {
+                    setSiteDownXR2(true)
+                    return
+                }
+
+                // Retry after 5 seconds.
+                // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                setTimeout(() => revalidate({ retryCount }), 5000)
+            }
+        }
+    )
 
 
     return (
@@ -116,16 +225,13 @@ export default function Home() {
                 <main
                     className={`flex min-h-screen w-full flex-col items-center justify-between px-12 pb-12 text-primary `}
                 >
-                    <ModalDashboardStatus
-                        isModalOpen={modalOpen}
-                        // modalTitle="Loading Dashboard Data"
-                        modalStatus={ModalStatus.LOADING}
-                    />
 
                     <div className="z-10 flex h-full w-full flex-row">
                         {/* Generator Card 1 CDO*/}
                         <Generator1
                             refetch={refetch}
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                            generatorError={siteDownCDO}
                             generatorId={1}
                             // generatorName="CDORFFWC"
                             generatorName={
@@ -141,6 +247,8 @@ export default function Home() {
                         {/* Generator Card 2 XR1*/}
                         <Generator2
                             refetch={refetch}
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                            generatorError={siteDownXR1}
                             generatorId={2}
                             // generatorName="XR1 - LIBONA"
                             generatorName={
@@ -157,6 +265,7 @@ export default function Home() {
                         <Generator3
                             refetch={refetch}
                             generatorId={3}
+                            generatorError={siteDownXR2}
                             // generatorName="XR2 - DAGUMBAAN"
                             generatorName={
                                 data?.generators[2]?.generatorName ?? ""

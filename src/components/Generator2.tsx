@@ -259,6 +259,20 @@ const Generator2 = (generatorProps: TestGenerator) => {
         batteryTemp
     ]);
 
+    useEffect(() => {
+        if (generatorProps.generatorError) {
+            mutate({
+                generatorId: generatorProps.generatorId ?? 0,
+                status: "DOWN",
+                status_type: "error",
+                status_msg: "Site XR1 is currently",
+            });
+        } else {
+            void refetchLogs()
+        }
+    }, [generatorProps.generatorError])
+
+
     const globalDegStatus = degStatus;
     const globalLoadStatus = loadOn;
     const globalCommercialPower = commercialPower;

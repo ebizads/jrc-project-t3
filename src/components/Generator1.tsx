@@ -18,7 +18,7 @@ import { useDieselGenStart } from "~/utils/useStore";
 import { api } from "~/utils/api";
 import { getStatusType } from "./StatusCard";
 import { Pagination } from "@mantine/core";
-import { DegStatus } from "~/utils/enums";
+import { DegStatus, ModalStatus } from "~/utils/enums";
 import ModalDashboardStatus from "./ModalDashboardStatus";
 
 const Generator1 = (generatorProps: TestGenerator) => {
@@ -259,6 +259,19 @@ const Generator1 = (generatorProps: TestGenerator) => {
         batteryTemp
     ]);
 
+    useEffect(() => {
+        if (generatorProps.generatorError) {
+            mutate({
+                generatorId: generatorProps.generatorId ?? 0,
+                status: "DOWN",
+                status_type: "error",
+                status_msg: "Site CDOFFWC is currently",
+            });
+        } else {
+            void refetchLogs()
+        }
+    }, [generatorProps.generatorError])
+
     const globalDegStatus = degStatus;
     const globalLoadStatus = loadOn;
     const globalCommercialPower = commercialPower;
@@ -285,6 +298,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
             <div className=" sticky top-0 z-40 flex h-20 w-full items-center justify-center bg-[#575757] text-center text-2xl font-normal uppercase tracking-widest">
                 {generatorProps.generatorName}
             </div>
+
             <div className="mt-7">
                 {degStatus == "FAILED" &&
                     <ModalDashboardStatus
@@ -295,6 +309,13 @@ const Generator1 = (generatorProps: TestGenerator) => {
                         modalStatus="FAILED"
                     ></ModalDashboardStatus>}
 
+                {/* {generatorProps.generatorError &&
+                    <ModalDashboardStatus
+                        isModalOpen={true}
+                        // modalTitle="Loading Dashboard Data"
+                        modalStatus={ModalStatus.LOADING}
+                    />
+                } */}
                 {/* Generator Control Status */}
                 <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
                     <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">

@@ -102,6 +102,8 @@ export type EmailData = {
 export type TestGenerator = {
     /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
     refetch: any;
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
+    generatorError?: any;
     generatorId: number;
     generatorName: string;
     generatorData: Array<TestStatus>;

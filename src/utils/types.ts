@@ -111,6 +111,16 @@ export type TestGenerator = {
     runningHours: number;
 };
 
+export type LineChart = {
+    /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
+    refetch: any;
+    generatorData: Array<TestStatus>;
+    commercialPower: string;
+    degStatus: string;
+    fuelLevel: string;
+};
+
+
 export type TestStatus = {
     name: string;
     value: boolean;

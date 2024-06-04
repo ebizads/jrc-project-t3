@@ -22,7 +22,7 @@ import {
 // import 'chartjs-adapter-date-fns';
 import "chartjs-adapter-moment";
 import { getTestMappedStatus } from "~/utils/functions";
-import { type TestGenerator, TestStatus } from "~/utils/types";
+import { type TestGenerator, TestStatus, LineChart } from "~/utils/types";
 
 // import { fetchData } from "~/utils/dataApi";
 
@@ -59,23 +59,23 @@ interface ChartData {
     datasets: DataSet[];
 }
 
-const LineChartExample = (generatorData: TestGenerator) => {
+const LineChartExample = (generatorData: LineChart) => {
     const chartRef = useRef<ChartJS<"line", DataPoint[]>>(null);
     const [gradientCP, setGradientCP] = useState<CanvasGradient>();
     const [gradientDS, setGradientDS] = useState<CanvasGradient>();
     const [gradientFL, setGradientFL] = useState<CanvasGradient>();
 
-    const [
-        commercialPower,
-        degMode,
-        degStatus,
-        remoteOperation,
-        loadOn,
-        fuelLevel,
-        powerSupply,
-        commercialPowerDC,
-        batteryTemp,
-    ] = getTestMappedStatus(generatorData);
+    // const [
+    //     commercialPower,
+    //     degMode,
+    //     degStatus,
+    //     remoteOperation,
+    //     loadOn,
+    //     fuelLevel,
+    //     powerSupply,
+    //     commercialPowerDC,
+    //     batteryTemp,
+    // ] = getTestMappedStatus(generatorData);
 
     useEffect(() => {
         const ctx = chartRef.current?.canvas.getContext("2d");
@@ -92,7 +92,7 @@ const LineChartExample = (generatorData: TestGenerator) => {
             gradientFL?.addColorStop(0, "rgba(36, 114, 168, 1)");
             gradientFL?.addColorStop(0.8, "rgba(36, 114, 168, 0)");
         }
-    }, [generatorData]);
+    }, [generatorData.commercialPower, generatorData.degStatus, generatorData.fuelLevel]);
 
     const [chartData, setChartData] = useState<ChartData>({
         datasets: [
@@ -141,19 +141,19 @@ const LineChartExample = (generatorData: TestGenerator) => {
                     switch (dataset.label) {
                         case "FUEL LEVEL":
                             // console.log(fuelLevel)
-                            value = fuelLevel;
+                            value = generatorData.fuelLevel;
                             dataset.backgroundColor = gradientFL;
                             break;
                         case "DEG STATUS":
                             // valueTemp = Math.round(Math.random()) * 1 + 2  // value betweeon 2 and 3
                             // console.log(degStatus);
-                            value = degStatus;
+                            value = generatorData.degStatus;
                             dataset.backgroundColor = gradientDS;
                             break;
                         case "COMMERCIAL POWER":
                             // valueTemp = Math.round(Math.random()) * 1 + 4 // value betweeon 4 and 5
                             // console.log(valueTemp)
-                            value = commercialPower;
+                            value = generatorData.commercialPower;
                             dataset.backgroundColor = gradientCP;
                             break;
                     }
@@ -172,7 +172,7 @@ const LineChartExample = (generatorData: TestGenerator) => {
 
         const interval = setInterval(addDataPointsData1, 60000); // Update every 60000 milliseconds
         return () => clearInterval(interval); // Cleanup on unmount
-    }, [commercialPower, degStatus, fuelLevel]);
+    }, [generatorData.commercialPower, generatorData.degStatus, generatorData.fuelLevel]);
 
     const unit: "minute" | "hour" | "day" | "month" = "minute";
     const type = "category";
@@ -183,6 +183,11 @@ const LineChartExample = (generatorData: TestGenerator) => {
         layout: {
             padding: 0,
         },
+        // elements: {
+        //     point: {
+        //         radius: 1
+        //     }
+        // },
         responsive: true,
         maintainAspectRatio: false,
         grid: {

@@ -37,7 +37,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
     });
 
     // DATA OF ALL LOGS AND REFETCH FUNCTION FOR LOGS
-    const { data: statusLogs, refetch: refetchLogs } =
+    const { data: logs, data: statusLogs, refetch: refetchLogs } =
         api.generator.findAllLogs.useQuery({
             filter: {
                 generatorId: generatorProps.generatorId,
@@ -94,16 +94,28 @@ const Generator1 = (generatorProps: TestGenerator) => {
         if (
             // remoteOperationStatus != null &&
             // GENERATOR STATUS
-            (commercialPower != null && commercialPower != "") &&
-            (degMode != null && degMode != "") &&
-            (degStatus != null || degStatus != "") &&
-            (remoteOperation != null || remoteOperation != "") &&
-            (loadOn != null || loadOn != "") &&
-            (fuelLevel != null || fuelLevel != "") &&
+            // (commercialPower != null || commercialPower != "") &&
+            // (degMode != null || degMode != "") &&
+            // (degStatus != null || degStatus != "") &&
+            // (remoteOperation != null || remoteOperation != "") &&
+            // (loadOn != null || loadOn != "") &&
+            // (fuelLevel != null || fuelLevel != "") &&
+            // // POWER SUPPLY STATUS
+            // (powerSupply != null || powerSupply != "") &&
+            // (commercialPowerDC != null || commercialPowerDC != "") &&
+            // (batteryTemp != null || batteryTemp != "")
+
+            // GENERATOR STATUS
+            (commercialPower != null) &&
+            (degMode != null) &&
+            (degStatus != null) &&
+            (remoteOperation != null) &&
+            (loadOn != null) &&
+            (fuelLevel != null) &&
             // POWER SUPPLY STATUS
-            (powerSupply != null || powerSupply != "") &&
-            (commercialPowerDC != null || commercialPowerDC != "") &&
-            (batteryTemp != null || batteryTemp != "")
+            (powerSupply != null) &&
+            (commercialPowerDC != null) &&
+            (batteryTemp != null)
         ) {
             if (dataLoaded == false) {
                 // GENERATOR STATUS
@@ -414,9 +426,9 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     <LineChartExample
                         /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
                         refetch={generatorProps.refetch}
-                        generatorId={generatorProps.generatorId}
-                        generatorName={generatorProps.generatorName}
-                        runningHours={generatorProps.runningHours}
+                        commercialPower={commercialPower}
+                        degStatus={degStatus}
+                        fuelLevel={fuelLevel}
                         generatorData={generatorProps.generatorData}
                     />
                 </div>
@@ -499,7 +511,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {statusLogs?.logs.map((item, index) => (
+                                                            {logs?.logs.map((item, index) => (
                                                                 <tr key={index}>
                                                                     <td className={"font-normal bg-secondary rounded-tl-lg rounded-bl-lg p-4 border-l-[8px] " + getStatusType(item.status_type ?? "")[1]}>
                                                                         <div>

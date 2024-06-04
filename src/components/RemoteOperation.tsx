@@ -100,7 +100,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                             // if disabled
                             // if generator stopped 
                             props.remoteOperationStatus == false ?
-                                props.standby == true ? `${yellowGlow} cursor-not-allowed`
+                                props.standby == true ? `${optionUnselected} cursor-not-allowed`
                                     : `${redGlow}`
                                 : `${optionUnselected} cursor-not-allowed`
                     }
@@ -132,7 +132,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                             // if disabled
                             // if generator started
                             props.remoteOperationStatus == true ?
-                                props.standby == true ? `${yellowGlow} cursor-not-allowed`
+                                props.standby == true ? `${optionUnselected} cursor-not-allowed`
                                     : `${greenGlow} cursor-not-allowed`
                                 : `${optionUnselected} cursor-not-allowed`
                     }

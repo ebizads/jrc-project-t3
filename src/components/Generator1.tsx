@@ -37,7 +37,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
     });
 
     // DATA OF ALL LOGS AND REFETCH FUNCTION FOR LOGS
-    const { data: logs, data: statusLogs, refetch: refetchLogs } =
+    const { data: statusLogs, refetch: refetchLogs } =
         api.generator.findAllLogs.useQuery({
             filter: {
                 generatorId: generatorProps.generatorId,
@@ -208,6 +208,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     });
                 }
 
+
                 // CREATE STATUS LOG IF FUEL LEVEL CHANGES
                 if (previousFuelLevel.current != fuelLevel) {
                     previousFuelLevel.current = fuelLevel;
@@ -244,6 +245,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                     previousCommercialPowerDC.current = commercialPowerDC;
                 }
 
+
                 // CREATE STATUS LOG IF BATTERY TEMPERATURE CHANGES
                 if (previousBatteryTemp.current != batteryTemp) {
                     mutate({
@@ -258,18 +260,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
 
             }
         }
-    }, [
-        remoteOperationStatus,
-        commercialPower,
-        degMode,
-        degStatus,
-        remoteOperation,
-        loadOn,
-        fuelLevel,
-        powerSupply,
-        commercialPowerDC,
-        batteryTemp
-    ]);
+    }, [remoteOperationStatus, commercialPower, degMode, degStatus, remoteOperation, loadOn, fuelLevel, powerSupply, commercialPowerDC, batteryTemp]);
 
     useEffect(() => {
         if (generatorProps.generatorError) {
@@ -511,7 +502,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {logs?.logs.map((item, index) => (
+                                                            {statusLogs?.logs.map((item, index) => (
                                                                 <tr key={index}>
                                                                     <td className={"font-normal bg-secondary rounded-tl-lg rounded-bl-lg p-4 border-l-[8px] " + getStatusType(item.status_type ?? "")[1]}>
                                                                         <div>

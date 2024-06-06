@@ -170,6 +170,7 @@ const LineChartExample = (generatorData: LineChart) => {
             }));
         };
 
+        addDataPointsData1();
         const interval = setInterval(addDataPointsData1, 60000); // Update every 60000 milliseconds
         return () => clearInterval(interval); // Cleanup on unmount
     }, [generatorData.commercialPower, generatorData.degStatus, generatorData.fuelLevel]);

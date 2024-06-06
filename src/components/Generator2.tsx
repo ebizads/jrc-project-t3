@@ -39,7 +39,7 @@ const Generator2 = (generatorProps: TestGenerator) => {
     });
 
     // DATA OF ALL LOGS AND REFETCH FUNCTION FOR LOGS
-    const { data: logs, data: statusLogs, refetch: refetchLogs } =
+    const { data: statusLogs, refetch: refetchLogs } =
         api.generator.findAllLogs.useQuery({
             filter: {
                 generatorId: generatorProps.generatorId,
@@ -493,7 +493,7 @@ const Generator2 = (generatorProps: TestGenerator) => {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {logs?.logs.map((item, index) => (
+                                                            {statusLogs?.logs.map((item, index) => (
                                                                 <tr key={index}>
                                                                     <td className={"font-normal bg-secondary rounded-tl-lg rounded-bl-lg p-4 border-l-[8px] " + getStatusType(item.status_type ?? "")[1]}>
                                                                         <div>

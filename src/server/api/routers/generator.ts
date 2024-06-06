@@ -58,7 +58,7 @@ export const generatorRouter = createTRPCRouter({
                     skip: input?.page
                         ? (input.page - 1) * (input.limit ?? 10)
                         : undefined,
-                    take: 20 ?? undefined,
+                    take: 30 ?? undefined,
                 }),
                 //FIND MANY QUERY FOR DASHBOARD LOGS 
                 ctx.db.statusLogs.findMany({

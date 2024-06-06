@@ -94,28 +94,28 @@ const Generator1 = (generatorProps: TestGenerator) => {
         if (
             // remoteOperationStatus != null &&
             // GENERATOR STATUS
-            // (commercialPower != null || commercialPower != "") &&
-            // (degMode != null || degMode != "") &&
-            // (degStatus != null || degStatus != "") &&
-            // (remoteOperation != null || remoteOperation != "") &&
-            // (loadOn != null || loadOn != "") &&
-            // (fuelLevel != null || fuelLevel != "") &&
-            // // POWER SUPPLY STATUS
-            // (powerSupply != null || powerSupply != "") &&
-            // (commercialPowerDC != null || commercialPowerDC != "") &&
-            // (batteryTemp != null || batteryTemp != "")
-
-            // GENERATOR STATUS
-            (commercialPower != null) &&
-            (degMode != null) &&
-            (degStatus != null) &&
-            (remoteOperation != null) &&
-            (loadOn != null) &&
-            (fuelLevel != null) &&
+            (commercialPower != null && commercialPower != "") &&
+            (degMode != null && degMode != "") &&
+            (degStatus != null || degStatus != "") &&
+            (remoteOperation != null || remoteOperation != "") &&
+            (loadOn != null || loadOn != "") &&
+            (fuelLevel != null || fuelLevel != "") &&
             // POWER SUPPLY STATUS
-            (powerSupply != null) &&
-            (commercialPowerDC != null) &&
-            (batteryTemp != null)
+            (powerSupply != null || powerSupply != "") &&
+            (commercialPowerDC != null || commercialPowerDC != "") &&
+            (batteryTemp != null || batteryTemp != "")
+
+            // // GENERATOR STATUS
+            // (commercialPower != null) &&
+            // (degMode != null) &&
+            // (degStatus != null) &&
+            // (remoteOperation != null) &&
+            // (loadOn != null) &&
+            // (fuelLevel != null) &&
+            // // POWER SUPPLY STATUS
+            // (powerSupply != null) &&
+            // (commercialPowerDC != null) &&
+            // (batteryTemp != null)
         ) {
             if (dataLoaded == false) {
                 // GENERATOR STATUS

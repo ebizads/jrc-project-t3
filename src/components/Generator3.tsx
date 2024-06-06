@@ -96,8 +96,8 @@ const Generator3 = (generatorProps: TestGenerator) => {
         if (
             // remoteOperationStatus != null &&
             // GENERATOR STATUS
-            (commercialPower != null || commercialPower != "") &&
-            (degMode != null || degMode != "") &&
+            (commercialPower != null && commercialPower != "") &&
+            (degMode != null && degMode != "") &&
             (degStatus != null || degStatus != "") &&
             (remoteOperation != null || remoteOperation != "") &&
             (loadOn != null || loadOn != "") &&

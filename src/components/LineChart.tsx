@@ -41,7 +41,7 @@ ChartJS.register(
 // Define interfaces for the data point and dataset
 interface DataPoint {
     x: string;
-    y: string;
+    y?: string;
 }
 
 interface DataSet {
@@ -141,24 +141,30 @@ const LineChartExample = (generatorData: LineChart) => {
                     switch (dataset.label) {
                         case "FUEL LEVEL":
                             // console.log(fuelLevel)
-                            value = generatorData.fuelLevel;
-                            dataset.backgroundColor = gradientFL;
+                            if (generatorData.fuelLevel) {
+                                value = generatorData.fuelLevel;
+                                dataset.backgroundColor = gradientFL;
+                            }
                             break;
                         case "DEG STATUS":
                             // valueTemp = Math.round(Math.random()) * 1 + 2  // value betweeon 2 and 3
                             // console.log(degStatus);
-                            value = generatorData.degStatus;
-                            dataset.backgroundColor = gradientDS;
+                            if (generatorData.degStatus) {
+                                value = generatorData.degStatus;
+                                dataset.backgroundColor = gradientDS;
+                            }
                             break;
                         case "COMMERCIAL POWER":
                             // valueTemp = Math.round(Math.random()) * 1 + 4 // value betweeon 4 and 5
                             // console.log(valueTemp)
-                            value = generatorData.commercialPower;
-                            dataset.backgroundColor = gradientCP;
+                            if (generatorData.commercialPower) {
+                                value = generatorData.commercialPower;
+                                dataset.backgroundColor = gradientCP;
+                            }
                             break;
                     }
                     // console.log(dataset)
-                    const newDataPoint: DataPoint = { x: newTime, y: value ?? "" };
+                    const newDataPoint: DataPoint = { x: newTime, y: value };
                     const newData = [...dataset.data, newDataPoint];
 
                     // Keep only the latest 20 data points
@@ -170,9 +176,12 @@ const LineChartExample = (generatorData: LineChart) => {
             }));
         };
 
+        // if (generatorData.commercialPower && generatorData.degStatus && generatorData.fuelLevel) {
+        // IF DATA SUDDENLY CHANGES LOG IN LINE CHART RIGHT AWAY
         addDataPointsData1();
         const interval = setInterval(addDataPointsData1, 60000); // Update every 60000 milliseconds
-        return () => clearInterval(interval); // Cleanup on unmount
+        return () => clearInterval(interval); // Cleanup on unmount}
+        // }
     }, [generatorData.commercialPower, generatorData.degStatus, generatorData.fuelLevel]);
 
     const unit: "minute" | "hour" | "day" | "month" = "minute";

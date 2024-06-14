@@ -425,7 +425,7 @@ export const getDataValueEquivalentTest = (
 export const getTestMappedStatus = (
     generatorProps: TestGenerator
 ): [string, string, string, string, string, string, string, string, string] => {
-    const sensorParameters: TestStatus[] = generatorProps.generatorData;
+    const sensorParameters = generatorProps.generatorData;
 
     // Generator Status
     let commercialPower = "";
@@ -446,7 +446,8 @@ export const getTestMappedStatus = (
         let degStatusStandby = true;
         let remoteOperationStandby = true;
         let remoteOperationNA = false;
-        let degStatusGenerating = true;
+        let degStatusGenerating;
+        let degStatusFailure;
 
         sensorParameters.forEach((parameter: TestStatus) => {
             switch (parameter.name) {
@@ -457,6 +458,7 @@ export const getTestMappedStatus = (
                             degStatus = DegStatus.FAILED;
                             break;
                         case false:
+                            degStatusFailure = false
                             break;
                     }
                     break;
@@ -585,7 +587,7 @@ export const getTestMappedStatus = (
             }
         });
         // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
-        if (degStatusStandby) {
+        if (degStatusStandby && degStatusGenerating == false && degStatusFailure == false) {
             degStatus = DegStatus.STANDBY;
         }
         if (remoteOperationStandby && remoteOperationNA == false) {
@@ -632,9 +634,10 @@ export const getTestMappedStatusXR1 = (
     if (sensorParameters && sensorParameters.length > 0) {
         // Dependent cases (FLAGS)
         let degStatusStandby = true;
-        let degStatusGenerating = true;
         let remoteOperationStandby = true;
         let remoteOperationNA = false;
+        let degStatusGenerating;
+        let degStatusFailure;
 
         sensorParameters.forEach((parameter: TestStatus) => {
             switch (parameter.name) {
@@ -645,6 +648,7 @@ export const getTestMappedStatusXR1 = (
                             degStatus = DegStatus.FAILED;
                             break;
                         case false:
+                            degStatusFailure = false;
                             break;
                     }
                     break;
@@ -774,7 +778,7 @@ export const getTestMappedStatusXR1 = (
         });
 
         // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
-        if (degStatusStandby) {
+        if (degStatusStandby && degStatusGenerating == false && degStatusFailure == false) {
             degStatus = DegStatus.STANDBY;
         }
         if (remoteOperationStandby && remoteOperationNA == false) {
@@ -821,9 +825,10 @@ export const getTestMappedStatusXR2 = (
     if (sensorParameters && sensorParameters.length > 0) {
         // Dependent cases (FLAGS)
         let degStatusStandby = true;
-        let degStatusGenerating = true;
         let remoteOperationStandby = true;
         let remoteOperationNA = false;
+        let degStatusGenerating;
+        let degStatusFailure;
 
         sensorParameters.forEach((parameter: TestStatus) => {
             switch (parameter.name) {
@@ -834,6 +839,7 @@ export const getTestMappedStatusXR2 = (
                             degStatus = DegStatus.FAILED;
                             break;
                         case false:
+                            degStatusFailure = false;
                             break;
                     }
                     break;
@@ -963,7 +969,7 @@ export const getTestMappedStatusXR2 = (
         });
 
         // IF MANUAL OFF, GENERATING OFF, and FAILURE OFF
-        if (degStatusStandby) {
+        if (degStatusStandby && degStatusGenerating == false && degStatusFailure == false) {
             degStatus = DegStatus.STANDBY;
         }
         if (remoteOperationStandby && remoteOperationNA == false) {
@@ -1141,3 +1147,18 @@ export const getStatusTypeDC48V = (status: string) => {
             return "error";
     }
 };
+
+
+export const generateSessionToken = () => {
+    let result = ""
+    const characters =
+        // "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{};:'\",.<>/?\\|"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+    const charactersLength = characters.length
+    for (let i = 0; i < 30; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    return result
+}
+

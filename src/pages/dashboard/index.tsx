@@ -74,7 +74,11 @@ export default function Home() {
     const { data: dataCDO, isLoading: isLoadingCDO } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsCDO", fetcher
         // , { refreshInterval: 1000 }
         , {
-            refreshInterval: 1000,
+            revalidateOnFocus: true,
+            revalidateOnReconnect: true,
+            refreshWhenHidden: true,
+            refreshInterval: 1000, // Disable automatic polling
+            dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
                 if (siteDownCDO) {
                     mutate({
@@ -110,7 +114,11 @@ export default function Home() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { data: dataXR1, isLoading: isLoadingXR1 } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsXR1", fetcher,
         {
-            refreshInterval: 1000,
+            revalidateOnFocus: true,
+            revalidateOnReconnect: true,
+            refreshWhenHidden: true,
+            refreshInterval: 1000, // Disable automatic polling
+            dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
                 if (siteDownXR1) {
                     mutate({
@@ -144,7 +152,11 @@ export default function Home() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { data: dataXR2, isLoading: isLoadingXR2 } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsXR2", fetcher,
         {
-            refreshInterval: 1000,
+            revalidateOnFocus: true,
+            revalidateOnReconnect: true,
+            refreshWhenHidden: true,
+            refreshInterval: 1000, // Disable automatic polling
+            dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
                 if (siteDownXR2) {
                     mutate({
@@ -176,7 +188,6 @@ export default function Home() {
             }
         }
     )
-
 
     return (
         <>
@@ -238,7 +249,7 @@ export default function Home() {
                                 data?.generators[0]?.generatorName ?? ""
                             }
                             // generatorData={cdoData ?? []}
-                            generatorData={dataCDO ?? []}
+                            generatorData={siteDownCDO ? [] : dataCDO}
 
                             generatorOutputData={cdoDigitalOutputs ?? []}
                             runningHours={data?.generators[0]?.runningTime ?? 0}
@@ -255,7 +266,7 @@ export default function Home() {
                                 data?.generators[1]?.generatorName ?? ""
                             }
                             // generatorData={xr1Data ?? []}
-                            generatorData={dataXR1 ?? []}
+                            generatorData={siteDownXR1 ? [] : dataXR1}
 
                             generatorOutputData={xr1DigitalOutputs ?? []}
                             runningHours={data?.generators[1]?.runningTime ?? 0}
@@ -271,7 +282,7 @@ export default function Home() {
                                 data?.generators[2]?.generatorName ?? ""
                             }
                             // generatorData={xr2Data ?? []}
-                            generatorData={dataXR2 ?? []}
+                            generatorData={siteDownXR2 ? [] : dataXR2}
 
                             generatorOutputData={xr2DigitalOutputs ?? []}
                             runningHours={data?.generators[2]?.runningTime ?? 0}

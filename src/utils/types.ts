@@ -106,15 +106,16 @@ export type TestGenerator = {
     generatorError?: any;
     generatorId: number;
     generatorName: string;
-    generatorData: Array<TestStatus>;
+    generatorData?: Array<TestStatus> | null;
     generatorOutputData?: TestStatus[];
     runningHours: number;
+    dataVersion?: Date;
 };
 
 export type LineChart = {
     /* eslint-disable-next-line  @typescript-eslint/no-explicit-any*/
     refetch: any;
-    generatorData: Array<TestStatus>;
+    generatorData?: Array<TestStatus> |  null;
     commercialPower: string;
     degStatus: string;
     fuelLevel: string;

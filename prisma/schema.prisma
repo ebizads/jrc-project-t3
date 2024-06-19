@@ -22,8 +22,6 @@ model Account {
   userId        String    @unique
   type          String
   refresh_token String?
-  reset_token   String?
-  reset_until   DateTime?
   access_token  String?
   expires_at    Int?
   token_type    String?
@@ -34,14 +32,17 @@ model Account {
   username      String    @unique
   id            Int       @id @default(autoincrement())
   oldPassword   String[]
+  reset_token   String?
+  reset_until   DateTime?
   user          User      @relation(fields: [userId], references: [uid], onDelete: Cascade)
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           Int      @id @default(autoincrement())
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  type         String   
   user         User     @relation(fields: [userId], references: [uid], onDelete: Cascade)
 }
 
@@ -55,7 +56,6 @@ model User {
   accounts      Account?
   posts         Post[]
   sessions      Session[]
-  StatusLogs    StatusLogs[]
 }
 
 model VerificationToken {
@@ -69,11 +69,11 @@ model VerificationToken {
 model Generator {
   id            Int          @id @default(autoincrement())
   generatorName String?      @unique
-  runningTime   Int?
-  updatedAt     DateTime?    @updatedAt
   createdAt     DateTime     @default(now())
   deleted       Boolean      @default(false)
   deletedAt     DateTime?
+  updatedAt     DateTime?    @updatedAt
+  runningTime   Int?
   StatusLogs    StatusLogs[]
 }
 
@@ -87,6 +87,4 @@ model StatusLogs {
   deletedAt   DateTime?
   generatorId Int
   generator   Generator @relation(fields: [generatorId], references: [id])
-  uid         String?
-  user        User?     @relation(fields: [uid], references: [uid], onDelete: Cascade)
 }

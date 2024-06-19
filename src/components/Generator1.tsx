@@ -543,7 +543,7 @@ const Generator1 = (generatorProps: TestGenerator) => {
                                             </div>
                                             <div className="flex justify-between mt-2">
                                                 <>
-                                                    Showing 10 of {statusLogs?.count}
+                                                    Showing 30 of {statusLogs?.count}
                                                 </>
                                                 <Pagination
                                                     value={page}

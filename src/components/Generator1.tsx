@@ -267,10 +267,14 @@ const Generator1 = (generatorProps: TestGenerator) => {
                 }
             }
         }
-        void refetchLogs()
+      
     }
         , [remoteOperationStatus, commercialPower, degMode, degStatus, remoteOperation, loadOn, fuelLevel, powerSupply, commercialPowerDC, batteryTemp]
     );
+
+    useEffect(()=>{
+        void refetchLogs()
+    })
 
     useEffect(() => {
         if (session?.user.type == "Logger") {

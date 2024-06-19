@@ -269,7 +269,7 @@ const Generator2 = (generatorProps: TestGenerator) => {
                 }
             }
         }
-        void refetchLogs()
+
     }, [
         remoteOperationStatus,
         commercialPower,
@@ -282,6 +282,10 @@ const Generator2 = (generatorProps: TestGenerator) => {
         commercialPowerDC,
         batteryTemp
     ]);
+
+    useEffect(()=>{
+        void refetchLogs()
+    })
 
     useEffect(() => {
         if (session?.user.type == "Logger") {

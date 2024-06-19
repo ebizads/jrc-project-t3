@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type GetServerSidePropsContext } from "next";
 import {
+    User,
     getServerSession,
     type DefaultSession,
     type NextAuthOptions,
@@ -14,6 +15,7 @@ import { env } from "~/env";
 import { db } from "~/server/db";
 import { Account } from "next-auth";
 import { DefaultJWT } from "next-auth/jwt";
+import { addHoursToDate, generateSessionToken } from "~/utils/functions";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -28,7 +30,9 @@ declare module "next-auth" {
             // ...other properties
             // role: UserRole;
             username: string,
-            type: string
+            type: string,
+            token: string,
+            sessionNum: number;
         };
     }
 
@@ -45,6 +49,8 @@ declare module "next-auth" {
         // role: UserRole;
         username: string;
         type: string;
+        token: string
+        sessionNum: number;
     }
 }
 
@@ -52,6 +58,8 @@ declare module "next-auth/jwt" {
     interface JWT extends DefaultJWT {
         username: string;
         type: string;
+        token: string;
+        sessionNum: number;
     }
 }
 /**
@@ -64,8 +72,11 @@ export const authOptions: NextAuthOptions = {
         jwt: async ({ token, user }) => {
             if (user) {
                 token.id = user.id;
-                token.type= user.type
+                token.type = user.type
                 token.email = user.email;
+                token.token = user.token;
+                token.type = user.type
+                token.sessionNum = user.sessionNum
             }
 
             return token;
@@ -73,8 +84,11 @@ export const authOptions: NextAuthOptions = {
         session({ session, token }) {
             if (session.user) {
                 session.user.id = Number(token.sub);
-                session.user.type= session.user.type
+                session.user.token = token.token
+                session.user.sessionNum = token.sessionNum
+                session.user.type = token.type 
             }
+            // console.log('JWT USER: ', session.user)
             return session;
         },
     },
@@ -109,15 +123,24 @@ export const authOptions: NextAuthOptions = {
                     );
 
                     if (isValid) {
+                        const sessionToken = generateSessionToken()
                         const user = await db.user.findUnique({
                             where: {
                                 uid: account.userId,
                             },
                         });
-                        console.log(encryptedPassword);
 
-                        console.log("User found:", user);
-                        return account;
+                        const session = await db.session.create({
+                            data: {
+                                sessionToken: sessionToken,
+                                userId: user?.uid ?? "",
+                                expires: addHoursToDate(new Date(), 730),
+                                type: account.type
+                            }
+                        })
+
+                        // console.log("User found:", account);
+                        return { ...account, token: sessionToken, sessionNum: session.id } as User;
                     }
                     throw new Error("account not found");
                 }

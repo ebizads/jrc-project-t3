@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { z } from "zod";
 import { useForm } from "react-hook-form";
 import type { loginSchema } from "~/server/schemas/user";
@@ -13,6 +13,8 @@ type User = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
     const router = useRouter();
+    const { data: session, status } = useSession()
+
     const [error, setError] = useState<string | null>(null);
     async function onRegister() {
         await router.push("UserManagement/register");
@@ -55,6 +57,15 @@ const LoginForm = () => {
             if (res?.url) await router.push(res?.url);
         }
     };
+
+    useEffect(() => {
+        if (session) {
+            void router.push("/dashboard")
+        } else {
+            void router.push("/");
+            
+        }
+    },[session])
 
     return (
         <main className="flex min-h-screen flex-col bg-[#202020] bg-[url('/loginBG.svg')] bg-cover bg-center bg-no-repeat py-4">

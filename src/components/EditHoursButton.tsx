@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -23,6 +24,8 @@ const EditHoursButton = (props: {
     /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
     refetchLogs: any,
 }) => {
+    const { data: session } = useSession()
+
     const [openEdit, setOpenEdit] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
     const [error, setErrors] = useState<string | null>(null);
@@ -53,10 +56,10 @@ const EditHoursButton = (props: {
     })
 
     const { mutate } = api.account.findOneWithUsernamePassword.useMutation({
-        // onError(error) {
-        //     setErrors(error.message)
-        //     setTimeout(() => setErrors(null), 3000)
-        // },
+        onError(error) {
+            setErrors(error.message)
+            setTimeout(() => setErrors(null), 3000)
+        },
         onSuccess() {
 
             mutateRunningTime({
@@ -165,7 +168,8 @@ const EditHoursButton = (props: {
                         <h2>Hours</h2>
                     </div>
                     <button
-                        className="flex h-full w-3/6 flex-row items-center justify-center gap-2 rounded-full border border-[#CCCCCC] p-3 text-center font-normal tracking-widest text-[#CCCCCC] transition-all duration-200 hover:bg-[#424242]"
+                        disabled={session?.user?.type != "Admin"}
+                        className={`flex h-full w-3/6 flex-row items-center justify-center gap-2 rounded-full border border-[#CCCCCC] p-3 text-center font-normal tracking-widest text-[#CCCCCC] transition-all duration-200 hover:bg-[#424242] ${session?.user?.type != "Admin" && ('pointer-events-none')}`}
                         onClick={(e) => {
                             setOpenEdit(true)
                             e.preventDefault()
@@ -383,32 +387,32 @@ const EditHoursButton = (props: {
                                 </div>
                             </div>
                         </div>
+                        {error && (
+                            <div className="toast toast-end toast-bottom">
+                                <div role="alert" className="alert alert-error">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-6 w-6 shrink-0 stroke-current"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        />
+                                    </svg>
+                                    <span>{error}</span>
+                                </div>
+                            </div>
+                        )}
 
 
                     </div>
                 )
             }
 
-            {error && (
-                <div className="toast toast-end toast-bottom">
-                    <div role="alert" className="alert alert-error">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-6 w-6 shrink-0 stroke-current"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                        <span>{error}</span>
-                    </div>
-                </div>
-            )}
 
             {success && (
                 <div className="toast toast-end toast-bottom">

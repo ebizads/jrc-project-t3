@@ -76,11 +76,11 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                     closeModal={() => { setIsModalOpen(false); document.body.style.overflow = "auto"; }}
                 />
             }
-            <div className={`flex w-full select-none flex-row items-center justify-center space-x-4 p-1 text-xs tracking-wider ${session?.user?.type == "Viewer" && ('pointer-events-none')}`}>
+            <div className={`flex w-full select-none flex-row items-center justify-center space-x-4 p-1 text-xs tracking-wider ${session?.user?.type != "Admin" && ('pointer-events-none')}`}>
                 {/* Handle Click for STOP button */}
                 <button
                     // disabled={disableButtonsTimeout || props.remoteOperationStatus == false}
-                    disabled={props.remoteOperationStatus == false}
+                    disabled={props.remoteOperationStatus == false || session?.user?.type != "Admin"}
                     // onClick={() => handleClick(0)}
                     onClick={() => {
                         openModal()
@@ -112,7 +112,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                 {/* Handle Click for START button */}
                 <button
                     // disabled={disableButtonsTimeout || props.remoteOperationStatus == true}
-                    disabled={props.remoteOperationStatus == true}
+                    disabled={props.remoteOperationStatus == true || session?.user?.type != "Admin" }
                     // onClick={() => handleClick(1)}
                     onClick={() => {
                         openModal()

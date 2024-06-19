@@ -109,7 +109,6 @@ export type TestGenerator = {
     generatorData?: Array<TestStatus> | null;
     generatorOutputData?: TestStatus[];
     runningHours: number;
-    dataVersion?: Date;
 };
 
 export type LineChart = {

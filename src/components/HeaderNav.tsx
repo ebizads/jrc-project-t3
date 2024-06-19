@@ -2,8 +2,12 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { api } from "~/utils/api";
 
 const HeaderNav = () => {
+    const session = useSession()
+    const {mutate} = api.account.deleteSession.useMutation()
     return (
         <>
             <div className="navbar bg-neutral px-10">
@@ -58,10 +62,19 @@ const HeaderNav = () => {
                             </li>
                             <li>
                                 <a
-                                    onClick={() =>
-                                        signOut({
+                                    onClick={() => {
+                                        console.log(session.data?.user.sessionNum)
+                                        console.log(session.data?.user.type)
+                                        console.log(session.data?.user.token)
+                                        mutate({
+                                            sessionNum: session.data?.user.sessionNum,
+                                            token: session.data?.user.token,
+                                            type: session.data?.user.type
+                                        })
+                                        void signOut({
                                             callbackUrl: "/",
                                         })
+                                    }
                                     }>Logout</a>
                             </li>
                         </ul>

@@ -15,7 +15,7 @@
 // } from "~/utils/functions";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { api } from "~/utils/api";
 import { Status, TestStatus } from "~/utils/types";
 import { useState } from "react";
@@ -25,6 +25,7 @@ import Generator3 from "~/components/Generator3";
 import ModalDashboardStatus from "~/components/ModalDashboardStatus";
 import { ModalStatus } from "~/utils/enums";
 import useSWR from 'swr'
+import { useSession } from "next-auth/react";
 
 const fetcher = async (url: string | URL | Request) => {
     const res = await fetch(url)
@@ -43,6 +44,8 @@ const fetcher = async (url: string | URL | Request) => {
 }
 // const fetcher = (...args) => fetch(...args).then(res => res.json())
 export default function Home() {
+    const { data: session } = useSession()
+
     // MUTATE FUNCTION FOR LOGS TAKEN FROM GENERATOR ROUTER
     const { mutate } = api.generator.createLog.useMutation({});
 
@@ -80,17 +83,19 @@ export default function Home() {
             refreshInterval: 1000, // Disable automatic polling
             dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
-                if (siteDownCDO) {
-                    mutate({
-                        generatorId: 1,
-                        status: "RUNNING",
-                        status_type: "success",
-                        status_msg: "Site CDOFFWC is currently",
-                    });
-                    setSiteDownCDO(false)
-                    // setFirstLoad(false)
-                } else {
-                    return
+                if (session?.user.type == "Logger") {
+                    if (siteDownCDO) {
+                        mutate({
+                            generatorId: 1,
+                            status: "RUNNING",
+                            status_type: "success",
+                            status_msg: "Site CDOFFWC is currently",
+                        });
+                        setSiteDownCDO(false)
+                        // setFirstLoad(false)
+                    } else {
+                        return
+                    }
                 }
 
             },
@@ -99,7 +104,7 @@ export default function Home() {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 if (error.status === 404) return
 
-                // Only retry up to 10 times.
+                // Only retry up to 3 times.
                 if (retryCount >= 3) {
                     setSiteDownCDO(true)
                     return
@@ -120,25 +125,28 @@ export default function Home() {
             refreshInterval: 1000, // Disable automatic polling
             dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
-                if (siteDownXR1) {
-                    mutate({
-                        generatorId: 2,
-                        status: "RUNNING",
-                        status_type: "success",
-                        status_msg: "Site XR1 is currently",
-                    });
-                    // setFirstLoad1(false)
-                } else {
-                    return
+                if (session?.user.type == "Logger") {
+
+                    if (siteDownXR1) {
+                        mutate({
+                            generatorId: 2,
+                            status: "RUNNING",
+                            status_type: "success",
+                            status_msg: "Site XR1 is currently",
+                        });
+                        setSiteDownXR1(false)
+                        // setFirstLoad1(false)
+                    } else {
+                        return
+                    }
                 }
-                setSiteDownXR1(false)
             },
             onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
                 // Never retry on 404.
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 if (error.status === 404) return
 
-                // Only retry up to 10 times.
+                // Only retry up to 3 times.
                 if (retryCount >= 3) {
                     setSiteDownXR1(true)
                     return
@@ -158,25 +166,27 @@ export default function Home() {
             refreshInterval: 1000, // Disable automatic polling
             dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
-                if (siteDownXR2) {
-                    mutate({
-                        generatorId: 3,
-                        status: "RUNNING",
-                        status_type: "success",
-                        status_msg: "Site XR2 is currently",
-                    });
-                    // setFirstLoad2(false)
-                } else {
-                    return
+                if (session?.user.type == "Logger") {
+                    if (siteDownXR2) {
+                        mutate({
+                            generatorId: 3,
+                            status: "RUNNING",
+                            status_type: "success",
+                            status_msg: "Site XR2 is currently",
+                        });
+                        setSiteDownXR2(false)
+                        // setFirstLoad2(false)
+                    } else {
+                        return
+                    }
                 }
-                setSiteDownXR2(false)
             },
             onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
                 // Never retry on 404.
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                 if (error.status === 404) return
 
-                // Only retry up to 10 times.
+                // Only retry up to 3 times.
                 if (retryCount >= 3) {
                     setSiteDownXR2(true)
                     return

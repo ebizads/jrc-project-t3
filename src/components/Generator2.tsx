@@ -269,6 +269,7 @@ const Generator2 = (generatorProps: TestGenerator) => {
                 }
             }
         }
+        void refetchLogs()
     }, [
         remoteOperationStatus,
         commercialPower,

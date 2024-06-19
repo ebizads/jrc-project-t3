@@ -11,6 +11,35 @@ import { addHoursToDate, generateCertificate } from "~/utils/functions";
 import { sendEmail } from "~/pages/api/sendEmail";
 
 export const accountRouter = createTRPCRouter({
+    deleteSession: protectedProcedure
+        .input(
+            z.object({
+                sessionNum: z.number().optional(),
+                token: z.string().optional(),
+                type: z.string().optional(),
+            })
+        )
+        .mutation(async ({ input, ctx }) => {
+            // delete latest session when sign out is prompted
+            const deleteSession = await ctx.db.session.delete({
+                where: {
+                    id: input.sessionNum,
+                    sessionToken: input.token,
+                    type: input.type
+                }
+            })
+            
+            return deleteSession
+        }),
+    findAllUserSessions: protectedProcedure
+        // .input()
+        .query(async ({ input, ctx }) => {
+            const [sessions] = await ctx.db.$transaction([
+                ctx.db.session.findMany({})
+            ])
+
+            return { sessions };
+        }),
     findOne: protectedProcedure
         .input(z.number())
         .query(async ({ input, ctx }) => {
@@ -51,8 +80,6 @@ export const accountRouter = createTRPCRouter({
 
             return account
         }),
-
-
     findOneWithUsernamePassword: protectedProcedure
         .input(
             z.object({
@@ -96,7 +123,7 @@ export const accountRouter = createTRPCRouter({
                 if (account?.type != "Admin") {
                     throw new TRPCError({
                         code: "BAD_REQUEST",
-                        message: "The  provided account is not authorized to START/STOP",
+                        message: "The provided account is NOT AUTHORIZED to do this operation!",
                     })
                 }
                 return account;

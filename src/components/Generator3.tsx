@@ -406,7 +406,7 @@ const Generator3 = (generatorProps: TestGenerator) => {
                             generatorId: generatorProps.generatorId ?? 0,
                             status: "DOWN",
                             status_type: "error",
-                            status_msg: "Site CDOFFWC is currently",
+                            status_msg: "Site XR2 is currently",
                         });
                     }
                 } else {

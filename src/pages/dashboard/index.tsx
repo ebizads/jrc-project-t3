@@ -218,7 +218,6 @@ export default function Home() {
                                     status_msg: "Site XR2 is currently",
                                 });
                                 setSiteDownXR2(false)
-                                setSiteDownXR1(false)
                             }
                             // setFirstLoad(false)
                         }).catch(error => console.log(error))

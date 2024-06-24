@@ -72,6 +72,15 @@ export default function Home() {
     // const [firstLoad1, setFirstLoad1] = useState<boolean>(true);
     // const [firstLoad2, setFirstLoad2] = useState<boolean>(true);
 
+    // MUTATE FUNCTION FOR CURRENT STATUS IN THE BACKEND TO BE CHECKED WITH STATUS FROM API
+    const { mutate: mutateGeneratorStatus } = api.generator.generatorStatusUpdate.useMutation();
+
+    const { data: generatorStatuses, refetch: refetchGeneratorStatuses } = api.generator.generatorStatuses.useQuery(
+        {
+            generatorId: 1
+        }
+    )
+
     // SWR IMPLEMENTATION FOR FETCHING
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { data: dataCDO, isLoading: isLoadingCDO } = useSWR<Array<TestStatus> | null>("api/digitalInputs/fetchDigitalInputsCDO", fetcher
@@ -84,20 +93,32 @@ export default function Home() {
             // dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
                 // refetchGenerator1Statuses().then(res => console.log(res.data)).catch(error => console.log(error))
-                if (session?.user.type == "Logger") {
-                    if (siteDownCDO) {
-                        mutate({
-                            generatorId: 1,
-                            status: "RUNNING",
-                            status_type: "success",
-                            status_msg: "Site CDOFFWC is currently",
-                        });
-                        setSiteDownCDO(false)
-                        // setFirstLoad(false)
-                    } else {
-                        return
+                // if (session?.user.type == "Logger") {
+                if (siteDownCDO) {
+                    if (generatorStatuses) {
+                        refetchGeneratorStatuses().then((res) => {
+                            if (res.data?.genStatus1?.current_status != 'RUNNING') {
+                                mutateGeneratorStatus({
+                                    statusId: generatorStatuses?.genStatus1?.id ?? 28,
+                                    generatorId: 1,
+                                    status_name: "genStatus",
+                                    status_value: "RUNNING",
+                                });
+                                mutate({
+                                    generatorId: 1,
+                                    status: "RUNNING",
+                                    status_type: "success",
+                                    status_msg: "Site CDOFFWC is currently",
+                                });
+                                setSiteDownCDO(false)
+                            }
+                            // setFirstLoad(false)
+                        }).catch(error => console.log(error))
                     }
+                } else {
+                    return
                 }
+                // }
 
             },
             onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
@@ -126,21 +147,33 @@ export default function Home() {
             refreshInterval: 1000, // Disable automatic polling
             // dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
-                if (session?.user.type == "Logger") {
-
-                    if (siteDownXR1) {
-                        mutate({
-                            generatorId: 2,
-                            status: "RUNNING",
-                            status_type: "success",
-                            status_msg: "Site XR1 is currently",
-                        });
-                        setSiteDownXR1(false)
-                        // setFirstLoad1(false)
-                    } else {
-                        return
+                // if (session?.user.type == "Logger") {
+                if (siteDownXR1) {
+                    if (generatorStatuses) {
+                        refetchGeneratorStatuses().then((res) => {
+                            if (res.data?.genStatus2?.current_status != 'RUNNING') {
+                                mutateGeneratorStatus({
+                                    statusId: generatorStatuses?.genStatus2?.id ?? 29,
+                                    generatorId: 2,
+                                    status_name: "genStatus",
+                                    status_value: "RUNNING",
+                                });
+                                mutate({
+                                    generatorId: 2,
+                                    status: "RUNNING",
+                                    status_type: "success",
+                                    status_msg: "Site XR1 is currently",
+                                });
+                                setSiteDownXR1(false)
+                            }
+                            // setFirstLoad(false)
+                        }).catch(error => console.log(error))
                     }
+                    // setFirstLoad1(false)
+                } else {
+                    return
                 }
+                // }
             },
             onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
                 // Never retry on 404.
@@ -167,20 +200,34 @@ export default function Home() {
             refreshInterval: 1000, // Disable automatic polling
             // dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
-                if (session?.user.type == "Logger") {
-                    if (siteDownXR2) {
-                        mutate({
-                            generatorId: 3,
-                            status: "RUNNING",
-                            status_type: "success",
-                            status_msg: "Site XR2 is currently",
-                        });
-                        setSiteDownXR2(false)
-                        // setFirstLoad2(false)
-                    } else {
-                        return
+                // if (session?.user.type == "Logger") {
+                if (siteDownXR2) {
+                    if (generatorStatuses) {
+                        refetchGeneratorStatuses().then((res) => {
+                            if (res.data?.genStatus3?.current_status != 'RUNNING') {
+                                mutateGeneratorStatus({
+                                    statusId: generatorStatuses?.genStatus3?.id ?? 30,
+                                    generatorId: 3,
+                                    status_name: "genStatus",
+                                    status_value: "RUNNING",
+                                });
+                                mutate({
+                                    generatorId: 3,
+                                    status: "RUNNING",
+                                    status_type: "success",
+                                    status_msg: "Site XR2 is currently",
+                                });
+                                setSiteDownXR2(false)
+                                setSiteDownXR1(false)
+                            }
+                            // setFirstLoad(false)
+                        }).catch(error => console.log(error))
                     }
+                    // setFirstLoad2(false)
+                } else {
+                    return
                 }
+                // }
             },
             onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
                 // Never retry on 404.

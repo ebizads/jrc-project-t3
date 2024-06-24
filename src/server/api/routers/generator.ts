@@ -81,7 +81,7 @@ export const generatorRouter = createTRPCRouter({
             ])
 
             type MyRecord = Record<string, Array<
-               StatusLogType
+                StatusLogType
             >>;
 
             const obj: MyRecord = {}
@@ -258,7 +258,10 @@ export const generatorRouter = createTRPCRouter({
                 fuelLevel,
                 powerSupply,
                 commercialPowerDC,
-                batteryTemp
+                batteryTemp,
+                genStatus1,
+                genStatus2,
+                genStatus3,
             ] = await ctx.db.$transaction([
                 ctx.db.generatorStatuses.findFirst({
                     where: {
@@ -314,6 +317,24 @@ export const generatorRouter = createTRPCRouter({
                         generatorId: input.generatorId
                     }
                 }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "genStatus",
+                        generatorId: 1
+                    }
+                }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "genStatus",
+                        generatorId: 2
+                    }
+                }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "genStatus",
+                        generatorId: 3
+                    }
+                }),
             ])
 
             return {
@@ -325,7 +346,10 @@ export const generatorRouter = createTRPCRouter({
                 fuelLevel,
                 powerSupply,
                 commercialPowerDC,
-                batteryTemp
+                batteryTemp,
+                genStatus1,
+                genStatus2,
+                genStatus3
             }
         })
 

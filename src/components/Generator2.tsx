@@ -39,10 +39,23 @@ const Generator2 = (generatorProps: TestGenerator) => {
         },
     });
 
+    // MUTATE FUNCTION FOR CURRENT STATUS IN THE BACKEND TO BE CHECKED WITH STATUS FROM API
+    const { mutate: mutateGeneratorStatus } = api.generator.generatorStatusUpdate.useMutation({
+        async onSuccess() {
+            await refetchLogs();
+        },
+    });
+
     const { data: session } = useSession();
 
     const { data: userSessions, refetch: refetchUserSessions } =
         api.account.findAllUserSessions.useQuery()
+
+    const { data: generatorStatuses, refetch: refetchGeneratorStatuses } = api.generator.generatorStatuses.useQuery(
+        {
+            generatorId: generatorProps.generatorId
+        }
+    )
 
     // DATA OF ALL LOGS AND REFETCH FUNCTION FOR LOGS
     const { data: statusLogs, refetch: refetchLogs } =
@@ -69,22 +82,6 @@ const Generator2 = (generatorProps: TestGenerator) => {
     const [remoteOperationStatus] =
         getMappedStatusDigitalOutputsXR1(generatorProps);
 
-    // USEREF TO CHECK ().CURRENT OF REF AND COMPARE WITH MAPPED STATUS
-    const previousRemoteOperationStatus = useRef<boolean | undefined>(
-        remoteOperationStatus
-    );
-    const previousCommercialPower = useRef<string | undefined>(commercialPower);
-    const previousDEGMode = useRef<string | undefined>(degMode);
-    const previousDEGStatus = useRef<string | undefined>(degStatus);
-    const previousRemoteOperation = useRef<string | undefined>(remoteOperation);
-    const previousLoadOn = useRef<string | undefined>(loadOn);
-    const previousFuelLevel = useRef<string | undefined>(fuelLevel);
-    const previousPowerSupply = useRef<string | undefined>(powerSupply);
-    const previousCommercialPowerDC = useRef<string | undefined>(
-        commercialPowerDC
-    );
-    const previousBatteryTemp = useRef<string | undefined>(batteryTemp);
-    const [dataLoaded, setDataLoaded] = useState<boolean>(false);
 
     useEffect(() => {
         if (degStatus == "FAILED") {
@@ -93,197 +90,279 @@ const Generator2 = (generatorProps: TestGenerator) => {
     }, [degStatus])
 
     useEffect(() => {
-        // console.log(statusLogs);
-        // console.log(
-        //     "PREVIOUS REMOTE STATUS (REMORTEOPERATIONSTATUS)",
-        //     remoteOperationStatus
-        // );
-        // if (remoteOperationStatus != null) {
-        console.log(session?.user.sessionNum)
-        console.log(userSessions?.sessions[userSessions.sessions.length - 1]?.id)
-        if (
-            // GENERATOR STATUS
-            (commercialPower != null && commercialPower != "") &&
-            (degMode != null && degMode != "") &&
-            (degStatus != null && degStatus != "") &&
-            (remoteOperation != null && remoteOperation != "") &&
-            (loadOn != null && loadOn != "") &&
-            (fuelLevel != null && fuelLevel != "") &&
-            // POWER SUPPLY STATUS
-            (powerSupply != null && powerSupply != "") &&
-            (commercialPowerDC != null && commercialPowerDC != "") &&
-            (batteryTemp != null && batteryTemp != "")
-        ) {
-            if (dataLoaded == false) {
-                // GENERATOR STATUS
-                previousRemoteOperationStatus.current = remoteOperationStatus;
-                previousCommercialPower.current = commercialPower;
-                previousDEGMode.current = degMode;
-                previousDEGStatus.current = degStatus;
-                previousRemoteOperation.current = remoteOperation;
-                previousLoadOn.current = loadOn;
-                previousFuelLevel.current = fuelLevel;
-                // POWER SUPPLY STATUS
-                previousPowerSupply.current = powerSupply;
-                previousCommercialPowerDC.current = commercialPowerDC;
-                previousBatteryTemp.current = batteryTemp;
-                setDataLoaded(true)
-                return;
-            }
+        void refetchGeneratorStatuses()
+    }, [
+        generatorStatuses,
+    ])
 
-            else {
-                if (session?.user.type == "Logger") {
-                    // if (Number(sessionNum) == userSessions?.sessions[userSessions.sessions.length - 1]?.id) {
-                    // CREATE STATUS LOG IF REMOTE OPERATION STARTS OR STOPS
-                    // if (
-                    //     previousRemoteOperationStatus.current != remoteOperationStatus
-                    // ) {
-                    //     previousRemoteOperationStatus.current = remoteOperationStatus;
-                    //     mutate({
-                    //         generatorId: generatorProps.generatorId ?? 0,
-                    //         status: getStatusDEG(remoteOperationStatus ?? false),
-                    //         status_type: "success",
-                    //         status_msg: "Diesel Generator remote operation",
-                    //     });
-                    // }
+    // MUTATING BACKEND STATUS AND LOGS FOR COMMERCIAL POWER, BY REFETCHING DATA OF GENERATOR STATUSES
+    useEffect(() => {
+        if (generatorStatuses) {
+            refetchGeneratorStatuses().then((res) => {
+                // console.log(res.data?.commercialPower?.current_status, "BACK-END STATUS")
+                // console.log(commercialPower, "API STATUS")
+                if (res.data?.commercialPower?.current_status != commercialPower) {
+                    // CHANGE STATUS VALUE IN BACKEND
+                    mutateGeneratorStatus({
+                        statusId: generatorStatuses?.commercialPower?.id ?? 10,
+                        generatorId: generatorProps.generatorId,
+                        status_name: "commercialPower",
+                        status_value: commercialPower,
+                    })
 
-                    // CREATE STATUS LOG IF COMMERCIAL POWER CHANGES
-
-                    if (previousCommercialPower.current != commercialPower) {
-                        mutate({
-                            generatorId: generatorProps.generatorId ?? 0,
-                            status: commercialPower,
-                            status_type: "info",
-                            status_msg: "DEG Commercial Power is",
-                        });
-                        previousCommercialPower.current = commercialPower;
-                    }
-
-                    // CREATE STATUS LOG IF DEG MODE CHANGES
-                    if (previousDEGMode.current != degMode) {
-                        previousDEGMode.current = degMode;
-                        mutate({
-                            generatorId: generatorProps.generatorId ?? 0,
-                            status: degMode,
-                            status_type: getStatusTypeDEG(degMode) ?? "info",
-                            status_msg: "DEG Mode is",
-
-                        });
-                    }
-
-                    // CREATE STATUS LOG IF DEG STATUS CHANGES
-                    if (previousDEGStatus.current != degStatus) {
-                        mutate({
-                            generatorId: generatorProps.generatorId ?? 0,
-                            status: degStatus,
-                            status_type: getStatusTypeDEG(degStatus) ?? "info",
-                            status_msg: "DEG Status is",
-
-                        });
-                        // console.log("DEG STATUS CHANGED")
-                        previousDEGStatus.current = degStatus;
-                    }
-
-                    // CREATE STATUS LOG IF REMOTE OPERATION CHANGES
-                    if (previousRemoteOperation.current != remoteOperation) {
-                        previousRemoteOperation.current = remoteOperation;
-                        mutate({
-                            generatorId: generatorProps.generatorId ?? 0,
-                            status: remoteOperation,
-                            status_type:
-                                getStatusTypeRemoteOperationToFuelLevel(
-                                    remoteOperation
-                                ) ?? "info",
-                            status_msg: "Remote Operation is ",
-
-                        });
-                    }
-
-                    // CREATE STATUS LOG IF LOAD ON CHANGES
-                    if (previousLoadOn.current != loadOn) {
-                        previousLoadOn.current = loadOn;
-                        mutate({
-                            generatorId: generatorProps.generatorId ?? 0,
-                            status: loadOn,
-                            status_type:
-                                getStatusTypeRemoteOperationToFuelLevel(loadOn) ??
-                                "info",
-                            status_msg: "Load On ",
-
-                        });
-                    }
-
-
-                    // CREATE STATUS LOG IF FUEL LEVEL CHANGES
-                    if (previousFuelLevel.current != fuelLevel) {
-                        previousFuelLevel.current = fuelLevel;
-                        mutate({
-                            generatorId: generatorProps.generatorId ?? 0,
-                            status: fuelLevel,
-                            status_type:
-                                getStatusTypeRemoteOperationToFuelLevel(fuelLevel) ??
-                                "info",
-                            status_msg: "Fuel Level is ",
-
-                        });
-                    }
-
-                    // STATUS LOGS FOR DC 48V
-                    // CREATE STATUS LOG IF POWER SUPPLY STATUS CHANGES
-                    if (previousPowerSupply.current != powerSupply) {
-                        mutate({
-                            generatorId: generatorProps.generatorId ?? 0,
-                            status: powerSupply,
-                            status_type: getStatusTypeDC48V(powerSupply) ?? "info",
-                            status_msg: "DC 48v Power Supply is",
-                        });
-                        previousPowerSupply.current = powerSupply;
-
-                    }
-
-                    // CREATE STATUS LOG IF COMMERCIAL POWER DC CHANGES
-                    if (previousCommercialPowerDC.current != commercialPowerDC) {
-                        mutate({
-                            generatorId: generatorProps.generatorId ?? 0,
-                            status: commercialPowerDC,
-                            status_type: "info",
-                            status_msg: "DC 48v Commercial Power is",
-                        });
-                        previousCommercialPowerDC.current = commercialPowerDC;
-
-                    }
-
-
-                    // CREATE STATUS LOG IF BATTERY TEMPERATURE CHANGES
-                    if (previousBatteryTemp.current != batteryTemp) {
-                        mutate({
-                            generatorId: generatorProps.generatorId ?? 0,
-                            status: batteryTemp,
-                            status_type: getStatusTypeDC48V(batteryTemp) ?? "info",
-                            status_msg: "DC 48v Battery Temperature is",
-                        });
-                        previousBatteryTemp.current = batteryTemp;
-
-                    }
-                    // }
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: commercialPower,
+                        status_type: "info",
+                        status_msg: "DEG Commercial Power is",
+                    });
+                    // previousCommercialPower.current = commercialPower
                 }
+
             }
+            ).catch(error => console.log(error))
+
         }
 
-    }, [
-        remoteOperationStatus,
-        commercialPower,
-        degMode,
-        degStatus,
-        remoteOperation,
-        loadOn,
-        fuelLevel,
-        powerSupply,
-        commercialPowerDC,
-        batteryTemp
-    ]);
+    }, [commercialPower]);
 
-    useEffect(()=>{
+    // MUTATING BACKEND STATUS AND LOGS FOR DEG MODE, BY REFETCHING DATA OF GENERATOR STATUSES
+    useEffect(() => {
+        if (generatorStatuses) {
+            refetchGeneratorStatuses().then((res) => {
+                console.log(res.data?.degMode?.current_status, "BACK-END STATUS")
+                console.log(degMode, "API STATUS")
+
+                if (res.data?.degMode?.current_status != degMode) {
+                    mutateGeneratorStatus({
+                        statusId: generatorStatuses?.degMode?.id ?? 11,
+                        generatorId: generatorProps.generatorId,
+                        status_name: "degMode",
+                        status_value: degMode,
+                    })
+
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: degMode,
+                        status_type: getStatusTypeDEG(degMode) ?? "info",
+                        status_msg: "DEG Mode is",
+
+                    });
+                }
+
+            }
+            ).catch(error => console.log(error))
+        }
+    }, [degMode])
+
+    // MUTATING BACKEND STATUS AND LOGS FOR DEG STATUS, BY REFETCHING DATA OF GENERATOR STATUSES
+    useEffect(() => {
+        if (generatorStatuses) {
+            refetchGeneratorStatuses().then((res) => {
+                // console.log(res.data?.degStatus?.current_status, "BACK-END STATUS")
+                // console.log(degStatus, "API STATUS")
+                if (res.data?.degStatus?.current_status != degStatus) {
+                    mutateGeneratorStatus({
+                        statusId: generatorStatuses?.degStatus?.id ?? 12,
+                        generatorId: generatorProps.generatorId,
+                        status_name: "degStatus",
+                        status_value: degStatus,
+                    })
+
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: degStatus,
+                        status_type: getStatusTypeDEG(degStatus) ?? "info",
+                        status_msg: "DEG Status is",
+
+                    });
+
+                }
+
+            }
+            ).catch(error => console.log(error))
+        }
+    }, [degStatus])
+
+    // MUTATING BACKEND STATUS AND LOGS FOR REMOTE OPERATION, BY REFETCHING DATA OF GENERATOR STATUSES
+    useEffect(() => {
+        if (generatorStatuses) {
+            refetchGeneratorStatuses().then((res) => {
+                // console.log(res.data?.remoteOperation?.current_status, "BACK-END STATUS")
+                // console.log(remoteOperation, "API STATUS")
+
+                if (res.data?.remoteOperation?.current_status != remoteOperation) {
+                    mutateGeneratorStatus({
+                        statusId: generatorStatuses?.remoteOperation?.id ?? 13,
+                        generatorId: generatorProps.generatorId,
+                        status_name: "remoteOperation",
+                        status_value: remoteOperation,
+                    })
+
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: remoteOperation,
+                        status_type:
+                            getStatusTypeRemoteOperationToFuelLevel(
+                                remoteOperation
+                            ) ?? "info",
+                        status_msg: "Remote Operation is ",
+
+                    });
+                }
+
+
+            }
+            ).catch(error => console.log(error))
+        }
+    }, [remoteOperation])
+
+    // MUTATING BACKEND STATUS AND LOGS FOR LOAD ON, BY REFETCHING DATA OF GENERATOR STATUSES
+    useEffect(() => {
+        if (generatorStatuses) {
+            refetchGeneratorStatuses().then((res) => {
+                // console.log(res.data?.loadOn?.current_status, "BACK-END STATUS")
+                // console.log(loadOn, "API STATUS")
+
+                if (res.data?.loadOn?.current_status != loadOn) {
+                    mutateGeneratorStatus({
+                        statusId: generatorStatuses?.loadOn?.id ?? 14,
+                        generatorId: generatorProps.generatorId,
+                        status_name: "loadOn",
+                        status_value: loadOn,
+                    })
+
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: loadOn,
+                        status_type:
+                            getStatusTypeRemoteOperationToFuelLevel(loadOn) ??
+                            "info",
+                        status_msg: "Load On ",
+
+                    });
+                }
+            }
+            ).catch(error => console.log(error))
+        }
+    }, [loadOn])
+
+    // MUTATING BACKEND STATUS AND LOGS FOR FUEL LEVEL, BY REFETCHING DATA OF GENERATOR STATUSES
+    useEffect(() => {
+        if (generatorStatuses) {
+            refetchGeneratorStatuses().then((res) => {
+                // console.log(res.data?.fuelLevel?.current_status, "BACK-END STATUS")
+                // console.log(fuelLevel, "API STATUS")
+
+                if (res.data?.fuelLevel?.current_status != fuelLevel) {
+                    mutateGeneratorStatus({
+                        statusId: generatorStatuses?.fuelLevel?.id ?? 15,
+                        generatorId: generatorProps.generatorId,
+                        status_name: "fuelLevel",
+                        status_value: fuelLevel,
+                    })
+
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: fuelLevel,
+                        status_type:
+                            getStatusTypeRemoteOperationToFuelLevel(fuelLevel) ??
+                            "info",
+                        status_msg: "Fuel Level is ",
+
+                    });
+                }
+            }
+            ).catch(error => console.log(error))
+        }
+    }, [fuelLevel])
+
+
+    // MUTATING BACKEND STATUS AND LOGS FOR FUEL LEVEL, BY REFETCHING DATA OF GENERATOR STATUSES
+    useEffect(() => {
+        if (generatorStatuses) {
+            refetchGeneratorStatuses().then((res) => {
+                // console.log(res.data?.powerSupply?.current_status, "BACK-END STATUS")
+                // console.log(powerSupply, "API STATUS")
+
+                if (res.data?.powerSupply?.current_status != powerSupply) {
+                    mutateGeneratorStatus({
+                        statusId: generatorStatuses?.powerSupply?.id ?? 16,
+                        generatorId: generatorProps.generatorId,
+                        status_name: "powerSupply",
+                        status_value: powerSupply,
+                    })
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: powerSupply,
+                        status_type: getStatusTypeDC48V(powerSupply) ?? "info",
+                        status_msg: "DC 48v Power Supply is",
+                    });
+                }
+            }
+
+            ).catch(error => console.log(error))
+        }
+    }, [powerSupply])
+
+
+    // MUTATING BACKEND STATUS AND LOGS FOR COMMERCIAL POWER DC, BY REFETCHING DATA OF GENERATOR STATUSES
+    useEffect(() => {
+        if (generatorStatuses) {
+            refetchGeneratorStatuses().then((res) => {
+                console.log(res.data?.commercialPowerDC?.current_status, "BACK-END STATUS")
+                console.log(commercialPowerDC, "API STATUS")
+
+                if (res.data?.commercialPowerDC?.current_status != commercialPowerDC) {
+                    mutateGeneratorStatus({
+                        statusId: generatorStatuses?.commercialPowerDC?.id ?? 17,
+                        generatorId: generatorProps.generatorId,
+                        status_name: "commercialPowerDC",
+                        status_value: commercialPowerDC,
+                    })
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: commercialPowerDC,
+                        status_type: "info",
+                        status_msg: "DC 48v Commercial Power is",
+                    });
+                }
+            }
+
+            ).catch(error => console.log(error))
+        }
+    }, [commercialPowerDC])
+
+
+    // MUTATING BACKEND STATUS AND LOGS FOR COMMERCIAL POWER DC, BY REFETCHING DATA OF GENERATOR STATUSES
+    useEffect(() => {
+        if (generatorStatuses) {
+            refetchGeneratorStatuses().then((res) => {
+                console.log(res.data?.batteryTemp?.current_status, "BACK-END STATUS")
+                console.log(batteryTemp, "API STATUS")
+
+                if (res.data?.batteryTemp?.current_status != batteryTemp) {
+                    mutateGeneratorStatus({
+                        statusId: generatorStatuses?.batteryTemp?.id ?? 18,
+                        generatorId: generatorProps.generatorId,
+                        status_name: "batteryTemp",
+                        status_value: batteryTemp,
+                    })
+
+                    mutate({
+                        generatorId: generatorProps.generatorId ?? 0,
+                        status: batteryTemp,
+                        status_type: getStatusTypeDC48V(batteryTemp) ?? "info",
+                        status_msg: "DC 48v Battery Temperature is",
+                    });
+                }
+            }
+
+            ).catch(error => console.log(error))
+        }
+    }, [batteryTemp])
+
+    useEffect(() => {
         void refetchLogs()
     })
 
@@ -584,3 +663,211 @@ const Generator2 = (generatorProps: TestGenerator) => {
 };
 
 export default Generator2;
+
+// LEGACY CODE FOR MUTATING LOGS!!!
+// // USEREF TO CHECK ().CURRENT OF REF AND COMPARE WITH MAPPED STATUS
+// const previousRemoteOperationStatus = useRef<boolean | undefined>(
+//     remoteOperationStatus
+// );
+// const previousCommercialPower = useRef<string | undefined>(commercialPower);
+// const previousDEGMode = useRef<string | undefined>(degMode);
+// const previousDEGStatus = useRef<string | undefined>(degStatus);
+// const previousRemoteOperation = useRef<string | undefined>(remoteOperation);
+// const previousLoadOn = useRef<string | undefined>(loadOn);
+// const previousFuelLevel = useRef<string | undefined>(fuelLevel);
+// const previousPowerSupply = useRef<string | undefined>(powerSupply);
+// const previousCommercialPowerDC = useRef<string | undefined>(
+//     commercialPowerDC
+// );
+// const previousBatteryTemp = useRef<string | undefined>(batteryTemp);
+// const [dataLoaded, setDataLoaded] = useState<boolean>(false);
+// useEffect(() => {
+//     // console.log(statusLogs);
+//     // console.log(
+//     //     "PREVIOUS REMOTE STATUS (REMORTEOPERATIONSTATUS)",
+//     //     remoteOperationStatus
+//     // );
+//     // if (remoteOperationStatus != null) {
+//     console.log(session?.user.sessionNum)
+//     console.log(userSessions?.sessions[userSessions.sessions.length - 1]?.id)
+//     if (
+//         // GENERATOR STATUS
+//         (commercialPower != null && commercialPower != "") &&
+//         (degMode != null && degMode != "") &&
+//         (degStatus != null && degStatus != "") &&
+//         (remoteOperation != null && remoteOperation != "") &&
+//         (loadOn != null && loadOn != "") &&
+//         (fuelLevel != null && fuelLevel != "") &&
+//         // POWER SUPPLY STATUS
+//         (powerSupply != null && powerSupply != "") &&
+//         (commercialPowerDC != null && commercialPowerDC != "") &&
+//         (batteryTemp != null && batteryTemp != "")
+//     ) {
+//         if (dataLoaded == false) {
+//             // GENERATOR STATUS
+//             previousRemoteOperationStatus.current = remoteOperationStatus;
+//             previousCommercialPower.current = commercialPower;
+//             previousDEGMode.current = degMode;
+//             previousDEGStatus.current = degStatus;
+//             previousRemoteOperation.current = remoteOperation;
+//             previousLoadOn.current = loadOn;
+//             previousFuelLevel.current = fuelLevel;
+//             // POWER SUPPLY STATUS
+//             previousPowerSupply.current = powerSupply;
+//             previousCommercialPowerDC.current = commercialPowerDC;
+//             previousBatteryTemp.current = batteryTemp;
+//             setDataLoaded(true)
+//             return;
+//         }
+
+//         else {
+//             if (session?.user.type == "Logger") {
+//                 // if (Number(sessionNum) == userSessions?.sessions[userSessions.sessions.length - 1]?.id) {
+//                 // CREATE STATUS LOG IF REMOTE OPERATION STARTS OR STOPS
+//                 // if (
+//                 //     previousRemoteOperationStatus.current != remoteOperationStatus
+//                 // ) {
+//                 //     previousRemoteOperationStatus.current = remoteOperationStatus;
+//                 //     mutate({
+//                 //         generatorId: generatorProps.generatorId ?? 0,
+//                 //         status: getStatusDEG(remoteOperationStatus ?? false),
+//                 //         status_type: "success",
+//                 //         status_msg: "Diesel Generator remote operation",
+//                 //     });
+//                 // }
+
+//                 // CREATE STATUS LOG IF COMMERCIAL POWER CHANGES
+
+//                 if (previousCommercialPower.current != commercialPower) {
+//                     mutate({
+//                         generatorId: generatorProps.generatorId ?? 0,
+//                         status: commercialPower,
+//                         status_type: "info",
+//                         status_msg: "DEG Commercial Power is",
+//                     });
+//                     previousCommercialPower.current = commercialPower;
+//                 }
+
+//                 // CREATE STATUS LOG IF DEG MODE CHANGES
+//                 if (previousDEGMode.current != degMode) {
+//                     previousDEGMode.current = degMode;
+//                     mutate({
+//                         generatorId: generatorProps.generatorId ?? 0,
+//                         status: degMode,
+//                         status_type: getStatusTypeDEG(degMode) ?? "info",
+//                         status_msg: "DEG Mode is",
+
+//                     });
+//                 }
+
+//                 // CREATE STATUS LOG IF DEG STATUS CHANGES
+//                 if (previousDEGStatus.current != degStatus) {
+//                     mutate({
+//                         generatorId: generatorProps.generatorId ?? 0,
+//                         status: degStatus,
+//                         status_type: getStatusTypeDEG(degStatus) ?? "info",
+//                         status_msg: "DEG Status is",
+
+//                     });
+//                     // console.log("DEG STATUS CHANGED")
+//                     previousDEGStatus.current = degStatus;
+//                 }
+
+//                 // CREATE STATUS LOG IF REMOTE OPERATION CHANGES
+//                 if (previousRemoteOperation.current != remoteOperation) {
+//                     previousRemoteOperation.current = remoteOperation;
+//                     mutate({
+//                         generatorId: generatorProps.generatorId ?? 0,
+//                         status: remoteOperation,
+//                         status_type:
+//                             getStatusTypeRemoteOperationToFuelLevel(
+//                                 remoteOperation
+//                             ) ?? "info",
+//                         status_msg: "Remote Operation is ",
+
+//                     });
+//                 }
+
+//                 // CREATE STATUS LOG IF LOAD ON CHANGES
+//                 if (previousLoadOn.current != loadOn) {
+//                     previousLoadOn.current = loadOn;
+//                     mutate({
+//                         generatorId: generatorProps.generatorId ?? 0,
+//                         status: loadOn,
+//                         status_type:
+//                             getStatusTypeRemoteOperationToFuelLevel(loadOn) ??
+//                             "info",
+//                         status_msg: "Load On ",
+
+//                     });
+//                 }
+
+
+//                 // CREATE STATUS LOG IF FUEL LEVEL CHANGES
+//                 if (previousFuelLevel.current != fuelLevel) {
+//                     previousFuelLevel.current = fuelLevel;
+//                     mutate({
+//                         generatorId: generatorProps.generatorId ?? 0,
+//                         status: fuelLevel,
+//                         status_type:
+//                             getStatusTypeRemoteOperationToFuelLevel(fuelLevel) ??
+//                             "info",
+//                         status_msg: "Fuel Level is ",
+
+//                     });
+//                 }
+
+//                 // STATUS LOGS FOR DC 48V
+//                 // CREATE STATUS LOG IF POWER SUPPLY STATUS CHANGES
+//                 if (previousPowerSupply.current != powerSupply) {
+//                     mutate({
+//                         generatorId: generatorProps.generatorId ?? 0,
+//                         status: powerSupply,
+//                         status_type: getStatusTypeDC48V(powerSupply) ?? "info",
+//                         status_msg: "DC 48v Power Supply is",
+//                     });
+//                     previousPowerSupply.current = powerSupply;
+
+//                 }
+
+//                 // CREATE STATUS LOG IF COMMERCIAL POWER DC CHANGES
+//                 if (previousCommercialPowerDC.current != commercialPowerDC) {
+//                     mutate({
+//                         generatorId: generatorProps.generatorId ?? 0,
+//                         status: commercialPowerDC,
+//                         status_type: "info",
+//                         status_msg: "DC 48v Commercial Power is",
+//                     });
+//                     previousCommercialPowerDC.current = commercialPowerDC;
+
+//                 }
+
+
+//                 // CREATE STATUS LOG IF BATTERY TEMPERATURE CHANGES
+//                 if (previousBatteryTemp.current != batteryTemp) {
+//                     mutate({
+//                         generatorId: generatorProps.generatorId ?? 0,
+//                         status: batteryTemp,
+//                         status_type: getStatusTypeDC48V(batteryTemp) ?? "info",
+//                         status_msg: "DC 48v Battery Temperature is",
+//                     });
+//                     previousBatteryTemp.current = batteryTemp;
+
+//                 }
+//                 // }
+//             }
+//         }
+//     }
+
+// }, [
+//     remoteOperationStatus,
+//     commercialPower,
+//     degMode,
+//     degStatus,
+//     remoteOperation,
+//     loadOn,
+//     fuelLevel,
+//     powerSupply,
+//     commercialPowerDC,
+//     batteryTemp
+// ]);

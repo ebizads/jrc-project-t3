@@ -79,10 +79,11 @@ export default function Home() {
         , {
             revalidateOnFocus: true,
             revalidateOnReconnect: true,
-            refreshWhenHidden: true,
+            // refreshWhenHidden: true,
             refreshInterval: 1000, // Disable automatic polling
-            dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
+            // dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
+                // refetchGenerator1Statuses().then(res => console.log(res.data)).catch(error => console.log(error))
                 if (session?.user.type == "Logger") {
                     if (siteDownCDO) {
                         mutate({
@@ -121,9 +122,9 @@ export default function Home() {
         {
             revalidateOnFocus: true,
             revalidateOnReconnect: true,
-            refreshWhenHidden: true,
+            // refreshWhenHidden: true,
             refreshInterval: 1000, // Disable automatic polling
-            dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
+            // dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
                 if (session?.user.type == "Logger") {
 
@@ -162,9 +163,9 @@ export default function Home() {
         {
             revalidateOnFocus: true,
             revalidateOnReconnect: true,
-            refreshWhenHidden: true,
+            // refreshWhenHidden: true,
             refreshInterval: 1000, // Disable automatic polling
-            dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
+            // dedupingInterval: 1000, // Cache data for 10 minutes (adjust as needed)
             onSuccess: (data, key, config) => {
                 if (session?.user.type == "Logger") {
                     if (siteDownXR2) {

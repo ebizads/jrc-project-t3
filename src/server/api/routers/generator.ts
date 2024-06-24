@@ -105,6 +105,12 @@ export const generatorRouter = createTRPCRouter({
                 count
             }
         }),
+    findLogs: protectedProcedure
+        .query(async ({ ctx }) => {
+            const logs = await ctx.db.statusLogs.findMany()
+
+            return logs
+        }),
     changeDashboardTitle: protectedProcedure
         .input(ChangeDashboardSettings)
         .mutation(async ({ ctx, input }) => {
@@ -217,5 +223,110 @@ export const generatorRouter = createTRPCRouter({
                 })
             }
         }),
+    generatorStatusUpdate: protectedProcedure.input(z.object({
+        statusId: z.number(),
+        generatorId: z.number(),
+        status_name: z.string(),
+        status_value: z.string(),
+    })).mutation(async ({ ctx, input }) => {
+        const updateStatus = await ctx.db.generatorStatuses.update({
+            where: {
+                id: input.statusId,
+                generatorId: input.generatorId,
+                status_name: input.status_name
+            },
+            data: {
+                current_status: input.status_value
+            }
+        })
+
+        return updateStatus
+    }),
+    generatorStatuses: protectedProcedure
+        .input(
+            z.object({
+                generatorId: z.number(),
+                status_name: z.string().optional()
+            })
+        ).query(async ({ ctx, input }) => {
+            const [
+                commercialPower,
+                degMode,
+                degStatus,
+                remoteOperation,
+                loadOn,
+                fuelLevel,
+                powerSupply,
+                commercialPowerDC,
+                batteryTemp
+            ] = await ctx.db.$transaction([
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "commercialPower",
+                        generatorId: input.generatorId
+                    }
+                }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "degMode",
+                        generatorId: input.generatorId
+                    }
+                }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "degStatus",
+                        generatorId: input.generatorId
+                    }
+                }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "remoteOperation",
+                        generatorId: input.generatorId
+                    }
+                }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "loadOn",
+                        generatorId: input.generatorId
+                    }
+                }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "fuelLevel",
+                        generatorId: input.generatorId
+                    }
+                }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "powerSupply",
+                        generatorId: input.generatorId
+                    }
+                }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "commercialPowerDC",
+                        generatorId: input.generatorId
+                    }
+                }),
+                ctx.db.generatorStatuses.findFirst({
+                    where: {
+                        status_name: "batteryTemp",
+                        generatorId: input.generatorId
+                    }
+                }),
+            ])
+
+            return {
+                commercialPower,
+                degMode,
+                degStatus,
+                remoteOperation,
+                loadOn,
+                fuelLevel,
+                powerSupply,
+                commercialPowerDC,
+                batteryTemp
+            }
+        })
 
 })

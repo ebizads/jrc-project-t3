@@ -42,17 +42,17 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  type         String   
+  type         String
   user         User     @relation(fields: [userId], references: [uid], onDelete: Cascade)
 }
 
 model User {
   name          String?
-  email         String?      @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
-  uid           String       @id @default(cuid())
-  id            Int          @default(autoincrement())
+  uid           String    @id @default(cuid())
+  id            Int       @default(autoincrement())
   accounts      Account?
   posts         Post[]
   sessions      Session[]
@@ -67,14 +67,15 @@ model VerificationToken {
 }
 
 model Generator {
-  id            Int          @id @default(autoincrement())
-  generatorName String?      @unique
-  createdAt     DateTime     @default(now())
-  deleted       Boolean      @default(false)
-  deletedAt     DateTime?
-  updatedAt     DateTime?    @updatedAt
-  runningTime   Int?
-  StatusLogs    StatusLogs[]
+  id                Int                 @id @default(autoincrement())
+  generatorName     String?             @unique
+  createdAt         DateTime            @default(now())
+  deleted           Boolean             @default(false)
+  deletedAt         DateTime?
+  updatedAt         DateTime?           @updatedAt
+  runningTime       Int?
+  StatusLogs        StatusLogs[]
+  GeneratorStatuses GeneratorStatuses[]
 }
 
 model StatusLogs {
@@ -87,4 +88,12 @@ model StatusLogs {
   deletedAt   DateTime?
   generatorId Int
   generator   Generator @relation(fields: [generatorId], references: [id])
+}
+
+model GeneratorStatuses {
+  id             Int       @id @default(autoincrement())
+  status_name    String?
+  current_status String?
+  generatorId    Int
+  generator      Generator @relation(fields: [generatorId], references: [id])
 }

@@ -99,10 +99,10 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                             :
                             // if disabled
                             // if generator stopped 
-                            props.remoteOperationStatus == false ?
-                                props.standby == true ? `${optionUnselected} cursor-not-allowed`
-                                    : `${redGlow}`
-                                : `${optionUnselected} cursor-not-allowed`
+                            // props.remoteOperationStatus == false ?
+                            // props.standby == true ? `${optionUnselected} cursor-not-allowed`
+                            //     : `${redGlow}`
+                            `${optionUnselected} cursor-not-allowed`
                     }
                 >
                     <h2 className="uppercase">Diesel Generator</h2>
@@ -112,7 +112,7 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                 {/* Handle Click for START button */}
                 <button
                     // disabled={disableButtonsTimeout || props.remoteOperationStatus == true}
-                    disabled={props.remoteOperationStatus == true || session?.user?.type != "Admin" }
+                    disabled={props.remoteOperationStatus == true || session?.user?.type != "Admin"}
                     // onClick={() => handleClick(1)}
                     onClick={() => {
                         openModal()
@@ -131,10 +131,10 @@ const RemoteOperation = (props: RemoteOperationProps) => {
                             :
                             // if disabled
                             // if generator started
-                            props.remoteOperationStatus == true ?
-                                props.standby == true ? `${optionUnselected} cursor-not-allowed`
-                                    : `${greenGlow} cursor-not-allowed`
-                                : `${optionUnselected} cursor-not-allowed`
+                            // props.remoteOperationStatus == true ?
+                            //     props.standby == true ? `${optionUnselected} cursor-not-allowed`
+                            //         : `${greenGlow} cursor-not-allowed` :
+                            `${optionUnselected} cursor-not-allowed`
                     }
                 >
                     <h2 className="uppercase">Diesel Generator</h2>

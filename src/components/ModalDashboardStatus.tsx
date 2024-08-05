@@ -9,7 +9,7 @@ const ModalDashboardStatus = (props: ModalDashboardStatusProps) => {
     return (
         <>
             {props.isModalOpen && (
-                <div className="sticky inset-0 z-30 -top-5 overflow-y-auto bg-gradient-to-b from-base-100/90 from-90% py-56">
+                <div className="sticky inset-0 z-30 -top-5 overflow-y-auto bg-gradient-to-b from-base-100/90 from-90% py-72 xl:py-44 2xl:py-0">
                     {/* <div
                             className="fixed inset-0 transition-opacity"
                             aria-hidden="true"

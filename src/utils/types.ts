@@ -45,6 +45,7 @@ export type statusList = {
     key: string;
     option: string;
     color: string;
+    animate?: boolean;
 };
 
 export type RemoteOperationProps = {

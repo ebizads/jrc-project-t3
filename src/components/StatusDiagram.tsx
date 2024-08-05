@@ -164,7 +164,7 @@ const StatusDiagram = (statusDiagram: StatusDiagramProps) => {
                             {statusDiagram.degStatus}
                         </div>
                     </div>
-                    {statusDiagram.degStatus == "GENERATING" && <div className={`absolute left-10 top-4 rounded-xl -z-1 h-2/3 w-2/4 bg-gradient-to-tr from-[#304B65] via-[#80A8D0] to-[#304E65] p-[1px] ${statusDiagram.degStatus == "GENERATING" ? `animate-ping ` : ` `} `}></div>}
+                    {statusDiagram.degStatus == "GENERATING" && <div className={`absolute -top-1 right-0 rounded-xl z-20 h-4 w-4 bg-gradient-to-tr from-[#304B65] via-[#80A8D0] to-[#304E65] p-[1px] ${statusDiagram.degStatus == "GENERATING" ? `animate-ping ` : ` `} `}></div>}
                 </div>
             </div>
         </div>

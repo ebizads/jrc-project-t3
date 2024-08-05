@@ -9,7 +9,7 @@ const ModalDashboardStatus = (props: ModalDashboardStatusProps) => {
     return (
         <>
             {props.isModalOpen && (
-                <div className="sticky inset-0 z-30 -my-[50vh] overflow-y-auto bg-base-100/90">
+                <div className="sticky inset-0 z-30 -top-5 overflow-y-auto bg-gradient-to-b from-base-100/90 from-90% py-56">
                     {/* <div
                             className="fixed inset-0 transition-opacity"
                             aria-hidden="true"
@@ -17,19 +17,19 @@ const ModalDashboardStatus = (props: ModalDashboardStatusProps) => {
                             <div className="absolute inset-0 bg-black opacity-75"></div>
                         </div> */}
                     <span
-                        className="hidden sm:inline-block sm:h-screen sm:align-middle"
+                        className="hidden sm:inline-block inset-0 sm:h-screen sm:align-middle"
                         aria-hidden="true"
                     >
                         &#8203;
                     </span>
                     {/* header and affects upper header colors */}
                     <div
-                        className="relative inline-block w-full transform overflow-hidden text-center align-middle transition-all"
+                        className="inline-block w-full transform overflow-hidden text-center align-middle transition-all"
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby="modal-headline"
                     >
-                        <div className="px-7 pt-[12rem]">
+                        <div className="px-7">
                             <div className="flex w-full items-center justify-center">
                                 <div className=" text-center sm:mt-0 ">
                                     {/* Question Mark icon */}
@@ -53,6 +53,8 @@ const ModalDashboardStatus = (props: ModalDashboardStatusProps) => {
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             )}

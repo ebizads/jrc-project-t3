@@ -94,30 +94,32 @@ export default function Home() {
             onSuccess: (data, key, config) => {
                 // refetchGenerator1Statuses().then(res => console.log(res.data)).catch(error => console.log(error))
                 // if (session?.user.type == "Logger") {
-                if (siteDownCDO) {
-                    if (generatorStatuses) {
-                        refetchGeneratorStatuses().then((res) => {
-                            if (res.data?.genStatus1?.current_status != 'RUNNING') {
-                                mutateGeneratorStatus({
-                                    statusId: generatorStatuses?.genStatus1?.id ?? 28,
-                                    generatorId: 1,
-                                    status_name: "genStatus",
-                                    status_value: "RUNNING",
-                                });
-                                mutate({
-                                    generatorId: 1,
-                                    status: "RUNNING",
-                                    status_type: "success",
-                                    status_msg: "Site CDOFFWC is currently",
-                                });
-                                setSiteDownCDO(false)
-                            }
-                            // setFirstLoad(false)
-                        }).catch(error => console.log(error))
-                    }
-                } else {
-                    return
+                // if (siteDownCDO) {
+                if (generatorStatuses) {
+                    refetchGeneratorStatuses().then((res) => {
+                        if (res.data?.genStatus1?.current_status != 'RUNNING') {
+                            mutateGeneratorStatus({
+                                statusId: generatorStatuses?.genStatus1?.id ?? 28,
+                                generatorId: 1,
+                                status_name: "genStatus",
+                                status_value: "RUNNING",
+                            });
+                            mutate({
+                                generatorId: 1,
+                                status: "RUNNING",
+                                status_type: "success",
+                                status_msg: "Site CDOFFWC is currently",
+                            });
+                            setSiteDownCDO(false)
+                        } else {
+                            return
+                        }
+                        // setFirstLoad(false)
+                    }).catch(error => console.log(error))
                 }
+                // } else {
+                //     return
+                // }
                 // }
 
             },

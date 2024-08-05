@@ -448,159 +448,166 @@ const Generator2 = (generatorProps: TestGenerator) => {
                 {generatorProps.generatorName}
             </div>
 
-            <div className="mt-7">
-                {degStatus == "FAILED" &&
-                    <ModalDashboardStatus
-                        isModalOpen={degStatus == "FAILED"}
-                        closeModal={() =>
-                            setModalDashboardStatusOpen(false)
-                        }
-                        modalStatus="FAILED"
-                    ></ModalDashboardStatus>}
+            <div className="h-full">
+                <div className="h-full">
+                    <div className="h-0">
+                        {degStatus == "FAILED" &&
+                            <ModalDashboardStatus
+                                isModalOpen={degStatus == "FAILED"}
+                                closeModal={() =>
+                                    setModalDashboardStatusOpen(false)
+                                }
+                                modalStatus="FAILED"
+                            ></ModalDashboardStatus>}
+                    </div>
 
-                {/* Generator Control Status */}
-                <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
-                    <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
-                        Generator Control Status
-                    </h1>
-                    <GeneratorControlStatus
-                        /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
-                        refetch={generatorProps.refetch}
-                        refetchLogs={refetchLogs}
-                        id={generatorProps.generatorId}
-                        runningHours={generatorProps.runningHours}
-                        degStatus={degStatus}
-                        statusSet={[
-                            {
-                                name: "COMMERCIAL POWER",
-                                value: commercialPower,
-                            },
-                            {
-                                name: "DEG MODE",
-                                value: degMode,
-                            },
-                            {
-                                name: "DEG STATUS",
-                                value: `${globalDegStatus}`,
-                            },
-                            {
-                                name: "REMOTE OPERATION",
-                                value: remoteOperation,
-                            },
-                            {
-                                name: "LOAD ON",
-                                value: `${globalLoadStatus}`,
-                            },
-                            {
-                                name: "FUEL LEVEL",
-                                value: fuelLevel,
-                            },
-                        ]}
-                    />
+                    {/* Generator Control Status */}
+                    <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
+                        <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                            Generator Control Status
+                        </h1>
+                        <GeneratorControlStatus
+                            /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
+                            refetch={generatorProps.refetch}
+                            refetchLogs={refetchLogs}
+                            id={generatorProps.generatorId}
+                            runningHours={generatorProps.runningHours}
+                            degStatus={degStatus}
+                            statusSet={[
+                                {
+                                    name: "COMMERCIAL POWER",
+                                    value: commercialPower,
+                                },
+                                {
+                                    name: "DEG MODE",
+                                    value: degMode,
+                                },
+                                {
+                                    name: "DEG STATUS",
+                                    value: `${globalDegStatus}`,
+                                },
+                                {
+                                    name: "REMOTE OPERATION",
+                                    value: remoteOperation,
+                                },
+                                {
+                                    name: "LOAD ON",
+                                    value: `${globalLoadStatus}`,
+                                },
+                                {
+                                    name: "FUEL LEVEL",
+                                    value: fuelLevel,
+                                },
+                            ]}
+                        />
+                    </div>
+
+                    {/* Generator Power Diagram */}
+                    <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
+                        <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                            Generator Power Diagram
+                        </h1>
+                        <StatusDiagram
+                            commercialPower={globalCommercialPower}
+                            loadStatus={globalLoadStatus}
+                            degStatus={globalDegStatus}
+                        />
+                    </div>
+
+                    {/* Remote Operation */}
+                    <div className="text-md m-5 flex flex-col rounded-xl bg-base-100 p-5">
+                        <h1 className="mb-6 text-sm font-semibold uppercase tracking-[0.2em]">
+                            Remote Operation
+                        </h1>
+                        <RemoteOperation
+                            refetch={refetchLogs}
+                            generatorId={generatorProps.generatorId ?? 0}
+                            remoteOperationStatus={degStatus == "GENERATING"}
+                            standby={commercialPower == "OFF" || degMode == "MANUAL" ? true : false}
+                            disabled={remoteOperation == "NA" || degMode == "MANUAL" || degStatus == "FAILED"}
+                        />
+                    </div>
+
                 </div>
 
-                {/* Generator Power Diagram */}
-                <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
-                    <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
-                        Generator Power Diagram
-                    </h1>
-                    <StatusDiagram
-                        commercialPower={globalCommercialPower}
-                        loadStatus={globalLoadStatus}
-                        degStatus={globalDegStatus}
-                    />
-                </div>
+                <div>
 
-                {/* Remote Operation */}
-                <div className="text-md m-5 flex flex-col rounded-xl bg-base-100 p-5">
-                    <h1 className="mb-6 text-sm font-semibold uppercase tracking-[0.2em]">
-                        Remote Operation
-                    </h1>
-                    <RemoteOperation
-                        refetch={refetchLogs}
-                        generatorId={generatorProps.generatorId ?? 0}
-                        remoteOperationStatus={degStatus == "GENERATING"}
-                        standby={commercialPower == "OFF" || degMode == "MANUAL" ? true : false}
-                        disabled={remoteOperation == "NA" || degMode == "MANUAL" || degStatus == "FAILED"}
-                    />
-                </div>
+                    {/* Power Supply Status */}
+                    <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
+                        <h1 className="text-sm font-semibold tracking-[0.2em]">
+                            DC 48V POWER SUPPLY STATUS
+                        </h1>
+                        <PowerSupplyStatus
+                            id="CDORFFWC"
+                            statusSet={[
+                                {
+                                    name: "DC POWER SUPPLY STATUS",
+                                    value: powerSupply,
+                                },
+                                {
+                                    name: "COMMERCIAL POWER",
+                                    value: commercialPowerDC,
+                                },
+                                {
+                                    name: "BATTERY TEMPERATURE",
+                                    value: batteryTemp,
+                                },
+                            ]}
+                        />
+                    </div>
 
-                {/* Power Supply Status */}
-                <div className="text-md m-5 flex flex-col space-y-5 rounded-xl bg-base-100 p-5">
-                    <h1 className="text-sm font-semibold tracking-[0.2em]">
-                        DC 48V POWER SUPPLY STATUS
-                    </h1>
-                    <PowerSupplyStatus
-                        id="CDORFFWC"
-                        statusSet={[
-                            {
-                                name: "DC POWER SUPPLY STATUS",
-                                value: powerSupply,
-                            },
-                            {
-                                name: "COMMERCIAL POWER",
-                                value: commercialPowerDC,
-                            },
-                            {
-                                name: "BATTERY TEMPERATURE",
-                                value: batteryTemp,
-                            },
-                        ]}
-                    />
-                </div>
+                    <div className="text-md m-5 flex h-fit flex-col space-y-5 rounded-xl bg-base-100 p-3 tracking-normal">
+                        <h1 className="text-sm font-semibold tracking-[0.2em]">
+                            GRAPHICAL REPORT
+                        </h1>
+                        <LineChartExample
+                            /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
+                            refetch={generatorProps.refetch}
+                            commercialPower={commercialPower}
+                            degStatus={degStatus}
+                            fuelLevel={fuelLevel}
+                            generatorData={generatorProps.generatorData}
+                        />
+                    </div>
 
-                <div className="text-md m-5 flex h-fit flex-col space-y-5 rounded-xl bg-base-100 p-3 tracking-normal">
-                    <h1 className="text-sm font-semibold tracking-[0.2em]">
-                        GRAPHICAL REPORT
-                    </h1>
-                    <LineChartExample
-                        /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
-                        refetch={generatorProps.refetch}
-                        commercialPower={commercialPower}
-                        degStatus={degStatus}
-                        fuelLevel={fuelLevel}
-                        generatorData={generatorProps.generatorData}
-                    />
-                </div>
+                    {/* Status Logs */}
+                    <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
+                        <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
+                            Status Logs
+                        </h1>
 
-                {/* Status Logs */}
-                <div className="text-md m-5 flex flex-col space-y-6 rounded-xl bg-base-100 p-5">
-                    <h1 className="text-sm font-semibold uppercase tracking-[0.2em]">
-                        Status Logs
-                    </h1>
-
-                    {/* {statusLogs && (
+                        {/* {statusLogs && (
                     statusLogs
                 )} */}
 
-                    {Object.entries(statusLogs?.groupedLogs ?? {}).map(
-                        ([date, items]) => (
-                            <div key={date}>
-                                <StatusDayLog
-                                    id={date}
-                                    day={date}
-                                    statusLogSet={items.map(
-                                        (item: StatusLogType) => ({
-                                            id: String(item.id),
-                                            time: item.createdAt,
-                                            statusType: item.status_type,
-                                            content: item.status_msg,
-                                            statusName: item.status,
-                                        })
-                                    )}
-                                />
-                            </div>
-                        )
-                    )}
+                        {Object.entries(statusLogs?.groupedLogs ?? {}).map(
+                            ([date, items]) => (
+                                <div key={date}>
+                                    <StatusDayLog
+                                        id={date}
+                                        day={date}
+                                        statusLogSet={items.map(
+                                            (item: StatusLogType) => ({
+                                                id: String(item.id),
+                                                time: item.createdAt,
+                                                statusType: item.status_type,
+                                                content: item.status_msg,
+                                                statusName: item.status,
+                                            })
+                                        )}
+                                    />
+                                </div>
+                            )
+                        )}
 
-                    {showMoreIsVisible &&
-                        <button
-                            className="border border-info rounded text-info mx-auto px-5 py-2"
-                            onClick={() => setOpenLogsModal(true)}
-                        >SHOW MORE</button>
-                    }
+                        {showMoreIsVisible &&
+                            <button
+                                className="border border-info rounded text-info mx-auto px-5 py-2"
+                                onClick={() => setOpenLogsModal(true)}
+                            >SHOW MORE</button>
+                        }
+                    </div>
                 </div>
-
                 {openLogsModal &&
                     (
                         <div className="fixed inset-0 z-50 overflow-y-auto">

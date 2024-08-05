@@ -19,6 +19,10 @@ const greenParent =
     " h-full w-1/3 bg-gradient-to-tr from-[#306536] via-[#80D088] to-[#306536] p-[1px] ";
 const greenChild =
     " w-full h-full items-center p-5 text-center font-semibold uppercase tracking-widest bg-gradient-to-tr from-[#44774A] via-[#2E362E] to-[#44774A] text-[#80D088] ";
+const blueParent =
+    " h-full w-1/3 bg-gradient-to-tr from-[#304B65] via-[#80A8D0] to-[#304E65] p-[1px] ";
+const blueChild =
+    " w-full h-full items-center p-5 text-center font-semibold uppercase tracking-widest bg-gradient-to-tr from-[#445c77] via-[#2E3236] to-[#445E77] text-[#80ADD0] ";
 const yellowParent =
     "h-full bg-gradient-to-tr from-[#57540D] via-[#FFFA8B] to-[#57540D] p-[1px]";
 const yellowChild =
@@ -151,15 +155,16 @@ const StatusDiagram = (statusDiagram: StatusDiagramProps) => {
 
             {/* DEG BOX */}
             <div className="flex w-full flex-row justify-center pt-5  text-xs tracking-wider">
-                <div className={`${DEG_boxBorder} rounded-xl`}>
-                    <div className={`${DEG_boxInner} rounded-xl text-[11px]`}>
-                        <div className=" text-center text-2xl font-semibold uppercase tracking-widest">
+                <div className={`${DEG_boxBorder} rounded-xl relative`}>
+                    <div className={`${DEG_boxInner} rounded-xl text-[11px] relative z-10`}>
+                        <div className={`text-center text-2xl font-semibold uppercase tracking-widest ${statusDiagram.degStatus == "GENERATING" ? `animate-[pulse_0.7s_cubic-bezier(0,0,0,1)_infinite]` : ``} `}>
                             Deg
                         </div>
-                        <div className=" justify-self-center text-center text-[11px] font-semibold uppercase">
+                        <div className={`justify-self-center text-center text-[11px] font-semibold uppercase ${statusDiagram.degStatus == "GENERATING" ? `animate-[pulse_0.7s_cubic-bezier(0,0,0,1)_infinite]` : ``} `}>
                             {statusDiagram.degStatus}
                         </div>
                     </div>
+                    {statusDiagram.degStatus == "GENERATING" && <div className={`absolute left-10 top-4 rounded-xl -z-1 h-2/3 w-2/4 bg-gradient-to-tr from-[#304B65] via-[#80A8D0] to-[#304E65] p-[1px] ${statusDiagram.degStatus == "GENERATING" ? `animate-ping ` : ` `} `}></div>}
                 </div>
             </div>
         </div>
@@ -222,8 +227,8 @@ function getDEGColor(
 
     if (genStatus === DegStatus.GENERATING.toString()) {
         // GREEN
-        DEG_boxBorder = greenParent;
-        DEG_boxInner = greenChild;
+        DEG_boxBorder = blueParent;
+        DEG_boxInner = blueChild;
         DEG_outerLine = greenLineGradient;
         DEG_innerLine = greenLine;
         DEG_dotColor = greenBorder;

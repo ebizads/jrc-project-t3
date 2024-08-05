@@ -17,6 +17,8 @@ const greenGlow =
     " flex h-full w-full flex-col rounded-full border-2 border-[#9CFDA6] bg-gradient-to-b from-[#3A463B] to-[#468C4D] p-3 text-center tracking-widest text-[#B4FFBC] shadow-[0_0_8px_rgba(70,140,77,1)] ";
 const redGlow =
     " flex h-full w-full flex-col rounded-full border-2 border-[#FF9CA2] bg-gradient-to-b from-[#583D3E] to-[#E8545C] p-3 text-center tracking-widest text-[#FFCFD1] shadow-[0_0_8px_rgba(232,84,92,1)] ";
+const blueGlow =
+    " flex h-full w-full flex-col rounded-full border-2 border-[#9CBCFD] bg-gradient-to-b from-[#3A4046] to-[#46678C] p-3 text-center tracking-widest text-[#B4D2FF] shadow-[0_0_8px_rgba(85,134,171,1)] ";
 // const optionUnselected =
 //     "flex h-full w-full flex-col rounded-full p-3 text-center font-normal tracking-widest text-[#7E7E7E]";
 
@@ -103,7 +105,8 @@ const getStatusList = (statusName: string) => {
                 {
                     key: "status3",
                     option: DegStatus.GENERATING,
-                    color: greenGlow,
+                    color: blueGlow,
+                    animate: true
                 },
             ];
         case "REMOTE OPERATION":
